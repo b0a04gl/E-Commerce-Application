@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity,StyleSheet, Text, View } from 'react-native';
-
+import Shibi from './Shibi';
 
 
 class Home extends React.Component
@@ -13,9 +13,7 @@ class Home extends React.Component
     render()
     {
         return(
-            <View  style={{flex:1,justifyContent: "center",alignItems: "center"}}>
-                <Text >Home UI</Text>
-            </View>
+            <Shibi/>
         );
     }
 
