@@ -5,12 +5,36 @@ import Card from './Components/Card'
 
 export default function Shibi()
 {
-  const [imageArray, setImageArray] = useState([
+  const [imageDeckArray, setImageDeckArray] = useState([
     require('../assets/ad1.jpg'),
     require('../assets/ad2.jpg'),
     require('../assets/ad3.jpg'),
     require('../assets/ad4.jpg')
   ]);
+
+  const [imageCardArray1, setImageCardArray1] = useState([{
+    id: 1,
+    image: require('../assets/images/headphones.jpeg'),
+    text: `20% offer for \n Headphones`,
+  },
+  {
+    id: 2,
+    image:require('../assets/images/smartwatch.jpeg'),
+    text: `10% offer for \nsmartwatches`
+  }
+  ]);
+  const [imageCardArray2, setImageCardArray2] = useState([{
+    id: 1,
+    image: require('../assets/images/offerphone1.jpeg'),
+    text: '\u20B9 8999 only'
+  },
+  {
+    id: 2,
+    image: require('../assets/images/offerphone2.jpeg'),
+    text: '\u20B9 9999 only'
+  }
+  ]);
+
   const [searchText, setSearchText] = useState('');
   const [searchHistory, setSearchHistory] = useState([]);
   const [displayContent, setDisplayContent] = useState(false);
@@ -42,8 +66,7 @@ export default function Shibi()
 
   return(
       <View style={styles.screen}>
-        <View style={styles.headerContainer}>
-          
+        <View style={styles.headerContainer}>        
           <View style={styles.inputContainer}>
             <TouchableWithoutFeedback onPress={DisplayContentHandler}>
               <Text style={styles.input}>Search for Products...</Text>
@@ -57,7 +80,7 @@ export default function Shibi()
           <View style={styles.imageDeckContainer}>
             <View style={styles.imageDeck}>
               <SliderBox
-                images={imageArray}
+                images={imageDeckArray}
                 autoplay={true}
                 sliderBoxHeight={175}
                 circleLoop={true}
@@ -67,8 +90,8 @@ export default function Shibi()
             </View>
           </View>
           <View style={styles.offerCards}>
-            <Card text='Offers' offer1={`20% offer for \n Headphones`} offer2={`10% offer for \nsmartwatches`} image1={require('../assets/images/headphones.jpeg')} image2={require('../assets/images/smartwatch.jpeg')}/>
-            <Card text='Mobile Phones' offer1={'\u20B9 8999 only'} offer2={'\u20B9 9999 only'} image1={require('../assets/images/offerphone1.jpeg')} image2={require('../assets/images/offerphone2.jpeg')}/>
+            <Card images={imageCardArray1} header='Offers' image1={require('../assets/images/headphones.jpeg')} image2={require('../assets/images/smartwatch.jpeg')}/>
+            <Card images={imageCardArray2} header='Mobile Phones' image1={require('../assets/images/offerphone1.jpeg')} image2={require('../assets/images/offerphone2.jpeg')}/>
           </View>
         </ScrollView>
         <Modal visible={displayContent} onRequestClose={()=>{
@@ -110,12 +133,6 @@ const styles = StyleSheet.create({
       width: '100%',
       backgroundColor: '#ec2F4B',
       padding: 0,
-    },
-
-    header:{
-      textAlign: 'left',
-      color: 'white',
-      fontWeight: 'bold'
     },
 
     inputContainer:{
