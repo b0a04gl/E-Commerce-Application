@@ -1,19 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
 
 const Card = props =>{
     return(
-        <View style={styles.cardContainer}>
-            <View style={styles.card}>
-              <Text>{props.text}</Text>
-              <View style={styles.Container}>
-                <Image source={props.image1} style={styles.image}/>
-                <Image source={props.image2} style={styles.image}/>
-              </View>
-              <View style={styles.Container}>
-                <Text style={styles.crossedText}>{props.offer1}</Text>
-                <Text style={styles.crossedText}>{props.offer2}</Text>
-              </View>
+        <View>
+            <View style={styles.headerContainer}>
+                <Text style={styles.header}>{props.header}</Text>
+            </View>
+            <View style={styles.cardContainer}>
+                <View style={styles.card}>
+                <FlatList data={props.images}
+                renderItem={ itemData => (
+                    <View style={styles.Container}>
+                        <Image style={styles.image} source={itemData.item.image} />
+                        <Text style={styles.text}>{itemData.item.textItem}</Text>
+                        <Text style={styles.offerText}>{itemData.item.textOff}</Text>
+                    </View>
+                )}
+                numColumns={2}/>
+                </View>
             </View>
         </View>
     );
@@ -22,39 +27,57 @@ const Card = props =>{
 
 const styles = StyleSheet.create({
     
+    headerContainer:{
+        paddingLeft: 30,
+        marginTop: 20,
+    },
+
+    header:{
+        fontSize: 18,
+        fontWeight: 'bold',
+        fontStyle: 'italic'
+    },
+
     cardContainer:{
         alignItems: 'center',
-        marginVertical: 20,
+        marginVertical: 10,
     },
 
     card:{
-        height: 200,
+        flex: 1,
         width: '90%',
-        padding: 10,
         elevation: 10,
         borderWidth: 1,
-        borderRadius: 10,
         borderColor: 'black',
         backgroundColor: 'white',
     },
 
     Container:{
-        flexDirection: 'row',
-        justifyContent: 'space-around',
+        flex: 1,
+        flexDirection: 'column', 
+        borderColor:'black', 
+        borderWidth:0.2 ,
+        padding: 10,
         alignItems: 'center',
-        paddingTop: 20,
+        justifyContent: 'center',
     },
 
     image:{
         height: 80,
-        width: 50,
+        width: 80,
+        marginVertical: 20,
         resizeMode: 'contain',
+        justifyContent: 'center',
     },
 
-    crossedText:{
+    text:{
         color: 'red',
-        textDecorationStyle: 'solid'
     },
+
+    offerText:{
+        color: 'darkgreen',
+        fontSize: 16,
+    }
 
 });
 
