@@ -1,7 +1,7 @@
 import React,{ useState } from 'react';
 import { Text, View, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity, Modal, TouchableWithoutFeedback, FlatList } from 'react-native';
 import { SliderBox } from 'react-native-image-slider-box';
-
+import Card from './components/Card'
 
 export default function Shibi()
 {
@@ -53,7 +53,7 @@ export default function Shibi()
             </TouchableOpacity>
           </View>
         </View>
-        <View>
+        <ScrollView>
           <View style={styles.imageDeckContainer}>
             <View style={styles.imageDeck}>
               <SliderBox
@@ -66,7 +66,12 @@ export default function Shibi()
                   console.warn(`image ${index} pressed`)}/>
             </View>
           </View>
-          <Modal visible={displayContent} onRequestClose={()=>{
+          <View style={styles.offerCards}>
+            <Card text='Offers' offer1={`20% offer for \n Headphones`} offer2={`10% offer for \nsmartwatches`} image1={require('../assets/images/headphones.jpeg')} image2={require('../assets/images/smartwatch.jpeg')}/>
+            <Card text='Mobile Phones' offer1={'\u20B9 8999 only'} offer2={'\u20B9 9999 only'} image1={require('../assets/images/offerphone1.jpeg')} image2={require('../assets/images/offerphone2.jpeg')}/>
+          </View>
+        </ScrollView>
+        <Modal visible={displayContent} onRequestClose={()=>{
             setDisplayContent(false);
             setSearchText('');
           }}>
@@ -91,7 +96,6 @@ export default function Shibi()
               />
             </View>
           </Modal>
-        </View>
       </View>
   );  
 }
@@ -186,4 +190,9 @@ const styles = StyleSheet.create({
       borderColor: 'black',
       borderWidth: 1,
     },
+
+    offerCards:{
+      backgroundColor: '#ff8eAb'
+    }
+
   });
