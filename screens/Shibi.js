@@ -1,7 +1,7 @@
 import React,{ useState } from 'react';
 import { Text, View, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity, Modal, TouchableWithoutFeedback, FlatList } from 'react-native';
 import { SliderBox } from 'react-native-image-slider-box';
-import Card from './components/Card'
+import Card from './Components/Card'
 
 export default function Shibi()
 {
