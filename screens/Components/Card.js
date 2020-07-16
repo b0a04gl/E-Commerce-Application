@@ -13,7 +13,8 @@ const Card = props =>{
                 renderItem={ itemData => (
                     <View style={styles.Container}>
                         <Image style={styles.image} source={itemData.item.image} />
-                        <Text style={styles.text}>{itemData.item.text}</Text>
+                        <Text style={styles.text}>{itemData.item.textItem}</Text>
+                        <Text style={styles.offerText}>{itemData.item.textOff}</Text>
                     </View>
                 )}
                 numColumns={2}/>
@@ -70,11 +71,13 @@ const styles = StyleSheet.create({
     },
 
     text:{
-        textAlign: 'center',
         color: 'red',
-        textDecorationStyle: 'solid',
-        color: 'blue'
     },
+
+    offerText:{
+        color: 'darkgreen',
+        fontSize: 16,
+    }
 
 });
 

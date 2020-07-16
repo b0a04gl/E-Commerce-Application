@@ -15,38 +15,45 @@ export default function Shibi()
   const [imageCardArray1, setImageCardArray1] = useState([{
     id: 1,
     image: require('../assets/images/headphones.jpeg'),
-    text: `20% offer for \nHeadphones`,
+    textItem: 'Headphones',
+    textOff: '20% Offer',
   },
   {
     id: 2,
     image:require('../assets/images/smartwatch.jpeg'),
-    text: `10% offer for \nsmartwatches`
+    textItem: 'Smartwatch',
+    textOff: '10% Offer'
   },
   {
     id: 3,
     image: require('../assets/images/shoes.jpeg'),
-    text: `30% offer for \nShoes`,
+    textItem: 'Shoes',
+    textOff: '30% Offer',
   },
   {
     id: 4,
     image:require('../assets/images/speaker.jpeg'),
-    text: `5% offer for \nspeaker`
+    textItem: 'Speaker',
+    textOff: '5% Offer'
   }
   ]);
   const [imageCardArray2, setImageCardArray2] = useState([{
     id: 1,
     image: require('../assets/images/offerphone1.jpeg'),
-    text: '\u20B9 8999 only'
+    textItem: 'Realme Phone',
+    textOff: '\u20B9 8999 only'
   },
   {
     id: 2,
     image: require('../assets/images/offerphone2.jpeg'),
-    text: '\u20B9 9999 only'
+    textItem: 'Oppo Phone',
+    textOff: '\u20B9 9999 only'
   },
   {
     id: 3,
     image: require('../assets/images/offerphone3.jpeg'),
-    text: '\u20B9 12395 only'
+    textItem: 'Samsung Phone',
+    textOff: '\u20B9 12395 only'
   }
   ]);
 
