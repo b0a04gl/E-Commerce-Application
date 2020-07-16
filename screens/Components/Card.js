@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
 
     card:{
-        height: 350,
+        flex: 1,
         width: '90%',
         elevation: 10,
         borderWidth: 1,
@@ -56,9 +56,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column', 
         borderColor:'black', 
         borderWidth:0.2 ,
+        padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        height: 175,
     },
 
     image:{
