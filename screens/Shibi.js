@@ -15,12 +15,22 @@ export default function Shibi()
   const [imageCardArray1, setImageCardArray1] = useState([{
     id: 1,
     image: require('../assets/images/headphones.jpeg'),
-    text: `20% offer for \n Headphones`,
+    text: `20% offer for \nHeadphones`,
   },
   {
     id: 2,
     image:require('../assets/images/smartwatch.jpeg'),
     text: `10% offer for \nsmartwatches`
+  },
+  {
+    id: 3,
+    image: require('../assets/images/shoes.jpeg'),
+    text: `30% offer for \nShoes`,
+  },
+  {
+    id: 4,
+    image:require('../assets/images/speaker.jpeg'),
+    text: `5% offer for \nspeaker`
   }
   ]);
   const [imageCardArray2, setImageCardArray2] = useState([{
@@ -32,6 +42,11 @@ export default function Shibi()
     id: 2,
     image: require('../assets/images/offerphone2.jpeg'),
     text: '\u20B9 9999 only'
+  },
+  {
+    id: 3,
+    image: require('../assets/images/offerphone3.jpeg'),
+    text: '\u20B9 12395 only'
   }
   ]);
 

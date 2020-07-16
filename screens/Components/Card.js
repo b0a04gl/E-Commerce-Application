@@ -43,8 +43,7 @@ const styles = StyleSheet.create({
     },
 
     card:{
-        height: 200,
-        maxHeight: 400,
+        height: 350,
         width: '90%',
         elevation: 10,
         borderWidth: 1,
@@ -59,8 +58,7 @@ const styles = StyleSheet.create({
         borderWidth:0.2 ,
         alignItems: 'center',
         justifyContent: 'center',
-        height: 200,
-        maxHeight: 400,
+        height: 175,
     },
 
     image:{
