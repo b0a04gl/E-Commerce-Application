@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     },
 
     offerCards:{
-      backgroundColor: '#ff8eAb'
+      backgroundColor: 'white'
     }
 
   });

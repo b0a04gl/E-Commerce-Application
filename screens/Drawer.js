@@ -15,8 +15,13 @@ import ToysBaby from './Category/ToysBabyCategory';
 import TVsAppliances from './Category/TVsAppliancesCategory';
 import ProfileScreen from './ProfileScreen';
 import Init from './initScreen';
-
-
+import BrowseElectronics from './Category/BrowseElectronics';
+import BrowseFashion from './Category/BrowseFashion';
+import BrowseBeautyPersonalcare from './Category/BrowseBeautyPersonalcare';
+import BrowseHomeFurniture from './Category/BrowseHomeFurniture';
+import BrowseSportsBooks from './Category/BrowseSportsBooks';
+import BrowseToysBaby from './Category/BrowseToysBaby';
+import BrowseTVsAppliances from './Category/BrowseTVsAppliances';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -67,8 +72,11 @@ const HomeStackScreen =({navigation}) =>(
                 <Icon.Button  name = 'ios-menu' size={30}
                 backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
             ),
-
-              
+            
+            headerRight : () => (
+                <Icon.Button  name = 'ios-cart' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+            ),
 
         }}/>
 
@@ -154,6 +162,7 @@ const ElectronicsStackScreen =({navigation}) =>(
     }}>
         <Stack.Screen name="Electronics" component={Electronics} options={{
             title:'Electronics',
+            headerShown: false,
             headerStyle: {
                 backgroundColor: '#ec2F4B',
               },
@@ -358,6 +367,236 @@ const TVsAppliancesStackScreen =({navigation}) =>(
     </Stack.Navigator>
 );
 
+const BrowseElectronicsStackScreen =({navigation}) =>(
+    <Stack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
+
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            // alignSelf: 'center'
+           
+          },
+    }}>
+        <Stack.Screen name="BrowseElectronics" component={BrowseElectronics} options={{
+            title:'BrowseElectronics',
+            headerShown: false,
+            headerStyle: {
+                backgroundColor: '#ec2F4B',
+              },
+            headerTitleAlign: 'center',
+            headerLeft : () => (
+                <Icon.Button  name = 'ios-menu' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+            ),
+
+              
+
+        }}/>
+
+    </Stack.Navigator>
+);
+
+const BrowseFashionStackScreen =({navigation}) =>(
+    <Stack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
+
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            // alignSelf: 'center'
+           
+          },
+    }}>
+        <Stack.Screen name="BrowseFashion" component={BrowseFashion} options={{
+            title:'BrowseFashion',
+            headerShown: false,
+            headerStyle: {
+                backgroundColor: '#ec2F4B',
+              },
+            headerTitleAlign: 'center',
+            headerLeft : () => (
+                <Icon.Button  name = 'ios-menu' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+            ),
+
+              
+
+        }}/>
+
+    </Stack.Navigator>
+);
+// BrowseBeautyPersonalcare
+
+const BrowseBeautyPersonalcareStackScreen =({navigation}) =>(
+    <Stack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
+
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            // alignSelf: 'center'
+           
+          },
+    }}>
+        <Stack.Screen name="BrowseBeautyPersonalcare" component={BrowseBeautyPersonalcare} options={{
+            title:'BrowseBeautyPersonalcare',
+            headerShown: false,
+            headerStyle: {
+                backgroundColor: '#ec2F4B',
+              },
+            headerTitleAlign: 'center',
+            headerLeft : () => (
+                <Icon.Button  name = 'ios-menu' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+            ),
+
+              
+
+        }}/>
+
+    </Stack.Navigator>
+);
+// BrowseHomeFurniture
+
+
+const BrowseHomeFurnitureStackScreen =({navigation}) =>(
+    <Stack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
+
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            // alignSelf: 'center'
+           
+          },
+    }}>
+        <Stack.Screen name="BrowseHomeFurniture" component={BrowseHomeFurniture} options={{
+            title:'BrowseHomeFurniture',
+            headerShown: false,
+            headerStyle: {
+                backgroundColor: '#ec2F4B',
+              },
+            headerTitleAlign: 'center',
+            headerLeft : () => (
+                <Icon.Button  name = 'ios-menu' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+            ),
+
+              
+
+        }}/>
+
+    </Stack.Navigator>
+);
+
+// BrowseSportsBooks
+const BrowseSportsBooksStackScreen =({navigation}) =>(
+    <Stack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
+
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            // alignSelf: 'center'
+           
+          },
+    }}>
+        <Stack.Screen name="BrowseSportsBooks" component={BrowseSportsBooks} options={{
+            title:'BrowseSportsBooks',
+            headerShown: false,
+            headerStyle: {
+                backgroundColor: '#ec2F4B',
+              },
+            headerTitleAlign: 'center',
+            headerLeft : () => (
+                <Icon.Button  name = 'ios-menu' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+            ),
+
+              
+
+        }}/>
+
+    </Stack.Navigator>
+);
+
+// BrowseToysBaby
+
+const BrowseToysBabyStackScreen =({navigation}) =>(
+    <Stack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
+
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            // alignSelf: 'center'
+           
+          },
+    }}>
+        <Stack.Screen name="BrowseToysBaby" component={BrowseToysBaby} options={{
+            title:'BrowseToysBaby',
+            headerShown: false,
+            headerStyle: {
+                backgroundColor: '#ec2F4B',
+              },
+            headerTitleAlign: 'center',
+            headerLeft : () => (
+                <Icon.Button  name = 'ios-menu' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+            ),
+
+              
+
+        }}/>
+
+    </Stack.Navigator>
+);
+BrowseTVsAppliances
+
+const BrowseTVsAppliancesStackScreen =({navigation}) =>(
+    <Stack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
+
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            // alignSelf: 'center'
+           
+          },
+    }}>
+        <Stack.Screen name="BrowseTVsAppliances" component={BrowseTVsAppliances} options={{
+            title:'BrowseTVsAppliances',
+            headerShown: false,
+            headerStyle: {
+                backgroundColor: '#ec2F4B',
+              },
+            headerTitleAlign: 'center',
+            headerLeft : () => (
+                <Icon.Button  name = 'ios-menu' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+            ),
+
+              
+
+        }}/>
+
+    </Stack.Navigator>
+);
 
 export default function DrawerNavigator () {
 
@@ -377,6 +616,13 @@ export default function DrawerNavigator () {
         <Drawer.Screen name="SportsBooks" component={SportsBooksStackScreen} />
         <Drawer.Screen name="ToysBaby" component={ToysBabyStackScreen} />
         <Drawer.Screen name="TVsAppliances" component={TVsAppliancesStackScreen} />
+        <Drawer.Screen name="BrowseElectronics" component={BrowseElectronicsStackScreen} />
+        <Drawer.Screen name="BrowseFashion" component={BrowseFashionStackScreen} />
+        <Drawer.Screen name="BrowseBeautyPersonalcare" component={BrowseBeautyPersonalcareStackScreen} />
+        <Drawer.Screen name="BrowseHomeFurniture" component={BrowseHomeFurnitureStackScreen} />
+        <Drawer.Screen name="BrowseSportsBooks" component={BrowseSportsBooksStackScreen} />
+        <Drawer.Screen name="BrowseToysBaby" component={BrowseToysBabyStackScreen} />
+        <Drawer.Screen name="BrowseTVsAppliances" component={BrowseTVsAppliancesStackScreen} />
         </Drawer.Navigator>
         </NavigationContainer>
     );

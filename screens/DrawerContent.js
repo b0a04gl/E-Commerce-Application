@@ -92,7 +92,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Electronics"
-                            onPress={() => {props.navigation.navigate('Electronics')}}
+                            onPress={() => {props.navigation.navigate('BrowseElectronics')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
@@ -103,7 +103,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Fashion"
-                            onPress={() => {props.navigation.navigate('Fashion')}}
+                            onPress={() => {props.navigation.navigate('BrowseFashion')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
@@ -114,7 +114,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="HomeFurniture"
-                            onPress={() => {props.navigation.navigate('HomeFurniture')}}
+                            onPress={() => {props.navigation.navigate('BrowseHomeFurniture')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
@@ -136,7 +136,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="SportsBooks"
-                            onPress={() => {props.navigation.navigate('SportsBooks')}}
+                            onPress={() => {props.navigation.navigate('BrowseSportsBooks')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
@@ -147,7 +147,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="ToysBaby"
-                            onPress={() => {props.navigation.navigate('ToysBaby')}}
+                            onPress={() => {props.navigation.navigate('BrowseToysBaby')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
@@ -158,7 +158,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="TVsAppliances"
-                            onPress={() => {props.navigation.navigate('TVsAppliances')}}
+                            onPress={() => {props.navigation.navigate('BrowseTVsAppliances')}}
                         /><DrawerItem 
                         icon={({color, size}) => (
                             <Icon 
@@ -168,7 +168,7 @@ export function DrawerContent(props) {
                             />
                         )}
                         label="BeautyPersonalcare"
-                        onPress={() => {props.navigation.navigate('BeautyPersonalcare')}}
+                        onPress={() => {props.navigation.navigate('BrowseBeautyPersonalcare')}}
                     />
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">
