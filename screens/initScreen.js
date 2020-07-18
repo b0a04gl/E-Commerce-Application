@@ -5,8 +5,8 @@ import { TouchableOpacity,StyleSheet, Text, View } from 'react-native';
 
 const styles = StyleSheet.create({
     SubmitButtonStyle1: {
- 
-        marginTop:275,
+        
+        marginTop:200,
         paddingTop:8,
         paddingBottom:15,
         marginLeft:109,
@@ -83,7 +83,7 @@ class Init extends React.Component
             <TouchableOpacity
                     style={styles.SubmitButtonStyle2}
                     activeOpacity = { .5 }
-                   
+                    onPress={() => navigate('Admin')}
                  >
  
             <Text style={styles.TextStyle}> ADMIN </Text>

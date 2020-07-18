@@ -23,6 +23,7 @@ import BrowseSportsBooks from './Category/BrowseSportsBooks';
 import BrowseToysBaby from './Category/BrowseToysBaby';
 import BrowseTVsAppliances from './Category/BrowseTVsAppliances';
 import OTPAuth from './OTPAuth';
+import Admin from './Admin';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
@@ -63,6 +64,35 @@ const OTPAuthStackScreen =({navigation}) =>(
         <Stack.Screen name="OTPAuth" component={OTPAuth} options={{
             title:'OTPAuth',
             
+        }}/>
+
+    </Stack.Navigator>
+);
+
+
+const AdminStackScreen =({navigation}) =>(
+    <Stack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
+
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            alignSelf: 'center'
+          },
+    }}>
+        <Stack.Screen name="Admin" component={Admin} options={{
+            title:'Admin',
+            // headerShown: false,
+            headerStyle: {
+                backgroundColor: '#ec2F4B',
+              },
+            headerTitleAlign: 'center',
+            headerLeft : () => (
+                <Icon.Button  name = 'ios-menu' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+            ),
         }}/>
 
     </Stack.Navigator>
@@ -626,6 +656,7 @@ export default function DrawerNavigator () {
         
         <Drawer.Screen name="Users" component={InitStackScreen} options={{drawerLabel: () => null,drawerIcon: () => null  }} />
         <Drawer.Screen name="Home" component={HomeStackScreen} />
+        <Drawer.Screen name="Admin" component={AdminStackScreen} />
         <Drawer.Screen name="OTPAuth" component={OTPAuthStackScreen} />
         <Drawer.Screen name="Profile" component={ProfileScreenStackScreen} />
         <Drawer.Screen name="BeautyPersonalcare" component={BeautyPersonalcareStackScreen} />
@@ -644,6 +675,7 @@ export default function DrawerNavigator () {
         <Drawer.Screen name="BrowseToysBaby" component={BrowseToysBabyStackScreen} />
         <Drawer.Screen name="BrowseTVsAppliances" component={BrowseTVsAppliancesStackScreen} />
         </Drawer.Navigator>
+        
         </NavigationContainer>
     );
 };
