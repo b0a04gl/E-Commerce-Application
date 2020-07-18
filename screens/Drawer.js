@@ -22,7 +22,7 @@ import BrowseHomeFurniture from './Category/BrowseHomeFurniture';
 import BrowseSportsBooks from './Category/BrowseSportsBooks';
 import BrowseToysBaby from './Category/BrowseToysBaby';
 import BrowseTVsAppliances from './Category/BrowseTVsAppliances';
-
+import OTPAuth from './OTPAuth';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
@@ -48,6 +48,25 @@ const InitStackScreen =({navigation}) =>(
     </Stack.Navigator>
 );
 
+const OTPAuthStackScreen =({navigation}) =>(
+    <Stack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
+
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            alignSelf: 'center'
+          },
+    }}>
+        <Stack.Screen name="OTPAuth" component={OTPAuth} options={{
+            title:'OTPAuth',
+            
+        }}/>
+
+    </Stack.Navigator>
+);
 
 const HomeStackScreen =({navigation}) =>(
     <Stack.Navigator screenOptions={{
@@ -604,9 +623,10 @@ export default function DrawerNavigator () {
     return(
         <NavigationContainer>
         <Drawer.Navigator initialRouteName="Users" drawerContent={props => <DrawerContent {...props}/>}>
-            
+        
         <Drawer.Screen name="Users" component={InitStackScreen} options={{drawerLabel: () => null,drawerIcon: () => null  }} />
         <Drawer.Screen name="Home" component={HomeStackScreen} />
+        <Drawer.Screen name="OTPAuth" component={OTPAuthStackScreen} />
         <Drawer.Screen name="Profile" component={ProfileScreenStackScreen} />
         <Drawer.Screen name="BeautyPersonalcare" component={BeautyPersonalcareStackScreen} />
         <Drawer.Screen name="Electronics" component={ElectronicsStackScreen} />

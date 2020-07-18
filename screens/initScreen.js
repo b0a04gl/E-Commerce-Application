@@ -73,7 +73,7 @@ class Init extends React.Component
             <TouchableOpacity
                     style={styles.SubmitButtonStyle1}
                     activeOpacity = { .5 }
-                    onPress={() => navigate('Home')}
+                    onPress={() => navigate('OTPAuth')}
                  >
  
             <Text style={styles.TextStyle}> CUSTOMER </Text>
