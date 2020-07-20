@@ -163,7 +163,7 @@ export default class Admin extends React.Component {
       cards: cardArray,
       showImageModal: false,
       header: '',
-      image: require('../assets/images/plus.png'),
+      image: require('../assets/images/add.png'),
       smallText: '',
       bigText: '',
     });

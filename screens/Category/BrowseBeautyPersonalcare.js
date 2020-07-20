@@ -96,7 +96,7 @@ export default class BrowseBeautyPersonalcare extends Component {
             {categories.map(category => (
               <TouchableOpacity
                 key={category.name}
-                onPress={() => navigation.navigate(category.name)}
+                onPress={() => navigation.navigate('ProductList')}
               >
                 <Card center middle shadow style={styles.category}>
                   <Badge

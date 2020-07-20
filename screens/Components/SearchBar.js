@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, TextInput, Modal, TouchableWithoutFeedback, FlatList } from 'react-native';
 
 const SearchBar = props => {
 

@@ -5,14 +5,7 @@ import { createDrawerNavigator} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons'; 
 import Home from './HomeScreen';
 import {DrawerContent} from './DrawerContent';
-import BeautyPersonalcare from './Category/BeautyPersonalcareCategory';
-import Electronics from './Category/ElectronicsCategory';
-import Fashion from './Category/FashsionCategory';
-import HomeFurniture from './Category/HomeFurnitureCategory';
-import RefurbishedProducts from './Category/RefurbishedProductsCategory';
-import SportsBooks from './Category/SportsBooksCategory';
-import ToysBaby from './Category/ToysBabyCategory';
-import TVsAppliances from './Category/TVsAppliancesCategory';
+import EditableProfileScreen from './EditableProfileScreen';
 import ProfileScreen from './ProfileScreen';
 import Init from './initScreen';
 import BrowseElectronics from './Category/BrowseElectronics';
@@ -24,10 +17,28 @@ import BrowseToysBaby from './Category/BrowseToysBaby';
 import BrowseTVsAppliances from './Category/BrowseTVsAppliances';
 import OTPAuth from './OTPAuth';
 import Admin from './Admin';
+import { StyleSheet, Text, View } from 'react-native';
+import ProductList from './ProductList';
+import SearchBar from './Components/SearchBar';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
 const InitStack = createStackNavigator();
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1
+    },
+    icon: {
+      paddingLeft: 10
+    },
+    iconContainer: {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      width: 80
+    }
+  });
+  
 
 const InitStackScreen =({navigation}) =>(
     <Stack.Navigator screenOptions={{
@@ -44,6 +55,30 @@ const InitStackScreen =({navigation}) =>(
         <Stack.Screen name="Init" component={Init} options={{
             title:'E-Commerce App',
             
+        }}/>
+
+    </Stack.Navigator>
+);
+
+const SearchBarStackScreen =({navigation}) =>(
+    <Stack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
+
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            alignSelf: 'center'
+          },
+          headerLeft : () => (
+            <Icon.Button  name = 'ios-arrow-round-back' size={30}
+            backgroundColor = '#ec2F4B' onPress={() => navigation.goBack()}></Icon.Button>
+        ),
+    }}>
+        <Stack.Screen name="SearchBar" component={SearchBar} options={{
+            title:'SearchBar',
+            headerTitleAlign: 'center',
         }}/>
 
     </Stack.Navigator>
@@ -123,8 +158,13 @@ const HomeStackScreen =({navigation}) =>(
             ),
             
             headerRight : () => (
-                <Icon.Button  name = 'ios-cart' size={30}
+                
+            //     <View style={styles.iconContainer}>
+            //   <Icon.Button  name = 'md-search' size={30}
+            //     backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+         <Icon.Button  name = 'ios-cart' size={30}
                 backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+    //   </View>
             ),
 
         }}/>
@@ -132,13 +172,51 @@ const HomeStackScreen =({navigation}) =>(
     </Stack.Navigator>
 );
 
+const ProductListStackScreen =({navigation}) =>(
+    <Stack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
+
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            // alignSelf: 'center'
+           
+          },
+    }}>
+        <Stack.Screen name="ProductList" component={ProductList} options={{
+            title:'ProductList',
+            headerStyle: {
+                backgroundColor: '#ec2F4B',
+              },
+            headerTitleAlign: 'center',
+            headerLeft : () => (
+                <Icon.Button  name = 'ios-menu' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+            ),
+            
+            headerRight : () => (
+                
+                <View style={styles.iconContainer}>
+              <Icon.Button  name = 'md-search' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('SearchBar')}></Icon.Button>
+         <Icon.Button  name = 'ios-cart' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+      </View>
+            ),
+
+        }}/>
+
+    </Stack.Navigator>
+);
 
 const ProfileScreenStackScreen =({navigation}) =>(
     <Stack.Navigator screenOptions={{
         headerStyle: {
             backgroundColor: '#ec2F4B',
           },
-
+        //   headerShown: false,
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold',
@@ -164,13 +242,12 @@ const ProfileScreenStackScreen =({navigation}) =>(
     </Stack.Navigator>
 );
 
-
-const BeautyPersonalcareStackScreen =({navigation}) =>(
+const EditableProfileScreenStackScreen =({navigation}) =>(
     <Stack.Navigator screenOptions={{
         headerStyle: {
             backgroundColor: '#ec2F4B',
           },
-
+        //   headerShown: false,
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold',
@@ -178,8 +255,8 @@ const BeautyPersonalcareStackScreen =({navigation}) =>(
            
           },
     }}>
-        <Stack.Screen name="BeautyPersonalcare" component={BeautyPersonalcare} options={{
-            title:'BeautyPersonalcare',
+        <Stack.Screen name="EditableProfile" component={EditableProfileScreen} options={{
+            title:'Edit Profile',
             headerStyle: {
                 backgroundColor: '#ec2F4B',
               },
@@ -196,225 +273,6 @@ const BeautyPersonalcareStackScreen =({navigation}) =>(
     </Stack.Navigator>
 );
 
-const ElectronicsStackScreen =({navigation}) =>(
-    <Stack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: '#ec2F4B',
-          },
-
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            // alignSelf: 'center'
-           
-          },
-    }}>
-        <Stack.Screen name="Electronics" component={Electronics} options={{
-            title:'Electronics',
-            headerShown: false,
-            headerStyle: {
-                backgroundColor: '#ec2F4B',
-              },
-            headerTitleAlign: 'center',
-            headerLeft : () => (
-                <Icon.Button  name = 'ios-menu' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
-            ),
-
-              
-
-        }}/>
-
-    </Stack.Navigator>
-);
-
-const FashionStackScreen =({navigation}) =>(
-    <Stack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: '#ec2F4B',
-          },
-
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            // alignSelf: 'center'
-           
-          },
-    }}>
-        <Stack.Screen name="Fashion" component={Fashion} options={{
-            title:'Fashion',
-            headerStyle: {
-                backgroundColor: '#ec2F4B',
-              },
-            headerTitleAlign: 'center',
-            headerLeft : () => (
-                <Icon.Button  name = 'ios-menu' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
-            ),
-
-              
-
-        }}/>
-
-    </Stack.Navigator>
-);
-
-const HomeFurnitureStackScreen =({navigation}) =>(
-    <Stack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: '#ec2F4B',
-          },
-
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            // alignSelf: 'center'
-           
-          },
-    }}>
-        <Stack.Screen name="HomeFurniture" component={HomeFurniture} options={{
-            title:'HomeFurniture',
-            headerStyle: {
-                backgroundColor: '#ec2F4B',
-              },
-            headerTitleAlign: 'center',
-            headerLeft : () => (
-                <Icon.Button  name = 'ios-menu' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
-            ),
-
-              
-
-        }}/>
-
-    </Stack.Navigator>
-);
-
-
-const RefurbishedProductsStackScreen =({navigation}) =>(
-    <Stack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: '#ec2F4B',
-          },
-
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            // alignSelf: 'center'
-           
-          },
-    }}>
-        <Stack.Screen name="RefurbishedProducts" component={RefurbishedProducts} options={{
-            title:'RefurbishedProducts',
-            headerStyle: {
-                backgroundColor: '#ec2F4B',
-              },
-            headerTitleAlign: 'center',
-            headerLeft : () => (
-                <Icon.Button  name = 'ios-menu' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
-            ),
-
-              
-
-        }}/>
-
-    </Stack.Navigator>
-);
-
-const SportsBooksStackScreen =({navigation}) =>(
-    <Stack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: '#ec2F4B',
-          },
-
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            // alignSelf: 'center'
-           
-          },
-    }}>
-        <Stack.Screen name="SportsBooks" component={SportsBooks} options={{
-            title:'SportsBooks',
-            headerStyle: {
-                backgroundColor: '#ec2F4B',
-              },
-            headerTitleAlign: 'center',
-            headerLeft : () => (
-                <Icon.Button  name = 'ios-menu' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
-            ),
-
-              
-
-        }}/>
-
-    </Stack.Navigator>
-);
-
-
-const ToysBabyStackScreen =({navigation}) =>(
-    <Stack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: '#ec2F4B',
-          },
-
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            // alignSelf: 'center'
-           
-          },
-    }}>
-        <Stack.Screen name="ToysBaby" component={ToysBaby} options={{
-            title:'ToysBaby',
-            headerStyle: {
-                backgroundColor: '#ec2F4B',
-              },
-            headerTitleAlign: 'center',
-            headerLeft : () => (
-                <Icon.Button  name = 'ios-menu' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
-            ),
-
-              
-
-        }}/>
-
-    </Stack.Navigator>
-);
-
-const TVsAppliancesStackScreen =({navigation}) =>(
-    <Stack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: '#ec2F4B',
-          },
-
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            // alignSelf: 'center'
-           
-          },
-    }}>
-        <Stack.Screen name="TVsAppliances" component={TVsAppliances} options={{
-            title:'TVsAppliances',
-            headerStyle: {
-                backgroundColor: '#ec2F4B',
-              },
-            headerTitleAlign: 'center',
-            headerLeft : () => (
-                <Icon.Button  name = 'ios-menu' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
-            ),
-
-              
-
-        }}/>
-
-    </Stack.Navigator>
-);
 
 const BrowseElectronicsStackScreen =({navigation}) =>(
     <Stack.Navigator screenOptions={{
@@ -659,14 +517,9 @@ export default function DrawerNavigator () {
         <Drawer.Screen name="Admin" component={AdminStackScreen} />
         <Drawer.Screen name="OTPAuth" component={OTPAuthStackScreen} />
         <Drawer.Screen name="Profile" component={ProfileScreenStackScreen} />
-        <Drawer.Screen name="BeautyPersonalcare" component={BeautyPersonalcareStackScreen} />
-        <Drawer.Screen name="Electronics" component={ElectronicsStackScreen} />
-        <Drawer.Screen name="Fashion" component={FashionStackScreen} />
-        <Drawer.Screen name="HomeFurniture" component={HomeFurnitureStackScreen} />
-        <Drawer.Screen name="RefurbishedProducts" component={RefurbishedProductsStackScreen} />
-        <Drawer.Screen name="SportsBooks" component={SportsBooksStackScreen} />
-        <Drawer.Screen name="ToysBaby" component={ToysBabyStackScreen} />
-        <Drawer.Screen name="TVsAppliances" component={TVsAppliancesStackScreen} />
+        <Drawer.Screen name="EditableProfile" component={EditableProfileScreenStackScreen} />
+        <Drawer.Screen name="SearchBar" component={SearchBarStackScreen} />
+        <Drawer.Screen name="ProductList" component={ProductListStackScreen} />
         <Drawer.Screen name="BrowseElectronics" component={BrowseElectronicsStackScreen} />
         <Drawer.Screen name="BrowseFashion" component={BrowseFashionStackScreen} />
         <Drawer.Screen name="BrowseBeautyPersonalcare" component={BrowseBeautyPersonalcareStackScreen} />
