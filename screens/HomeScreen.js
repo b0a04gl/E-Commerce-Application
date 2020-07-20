@@ -1,7 +1,5 @@
 import React from 'react';
-import { TouchableOpacity,StyleSheet, Text, View } from 'react-native';
-import Shibi from './Shibi';
-
+import UserScreen from './UserScreen';
 
 class Home extends React.Component
 {
@@ -13,7 +11,7 @@ class Home extends React.Component
     render()
     {
         return(
-            <Shibi/>
+            <UserScreen/>
         );
     }
 

@@ -16,7 +16,7 @@ export default class Admin extends React.Component {
       ],
       cards: [
         {
-          key: new Date().getTime(),
+          key: new Date().getTime().toString(),
           images: [
             {
               key: 1,
@@ -46,7 +46,7 @@ export default class Admin extends React.Component {
           header: 'Offers',
         },
         {
-          key: new Date().getTime(),
+          key: new Date().getTime().toString(),
           images: [
             {
               key: 5,
