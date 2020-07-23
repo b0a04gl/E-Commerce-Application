@@ -1,3 +1,7 @@
+
+const hidden = ['Users','OTPAuth','SearchBar','EditProfile','ProductList','Admin'];
+
+
 const electronic = [
   {
     id: "mobiles",
@@ -318,4 +322,4 @@ const profile = {
   newsletter: false
 };
 
-export { electronic,fashion,HomeFurniture,TVsAppliances,ToysBaby,BeautyPersonalcare,SportsBooks, explore, products, profile };
+export {hidden,electronic,fashion,HomeFurniture,TVsAppliances,ToysBaby,BeautyPersonalcare,SportsBooks, explore, products, profile };

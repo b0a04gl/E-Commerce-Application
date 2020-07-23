@@ -2,7 +2,9 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator} from '@react-navigation/drawer';
-import Icon from 'react-native-vector-icons/Ionicons'; 
+import Icon from 'react-native-vector-icons/Ionicons';
+import AddItems from './AddItems';
+import drawerItems from '../constants/drawerItems';
 import Home from './HomeScreen';
 import {DrawerContent} from './DrawerContent';
 import EditableProfileScreen from './EditableProfileScreen';
@@ -20,6 +22,7 @@ import Admin from './Admin';
 import { StyleSheet, Text, View } from 'react-native';
 import ProductList from './ProductList';
 import SearchBar from './Components/SearchBar';
+import {mocks} from '../constants';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
@@ -41,24 +44,60 @@ const styles = StyleSheet.create({
   
 
 const InitStackScreen =({navigation}) =>(
-    <Stack.Navigator screenOptions={{
+    <Stack.Navigator
+    
+    screenOptions={{
         headerStyle: {
             backgroundColor: '#ec2F4B',
           },
-
+          gestureEnabled: false ,
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold',
             alignSelf: 'center'
           },
     }}>
+
+
+      
         <Stack.Screen name="Init" component={Init} options={{
             title:'E-Commerce App',
-            
+            gestureEnabled: false,
         }}/>
 
     </Stack.Navigator>
 );
+
+const func = () => {
+  var temp = ProfileScreen;
+  return(
+
+<Stack.Navigator
+    
+    screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
+          gestureEnabled: false ,
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            alignSelf: 'center'
+          },
+    }}>
+
+
+      
+        <Stack.Screen name="Init" component={temp} options={{
+            title:'E-Commerce App',
+            // gestureEnabled: false,
+        }}/>
+
+    </Stack.Navigator>
+
+  );
+}
+
 
 const SearchBarStackScreen =({navigation}) =>(
     <Stack.Navigator screenOptions={{
@@ -507,26 +546,621 @@ const BrowseTVsAppliancesStackScreen =({navigation}) =>(
 
 export default function DrawerNavigator () {
 
+  const items = [
+
     
-    return(
-        <NavigationContainer>
-        <Drawer.Navigator initialRouteName="Users" drawerContent={props => <DrawerContent {...props}/>}>
+
+    <Drawer.Screen name="Home" component={HomeStackScreen} 
         
-        <Drawer.Screen name="Users" component={InitStackScreen} options={{drawerLabel: () => null,drawerIcon: () => null  }} />
-        <Drawer.Screen name="Home" component={HomeStackScreen} />
-        <Drawer.Screen name="Admin" component={AdminStackScreen} />
-        <Drawer.Screen name="OTPAuth" component={OTPAuthStackScreen} />
-        <Drawer.Screen name="Profile" component={ProfileScreenStackScreen} />
-        <Drawer.Screen name="EditableProfile" component={EditableProfileScreenStackScreen} />
-        <Drawer.Screen name="SearchBar" component={SearchBarStackScreen} />
-        <Drawer.Screen name="ProductList" component={ProductListStackScreen} />
-        <Drawer.Screen name="BrowseElectronics" component={BrowseElectronicsStackScreen} />
-        <Drawer.Screen name="BrowseFashion" component={BrowseFashionStackScreen} />
-        <Drawer.Screen name="BrowseBeautyPersonalcare" component={BrowseBeautyPersonalcareStackScreen} />
-        <Drawer.Screen name="BrowseHomeFurniture" component={BrowseHomeFurnitureStackScreen} />
-        <Drawer.Screen name="BrowseSportsBooks" component={BrowseSportsBooksStackScreen} />
-        <Drawer.Screen name="BrowseToysBaby" component={BrowseToysBabyStackScreen} />
-        <Drawer.Screen name="BrowseTVsAppliances" component={BrowseTVsAppliancesStackScreen} />
+        options={{
+          title: 'Home',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+
+
+        <Drawer.Screen name="Admin" component={AdminStackScreen} 
+        
+        options={{
+          title: 'Admin',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        
+        />,
+
+
+        <Drawer.Screen name="OTPAuth" component={OTPAuthStackScreen}
+        
+        options={{
+          title: 'OTPAuth',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        
+        />,
+        <Drawer.Screen name="Profile" component={ProfileScreenStackScreen}
+        
+        options={{
+          title: 'Profile',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+        <Drawer.Screen name="EditableProfile" component={EditableProfileScreenStackScreen} 
+        
+        options={{
+          title: 'EditProfile',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+
+        <Drawer.Screen name="SearchBar" component={SearchBarStackScreen} 
+        
+        options={{
+          title: 'SearchBar',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+
+        <Drawer.Screen name="ProductList" component={ProductListStackScreen} 
+        
+        options={{
+          title: 'ProductList',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+
+        <Drawer.Screen name="BrowseElectronics" component={BrowseElectronicsStackScreen} 
+        
+        options={{
+          title: 'Electronics',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+
+        <Drawer.Screen name="BrowseFashion" component={BrowseFashionStackScreen} 
+        
+        options={{
+          title: 'Fashion',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+
+
+<Drawer.Screen name="BrowseBeautyPersonalcare" component={BrowseBeautyPersonalcareStackScreen} 
+        
+        options={{
+          title: 'Beauty',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+
+<Drawer.Screen name="BrowseHomeFurniture" component={BrowseHomeFurnitureStackScreen} 
+        
+        options={{
+          title: 'HomeFurn',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+        <Drawer.Screen name="BrowseSportsBooks" component={BrowseSportsBooksStackScreen} 
+        options={{
+          title: 'Sports',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        
+        />,
+        <Drawer.Screen name="BrowseToysBaby" component={BrowseToysBabyStackScreen} 
+        
+        options={{
+          title: 'Toys',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+        // <Drawer.Screen name="BrowseTVsAppliances" component={BrowseTVsAppliancesStackScreen}
+        
+        // options={{
+        //   title: 'TVs',
+        //   drawerIcon: ({color, size}) => (
+        //     <Icon
+        //       name="ios-arrow-round-back"
+        //       size={size}
+        //       color={color}
+        //     />
+        //   ),
+        //   // gestureEnabled: false,
+        // }}
+        // /> ,
+
+<Drawer.Screen name="Users" component={func} 
+        
+        options={{
+
+         
+          title: 'Users',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="home-outline"
+              size={size}
+              color={color}
+            />
+            
+
+
+          ),
+          // gestureEnabled: false,
+
+          
+
+        }}
+        />
+
+        
+  ];
+
+ items.push(
+  <Drawer.Screen name="BrowseTVsAppliances" component={BrowseTVsAppliancesStackScreen}
+        
+  options={{
+    title: 'TVs',
+    drawerIcon: ({color, size}) => (
+      <Icon
+        name="ios-arrow-round-back"
+        size={size}
+        color={color}
+      />
+    ),
+    // gestureEnabled: false,
+  }}
+  /> 
+ )
+
+
+
+
+
+
+
+// function ssh ({navigation}) {
+//   return(
+    
+//       <Stack.Navigator
+      
+//       screenOptions={{
+//           headerStyle: {
+//               backgroundColor: '#ec2F4B',
+//             },
+//             gestureEnabled: false ,
+//             headerTintColor: '#fff',
+//             headerTitleStyle: {
+//               fontWeight: 'bold',
+//               alignSelf: 'center'
+//             },
+//       }}>
+    
+    
+        
+//           <Stack.Screen name="Init" component={temp} options={{
+//               title:'E-Commerce App',
+//               // gestureEnabled: false,
+//           }}/>
+    
+//       </Stack.Navigator>
+    
+//   );
+// }
+
+
+ //addding item in drawer - creating component (dummy)
+ const temp = function HomeScreen({ navigation }) {
+  return (
+    // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    //   <Text>Yebbaaaahhhhh</Text>
+    // </View>
+
+<ProductList/>
+
+  );
+};
+
+ //add a screen component : stack navigator (which has temp as component)
+items.push(
+  <Drawer.Screen name="UsersTemp" 
+  
+  
+  component={
+
+    function ssh ({navigation}) {
+      return(
+        
+          <Stack.Navigator
+          
+          screenOptions={{
+              headerStyle: {
+                  backgroundColor: '#ec2F4B',
+                },
+                gestureEnabled: false ,
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                  fontWeight: 'bold',
+                  alignSelf: 'center'
+                },
+          }}>
+        
+        
+            
+              <Stack.Screen name="AddItems" component={AddItems} options={{
+                  title:'AddItems',
+                  // gestureEnabled: false,
+              }}/>
+        
+          </Stack.Navigator>
+        
+      );
+    }
+
+  }
+        
+        options={{
+
+         
+          title: 'UsersTemp',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="home-outline"
+              size={size}
+              color={color}
+            />
+            
+
+
+          ),
+          // gestureEnabled: false,
+
+          
+
+        }}
+        />
+);
+
+//delete an screen
+// items.splice(items.length-1,1);
+
+const n = mocks.names;
+
+
+
+
+    return(
+
+      // <Text>Text inside drawer</Text>
+
+        <NavigationContainer>
+
+      {/* <AddItems/> */}
+       {n.map(x => (
+    <Text>{"it hasssssssssssss"+x}</Text>
+    ))} 
+    <Text>{'It hasssssssssss '+n.length}</Text>
+        <Drawer.Navigator initialRouteName="Users" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} 
+        
+        >
+
+
+        
+      {items}
+
+        {/* <Drawer.Screen name="Home" component={HomeStackScreen} 
+        
+        options={{
+          title: 'Home',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        /> */}
+        {/* <Drawer.Screen name="Admin" component={AdminStackScreen} 
+        
+        options={{
+          title: 'Admin',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        
+        /> */}
+        {/* <Drawer.Screen name="OTPAuth" component={OTPAuthStackScreen}
+        
+        options={{
+          title: 'OTPAuth',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        
+        /> */}
+        {/* <Drawer.Screen name="Profile" component={ProfileScreenStackScreen}
+        
+        options={{
+          title: 'Profile',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        /> */}
+        {/* <Drawer.Screen name="EditableProfile" component={EditableProfileScreenStackScreen} 
+        
+        options={{
+          title: 'EditProfile',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        /> */}
+        {/* <Drawer.Screen name="SearchBar" component={SearchBarStackScreen} 
+        
+        options={{
+          title: 'SearchBar',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        /> */}
+        {/* <Drawer.Screen name="ProductList" component={ProductListStackScreen} 
+        
+        options={{
+          title: 'ProductList',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        /> */}
+        {/* <Drawer.Screen name="BrowseElectronics" component={BrowseElectronicsStackScreen} 
+        
+        options={{
+          title: 'Electronics',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        /> */}
+        {/* <Drawer.Screen name="BrowseFashion" component={BrowseFashionStackScreen} 
+        
+        options={{
+          title: 'Fashion',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        /> */}
+        {/* <Drawer.Screen name="BrowseBeautyPersonalcare" component={BrowseBeautyPersonalcareStackScreen} 
+        
+        options={{
+          title: 'Beauty',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        /> */}
+        {/* <Drawer.Screen name="BrowseHomeFurniture" component={BrowseHomeFurnitureStackScreen} 
+        
+        options={{
+          title: 'HomeFurn',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />
+        <Drawer.Screen name="BrowseSportsBooks" component={BrowseSportsBooksStackScreen} 
+        options={{
+          title: 'Sports',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        
+        />
+        <Drawer.Screen name="BrowseToysBaby" component={BrowseToysBabyStackScreen} 
+        
+        options={{
+          title: 'Toys',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />
+        <Drawer.Screen name="BrowseTVsAppliances" component={BrowseTVsAppliancesStackScreen}
+        
+        options={{
+          title: 'TVs',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="ios-arrow-round-back"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />
+
+<Drawer.Screen name="Users" component={InitStackScreen} 
+        
+        options={{
+
+         
+          title: 'Users',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="home-outline"
+              size={size}
+              color={color}
+            />
+            
+
+
+          ),
+          gestureEnabled: false,
+
+          
+
+        }}
+        /> */}
+
+
         </Drawer.Navigator>
         
         </NavigationContainer>

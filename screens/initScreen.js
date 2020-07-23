@@ -61,6 +61,7 @@ class Init extends React.Component
     constructor(props)
     {
         super(props);
+        global.hidden=['Users','OTPAuth','SearchBar','EditProfile','ProductList','Admin'];
     }
 
     render()

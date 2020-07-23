@@ -89,7 +89,7 @@ class ProfileScreen extends React.Component
                     <Text style={styles.menuItemText}>My Cart</Text>
                   </View>
                 </TouchableRipple>
-                <TouchableRipple onPress={() => {navigation.navigate('EditableProfile')}}>
+                <TouchableRipple onPress={() => {navigation.navigate('EditProfile')}}>
                   <View style={styles.menuItem}>
                     <Icon name="account-check-outline" color="#ec2F4B" size={25}/>
                     <Text style={styles.menuItemText}>My Account</Text>
