@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect }  from 'react';
 import { 
     View, 
     Text, 
@@ -21,7 +21,11 @@ import { AuthContext } from '../components/context';
 
 import Users from '../model/users';
 
+import firebase from '../database/firebaseDb';
+
 const SignInScreen = ({navigation}) => {
+
+    const dbRef = firebase.firestore().collection('users');
 
     const [checked, setChecked] = React.useState('first');
 
@@ -34,6 +38,8 @@ const SignInScreen = ({navigation}) => {
         isValidPassword: true,
         type : '',
     });
+
+    const userArr = [];
 
      const products = [{
       id: 1,
@@ -51,6 +57,21 @@ const SignInScreen = ({navigation}) => {
     const { colors } = useTheme();
 
     const { signIn } = React.useContext(AuthContext);
+
+   const getCollection = (querySnapshot) => {
+        
+        querySnapshot.forEach((res) => {
+          const { email,password } = res.data();
+          userArr.push({
+            key: res.id,
+            res,
+            email,
+            password,
+          });
+        });
+        
+      }
+
 
     const textInputChange = (val) => {
         if( val.trim().length >= 4 ) {
@@ -109,39 +130,44 @@ const SignInScreen = ({navigation}) => {
 
     const loginHandle = (email, password,userType) => {
 
-        // const foundUser = Users.filter( item => {
-        //     return userName == item.username && password == item.password;
-        // } );
-
-        // if ( data.username.length == 0 || data.password.length == 0 ) {
-        //     Alert.alert('Wrong Input!', 'Username or password field cannot be empty.', [
-        //         {text: 'Okay'}
-        //     ]);
-        //     return;
-        // }
-
-        // if ( foundUser.length == 0 ) {
-        //     Alert.alert('Invalid User!', 'Username or password is incorrect.', [
-        //         {text: 'Okay'}
-        //     ]);
-        //     return;
-        // }
-
+       
+        dbRef.onSnapshot(getCollection);
         const foundUser = [
             {
-                email : email,
-                password : password,
+                email : null,
+                password : null,
                 type : userType
             }
         ];
 
+        for(let index=0;index<userArr.length;index+=1)
+        {
+            // Alert.alert(userArr[index].email+":"+userArr[index].password);
+
+            if(userArr[index].email==email && userArr[index].password==password)
+            {
+                foundUser[0].email = email;
+                foundUser[0].password = password;
+            }
+        }
  
-        // foundUser[0].type=data.type;
-
-        Alert.alert("current user : "+foundUser[0].type);
-
-        signIn(foundUser);
+        if(foundUser[0].email!=null && foundUser[0].password!=null)
+        {
+            Alert.alert("current user : "+foundUser[0].email+"\n"+foundUser[0].password+"\n"+foundUser[0].type);
+            signIn(foundUser);
+        }
+        else
+        {
+            Alert.alert("Click Again 'Sign In' Button to sign in (OR) If not registered, First you must signUp!...");
+        }
+        
     }
+
+    useEffect(() => {
+        setTimeout(async() => {
+            dbRef.onSnapshot(getCollection); 
+        }, 1000);
+      }, []);
 
     return (
       <View style={styles.container}>

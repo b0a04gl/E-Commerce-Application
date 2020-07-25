@@ -19,42 +19,17 @@ import RootStackScreen from './screens/RootStackScreen';
 import AsyncStorage from '@react-native-community/async-storage';
 // import auth from '@react-native-firebase/auth';
 // import * as firebase from "firebase";
+import firebase from './database/firebaseDb';
+
 
 const App = () => {
 
+
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
 
-//   const firebaseConfig =  {
-//     apiKey: "AIzaSyDXts_z81jdPnBThNwrC-rEdwESyg89K_E",
-//     authDomain: "e-commerce-b1423.firebaseapp.com",
-//     databaseURL: "https://e-commerce-b1423.firebaseio.com",
-//     projectId: "e-commerce-b1423",
-//     storageBucket: "e-commerce-b1423.appspot.com",
-//     messagingSenderId: "828771404482",
-//     appId: "1:828771404482:web:4d8d2bd1ef23c009c1095b",
-//     measurementId: "G-XHNS2RLH33"
-//   };
-//   // firebase.initializeApp(firebaseConfig)  
-// // const check = firebase.apps.length ? firebase.initializeApp(firebaseConfig);
-// const [message, showMessage] = React.useState((!firebaseConfig || Platform.OS === 'web')
-// ? { text: "To get started, provide a valid firebase config in App.js and open this snack on an iOS or Android device."}
-// : undefined);
+  const dbRef = firebase.firestore().collection('users');
 
-
-// setTimeout(() => {
-//   if (!firebase.apps.length) {
-//       try {
-//           firebase.initializeApp(firebaseConfig);
-//           Alert.alert("Initialized firebase :"+firebaseConfig.appId);
-//       } catch (err) {
-//           console.log(err)
-//       }
-//   }
-
-// }, 100)
-
-
-
+  const userArr = [];
 
   const initialLoginState = {
     isLoading: true,
@@ -62,6 +37,7 @@ const App = () => {
     userToken: null,
     hscreens: null,
     userType : null,
+    
   };
 
   const CustomDefaultTheme = {
@@ -85,6 +61,38 @@ const App = () => {
       text: '#ffffff'
     }
   }
+
+const storeUser =(emailID,pwd) =>{
+  if(emailID === ''){
+    alert('Fill at least your name!')
+   } else {
+        
+     dbRef.add({
+       email: emailID,
+       password: pwd,
+     }).then((res) => {
+      
+     })
+     .catch((err) => {
+       console.error("Error found: ", err);
+     });
+   }
+}
+
+const getCollection = (querySnapshot) => {
+  
+  querySnapshot.forEach((res) => {
+    const { name, email, mobile } = res.data();
+    userArr.push({
+      key: res.id,
+      res,
+      name,
+      email,
+      mobile,
+    });
+  });
+  
+}
 
   const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
 
@@ -138,10 +146,6 @@ const App = () => {
 
    
       try {
-
-        // await firebase.auth().signInWithEmailAndPassword(email, password);
-
-        
         await AsyncStorage.setItem('userToken', userToken);
         await AsyncStorage.setItem('userType',userType);
       } catch(e) {
@@ -168,13 +172,14 @@ const App = () => {
      
       try {
         
+        storeUser(email,password);
         // await firebase.auth().createUserWithEmailAndPassword(email, password);
         
-        await AsyncStorage.setItem('userToken', userToken);
-        await AsyncStorage.setItem('userType',userType);
+        // await AsyncStorage.setItem('userToken', userToken);
+        // await AsyncStorage.setItem('userType',userType);
 
        
-        dispatch({ type: 'REGISTER', id: email, token: userToken,userType:userType });
+        // dispatch({ type: 'REGISTER', id: email, token: userToken,userType:userType });
         // dispatch({ type: 'LOGIN', id: email, token: userToken,userType:userType });
       } catch (e) {
         console.log(e);
@@ -195,7 +200,7 @@ const App = () => {
 
       // Alert.alert("Initializing firebase");
       // firebase.initializeApp(firebaseConfig);
-
+      getCollection;
 
       let userToken;
       userToken = null;
@@ -210,7 +215,7 @@ const App = () => {
       // console.log('user token: ', userToken);
       dispatch({ type: 'RETRIEVE_TOKEN', token: userToken ,userType:userType});
       
-    }, 1000);
+    }, 100);
   }, []);
 
   if( loginState.isLoading ) {

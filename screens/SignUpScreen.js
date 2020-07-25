@@ -86,30 +86,12 @@ const SignUpScreen = ({navigation}) => {
         //     return userName == item.username && password == item.password;
         // } );
 
-        // if ( data.username.length == 0 || data.password.length == 0 ) {
-        //     Alert.alert('Wrong Input!', 'Username or password field cannot be empty.', [
-        //         {text: 'Okay'}
-        //     ]);
-        //     return;
-        // }
-
-        // if ( foundUser.length == 0 ) {
-        //     Alert.alert('Invalid User!', 'Username or password is incorrect.', [
-        //         {text: 'Okay'}
-        //     ]);
-        //     return;
-        // }
-
-        // foundUser = [
-        //     {
-        //         email : email,
-        //         password : passsword,
-        //         type : userType
-        //     }
-        // ];
-
- 
-        // // foundUser[0].type=data.type;
+        if ( data.email.length == 0 || data.password.length == 0 ) {
+            Alert.alert('Wrong Input!', 'email or password field cannot be empty.', [
+                {text: 'Okay'}
+            ]);
+            return;
+        }
 
         const foundUser = [
             {
@@ -119,7 +101,13 @@ const SignUpScreen = ({navigation}) => {
             }
         ];
 
+        Alert.alert("Kudos!!..Signed Up...Further Sign In to get into the App");
+
         signUp(foundUser);
+
+        
+
+        navigation.navigate('SignInScreen');
     }
 
     return (
