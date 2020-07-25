@@ -1,6 +1,6 @@
 import DrawerOrg from './screens/DrawerOrg';
 import React, { useEffect } from 'react';
-import { View, ActivityIndicator,Text } from 'react-native';
+import { View, ActivityIndicator,Text,Alert } from 'react-native';
 import { 
   NavigationContainer, 
   DefaultTheme as NavigationDefaultTheme,
@@ -17,15 +17,48 @@ import {
 import { AuthContext } from './components/context';
 import RootStackScreen from './screens/RootStackScreen';
 import AsyncStorage from '@react-native-community/async-storage';
-
+// import auth from '@react-native-firebase/auth';
+// import * as firebase from "firebase";
 
 const App = () => {
 
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
 
+//   const firebaseConfig =  {
+//     apiKey: "AIzaSyDXts_z81jdPnBThNwrC-rEdwESyg89K_E",
+//     authDomain: "e-commerce-b1423.firebaseapp.com",
+//     databaseURL: "https://e-commerce-b1423.firebaseio.com",
+//     projectId: "e-commerce-b1423",
+//     storageBucket: "e-commerce-b1423.appspot.com",
+//     messagingSenderId: "828771404482",
+//     appId: "1:828771404482:web:4d8d2bd1ef23c009c1095b",
+//     measurementId: "G-XHNS2RLH33"
+//   };
+//   // firebase.initializeApp(firebaseConfig)  
+// // const check = firebase.apps.length ? firebase.initializeApp(firebaseConfig);
+// const [message, showMessage] = React.useState((!firebaseConfig || Platform.OS === 'web')
+// ? { text: "To get started, provide a valid firebase config in App.js and open this snack on an iOS or Android device."}
+// : undefined);
+
+
+// setTimeout(() => {
+//   if (!firebase.apps.length) {
+//       try {
+//           firebase.initializeApp(firebaseConfig);
+//           Alert.alert("Initialized firebase :"+firebaseConfig.appId);
+//       } catch (err) {
+//           console.log(err)
+//       }
+//   }
+
+// }, 100)
+
+
+
+
   const initialLoginState = {
     isLoading: true,
-    userName: null,
+    email: null,
     userToken: null,
     hscreens: null,
     userType : null,
@@ -67,7 +100,7 @@ const App = () => {
       case 'LOGIN': 
         return {
           ...prevState,
-          userName: action.id,
+          email: action.id,
           userToken: action.token,
           userType : action.userType,
           isLoading: false,
@@ -75,16 +108,17 @@ const App = () => {
       case 'LOGOUT': 
         return {
           ...prevState,
-          userName: null,
+          email: null,
           userToken: null,
           isLoading: false,
         };
       case 'REGISTER': 
         return {
           ...prevState,
-          userName: action.id,
+          email: action.id,
           userToken: action.token,
           isLoading: false,
+          
         };
       
     }
@@ -96,17 +130,25 @@ const App = () => {
     signIn: async(foundUser) => {
       // setUserToken('fgkj');
       // setIsLoading(false);
-      const userToken = String(foundUser[0].userToken);
-      const userName = foundUser[0].username;
+      const userToken = 'hihi';
+      const email = foundUser[0].email;
+      const password = foundUser[0].password;
       const userType = foundUser[0].type;
+      
+
+   
       try {
+
+        // await firebase.auth().signInWithEmailAndPassword(email, password);
+
+        
         await AsyncStorage.setItem('userToken', userToken);
         await AsyncStorage.setItem('userType',userType);
       } catch(e) {
         console.log(e);
       }
       // console.log('user token: ', userToken);
-      dispatch({ type: 'LOGIN', id: userName, token: userToken,userType:userType });
+      dispatch({ type: 'LOGIN', id: email, token: userToken,userType:userType });
     },
     signOut: async() => {
       // setUserToken(null);
@@ -118,10 +160,28 @@ const App = () => {
       }
       dispatch({ type: 'LOGOUT' });
     },
-    signUp: () => {
-      // setUserToken('fgkj');
-      // setIsLoading(false);
+    signUp: async (foundUser) => {
+      const userToken = 'hihi';
+      const email = foundUser[0].email;
+      const password = foundUser[0].password;
+      const userType = foundUser[0].type;
+     
+      try {
+        
+        // await firebase.auth().createUserWithEmailAndPassword(email, password);
+        
+        await AsyncStorage.setItem('userToken', userToken);
+        await AsyncStorage.setItem('userType',userType);
+
+       
+        dispatch({ type: 'REGISTER', id: email, token: userToken,userType:userType });
+        // dispatch({ type: 'LOGIN', id: email, token: userToken,userType:userType });
+      } catch (e) {
+        console.log(e);
+      }
     },
+
+    
     toggleTheme: () => {
       setIsDarkTheme( isDarkTheme => !isDarkTheme );
     }
@@ -132,6 +192,11 @@ const App = () => {
   useEffect(() => {
     setTimeout(async() => {
       // setIsLoading(false);
+
+      // Alert.alert("Initializing firebase");
+      // firebase.initializeApp(firebaseConfig);
+
+
       let userToken;
       userToken = null;
       let userType;
