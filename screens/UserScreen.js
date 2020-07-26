@@ -3,6 +3,8 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import { SliderBox } from 'react-native-image-slider-box';
 import Card from './Components/Card'
 import SearchBar from './Components/SearchBar';
+import * as firebase from 'firebase';
+import ApiKeys from '../database/RealtimeDb';
 
 export default class UserScreen extends React.Component {
   _isMounted = false;
@@ -12,35 +14,38 @@ export default class UserScreen extends React.Component {
       imagesDeck: [],
       cards: [],
     };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(ApiKeys.firebaseConfig);
+    }
   }
 
   componentDidMount() {
     this._isMounted = true;
     firebase.database().ref('/imagesDeck').on('value', (data) => {
-        if (this._isMounted) {
-            if (data.val()) {
-                this.setState({
-                    imagesDeck: data.val(),
-                });
-            }
+      if (this._isMounted) {
+        if (data.val()) {
+          this.setState({
+            imagesDeck: data.val(),
+          });
         }
+      }
     }
     );
     firebase.database().ref('/cards').on('value', (data) => {
-        if (this._isMounted) {
-            if (data.val()) {
-                this.setState({
-                    cards: data.val(),
-                });
-            }
+      if (this._isMounted) {
+        if (data.val()) {
+          this.setState({
+            cards: data.val(),
+          });
         }
+      }
     }
     );
-}
+  }
 
-componentWillUnmount() {
+  componentWillUnmount() {
     this._isMounted = false;
-}
+  }
 
   render() {
     return (

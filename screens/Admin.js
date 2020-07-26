@@ -16,14 +16,14 @@ export default class Admin extends React.Component {
             cards: [],
             imageIndex: 0,
             header: '',
-            image: require('./assets/images/add.png'),
+            image: require('../assets/images/add.png'),
             smallText: '',
             bigText: '',
             showCardModal: false,
             showImageModal: false,
             deleteImageNames: [],
             flag: false,
-            alertflag: false,
+            alertflag: true,
         };
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.firebaseConfig);
@@ -157,7 +157,7 @@ export default class Admin extends React.Component {
                 cards: cardArray,
                 showImageModal: false,
                 header: '',
-                image: require('./assets/images/add.png'),
+                image: require('../assets/images/add.png'),
                 smallText: '',
                 bigText: '',
             });
@@ -221,9 +221,11 @@ export default class Admin extends React.Component {
     };
 
     SaveToDatabase = () => {
+        this.setState({
+            alertflag: true,
+        });
         if (this.state.imagesDeck.length > 0) {
             firebase.database().ref('/imagesDeck').set(this.state.imagesDeck).then(() => {
-                this.setState({ alertflag: true, });
             }).catch((error) => {
                 console.log(error);
             });
@@ -247,14 +249,10 @@ export default class Admin extends React.Component {
                     this.setState({
                         flag: true,
                     });
-                    this.setState({
-                        alertflag: true,
-                    });
                 }
             });
             if (flag) {
                 firebase.database().ref('/cards').set(this.state.cards).then(() => {
-                    this.setState({ alertflag: true, });
                     this.setState({
                         flag: true,
                     });
@@ -285,6 +283,9 @@ export default class Admin extends React.Component {
         if (this.state.alertflag) {
             Toast.show('Contents updated', Toast.LONG);
         }
+        else {
+            Toast.show('Error occured while updating', Toast.LONG);
+        }
     };
 
 
@@ -293,11 +294,11 @@ export default class Admin extends React.Component {
             <ScrollView keyboardShouldPersistTaps='always' style={styles.screen}>
                 <View style={styles.iconContainer}>
                     <TouchableOpacity onPress={this.AddImageHandler.bind(this, 'deck')}>
-                        <Image source={require('./assets/images/add.png')} style={styles.image} />
+                        <Image source={require('../assets/images/add.png')} style={styles.image} />
                     </TouchableOpacity>
                     <Text style={{ fontSize: 18, fontWeight: 'bold' }}> Image Deck </Text>
                     <TouchableOpacity onPress={this.DeleteImageHandler.bind(this, this.state.imageIndex)}>
-                        <Image source={require('./assets/images/delete.png')} style={styles.image} />
+                        <Image source={require('../assets/images/delete.png')} style={styles.image} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.imageDeck}>
@@ -316,7 +317,7 @@ export default class Admin extends React.Component {
                 <View>
                     {this.state.cards.map(card => <Card key={card.key} images={card.images} header={card.header} addImage={this.AddCardImageHandler} deleteImage={this.DeleteCardImageHandler} deleteCard={this.DeleteCardHandler} />)}
                     <TouchableOpacity style={styles.bottomContainer} onPress={this.AddCardHandler}>
-                        <Image source={require('./assets/images/add.png')} style={styles.addImage} />
+                        <Image source={require('../assets/images/add.png')} style={styles.addImage} />
                     </TouchableOpacity>
                     <View style={styles.bottomContainer}>
                         <Button title='Save Changes' color='red' onPress={this.SaveToDatabase} />
