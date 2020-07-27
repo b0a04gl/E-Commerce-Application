@@ -9,10 +9,11 @@ import ProfileScreen from './ProfileScreen';
 import Init from './initScreen';
 import OTPAuth from './OTPAuth';
 import Admin from './Admin';
-
+import DealerProducts from './DealerProducts';
 import{ AuthContext } from '../components/context';
 import ProductList from './ProductList';
 import SearchBar from './Components/SearchBar';
+import PendingList from './PendingList';
 
 import {
     useTheme,
@@ -106,6 +107,8 @@ const InitStackScreen =({navigation}) =>(
 
     </Stack.Navigator>
 );
+
+
 
 const SearchBarStackScreen =({navigation}) =>(
     <Stack.Navigator screenOptions={{
@@ -219,6 +222,64 @@ const DealerStackScreen =({navigation}) =>(
   </Stack.Navigator>
 );
 
+
+const DealerProductsStackScreen =({navigation}) =>(
+  <Stack.Navigator screenOptions={{
+      headerStyle: {
+          backgroundColor: '#ec2F4B',
+        },
+
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          alignSelf: 'center'
+        },
+  }}>
+      <Stack.Screen name="DealerProducts" component={DealerProducts} options={{
+          title:'Dealer Products',
+          // headerShown: false,
+          headerStyle: {
+              backgroundColor: '#ec2F4B',
+            },
+          headerTitleAlign: 'center',
+          headerLeft : () => (
+              <Icon.Button  name = 'ios-menu' size={30}
+              backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+          ),
+        
+      }}/>
+
+  </Stack.Navigator>
+);
+
+const PendingListStackScreen =({navigation}) =>(
+  <Stack.Navigator screenOptions={{
+      headerStyle: {
+          backgroundColor: '#ec2F4B',
+        },
+
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          alignSelf: 'center'
+        },
+  }}>
+      <Stack.Screen name="PendingList" component={PendingList} options={{
+          title:'Pending List',
+          // headerShown: false,
+          headerStyle: {
+              backgroundColor: '#ec2F4B',
+            },
+          headerTitleAlign: 'center',
+          headerLeft : () => (
+              <Icon.Button  name = 'ios-menu' size={30}
+              backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+          ),
+        
+      }}/>
+
+  </Stack.Navigator>
+);
 
 const ProductListStackScreen =({navigation}) =>(
     <Stack.Navigator screenOptions={{
@@ -519,8 +580,35 @@ const items = [
           ),
           // gestureEnabled: false,
         }}
+        />,
+        <DrawerNav.Screen name="DealerProducts" component={DealerProductsStackScreen}
+        
+        options={{
+          title: 'DealerProducts',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="md-checkmark-circle-outline"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+<DrawerNav.Screen name="PendingList" component={PendingListStackScreen}
+        
+        options={{
+          title: 'PendingList',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="md-checkmark-circle-outline"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
         />
-
 
 
 ];
@@ -670,17 +758,17 @@ function DrawerContent(props) {
     
   if(type[0]=='Customer')
   {
-      hidden = ['AddItems','Users','OTPAuth','SearchBar','EditProfile','ProductList','Admin','Dealer'];
+      hidden = ['AddItems','Users','OTPAuth','SearchBar','EditProfile','ProductList','Admin','Dealer','DealerProducts','PendingList'];
   }
 
   if(type[0]=='Admin')
 {
-    hidden = ['Users','OTPAuth','SearchBar','EditProfile','ProductList','Home','Profile','Dealer'];
+    hidden = ['Users','OTPAuth','SearchBar','EditProfile','ProductList','Home','Profile','Dealer','DealerProducts'];
 }
 
 if(type[0]=='Dealer')
 {
-    hidden = ['Admin','AddItems','Users','OTPAuth','SearchBar','EditProfile','ProductList','Home','Profile'];
+    hidden = ['Admin','AddItems','Users','OTPAuth','SearchBar','EditProfile','ProductList','Home','Profile','PendingList'];
 }
    
 

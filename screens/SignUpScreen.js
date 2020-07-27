@@ -18,6 +18,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { AuthContext } from '../components/context';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 
 const SignUpScreen = ({navigation}) => {
@@ -27,6 +28,7 @@ const SignUpScreen = ({navigation}) => {
     const [data, setData] = React.useState({
         email: '',
         password: '',
+        type: '',
         confirm_password: '',
         check_textInputChange: false,
         secureTextEntry: true,
@@ -80,7 +82,7 @@ const SignUpScreen = ({navigation}) => {
     }
 
 
-    const signupHandle = (email, password) => {
+    const signupHandle = (email, password,type) => {
 
         // const foundUser = Users.filter( item => {
         //     return userName == item.username && password == item.password;
@@ -97,11 +99,11 @@ const SignUpScreen = ({navigation}) => {
             {
                 email : email,
                 password : password,
-                type : 'Admin'
+                type : type
             }
         ];
-
-        Alert.alert("Kudos!!..Signed Up...Further Sign In to get into the App");
+//..Signed Up...Further Sign In to get into the App
+        Alert.alert("Kudos!!"+foundUser[0].email+":"+foundUser[0].type);
 
         signUp(foundUser);
 
@@ -216,6 +218,31 @@ const SignUpScreen = ({navigation}) => {
                     }
                 </TouchableOpacity>
             </View>
+
+
+            <Text style={[styles.text_footer, {
+                
+                marginTop: 25,
+                marginBottom: 15
+            }]}>User Type</Text>
+            <DropDownPicker
+                    items={
+                        [
+                            {label: 'Customer', value: 'Customer'},
+                            {label: 'Admin', value: 'Admin'},
+                            {label: 'Dealer', value: 'Dealer'},
+                        ]
+                    }
+                    defaultNull
+                    placeholder="Select your user type"
+                    containerStyle={{height: 40}}
+                    activeLabelStyle={{color: '#009387'}}
+                    onChangeItem={item => setData({
+                        ...data,
+                        type: item.value,
+                }) }
+                />
+
             <View style={styles.textPrivate}>
                 <Text style={styles.color_textPrivate}>
                     By signing up you agree to our
@@ -227,7 +254,7 @@ const SignUpScreen = ({navigation}) => {
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => {signupHandle(data.email,data.password)}}
+                    onPress={() => {signupHandle(data.email,data.password,data.type)}}
                 >
                 <LinearGradient
                     colors={['#08d4c4', '#01ab9d']}

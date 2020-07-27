@@ -62,7 +62,7 @@ const App = () => {
     }
   }
 
-const storeUser =(emailID,pwd) =>{
+const storeUser =(emailID,pwd,uType) =>{
   if(emailID === ''){
     alert('Fill at least your name!')
    } else {
@@ -70,6 +70,7 @@ const storeUser =(emailID,pwd) =>{
      dbRef.add({
        email: emailID,
        password: pwd,
+       userType : uType
      }).then((res) => {
       
      })
@@ -79,20 +80,7 @@ const storeUser =(emailID,pwd) =>{
    }
 }
 
-const getCollection = (querySnapshot) => {
-  
-  querySnapshot.forEach((res) => {
-    const { name, email, mobile } = res.data();
-    userArr.push({
-      key: res.id,
-      res,
-      name,
-      email,
-      mobile,
-    });
-  });
-  
-}
+
 
   const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
 
@@ -172,7 +160,7 @@ const getCollection = (querySnapshot) => {
      
       try {
         
-        storeUser(email,password);
+        storeUser(email,password,userType);
         // await firebase.auth().createUserWithEmailAndPassword(email, password);
         
         // await AsyncStorage.setItem('userToken', userToken);
@@ -200,7 +188,7 @@ const getCollection = (querySnapshot) => {
 
       // Alert.alert("Initializing firebase");
       // firebase.initializeApp(firebaseConfig);
-      getCollection;
+      // getCollection;
 
       let userToken;
       userToken = null;

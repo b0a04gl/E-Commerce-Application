@@ -10,6 +10,7 @@ import {
     Alert
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import {LinearGradient} from 'expo-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -41,19 +42,6 @@ const SignInScreen = ({navigation}) => {
 
     const userArr = [];
 
-     const products = [{
-      id: 1,
-      name : 'Customer'
-    },
-    {
-      id: 2,
-      name : 'Admin'
-    },
-    {
-      id: 3,
-      name : 'Dealer'
-    }];
-
     const { colors } = useTheme();
 
     const { signIn } = React.useContext(AuthContext);
@@ -61,12 +49,13 @@ const SignInScreen = ({navigation}) => {
    const getCollection = (querySnapshot) => {
         
         querySnapshot.forEach((res) => {
-          const { email,password } = res.data();
+          const { email,password,userType } = res.data();
           userArr.push({
             key: res.id,
             res,
             email,
             password,
+            userType
           });
         });
         
@@ -128,7 +117,7 @@ const SignInScreen = ({navigation}) => {
         }
     }
 
-    const loginHandle = (email, password,userType) => {
+    const loginHandle = (email, password,type) => {
 
        
         dbRef.onSnapshot(getCollection);
@@ -136,22 +125,23 @@ const SignInScreen = ({navigation}) => {
             {
                 email : null,
                 password : null,
-                type : userType
+                type : null
             }
         ];
 
         for(let index=0;index<userArr.length;index+=1)
         {
-            // Alert.alert(userArr[index].email+":"+userArr[index].password);
+            // Alert.alert(userArr[index].email+":"+userArr[index].password+":"+userArr[index].userType);
 
-            if(userArr[index].email==email && userArr[index].password==password)
+            if(userArr[index].email==email && userArr[index].password==password && userArr[index].userType==type)
             {
                 foundUser[0].email = email;
                 foundUser[0].password = password;
+                foundUser[0].type = type;
             }
         }
  
-        if(foundUser[0].email!=null && foundUser[0].password!=null)
+        if(foundUser[0].email!=null && foundUser[0].password!=null && foundUser[0].type!=null)
         {
             Alert.alert("current user : "+foundUser[0].email+"\n"+foundUser[0].password+"\n"+foundUser[0].type);
             signIn(foundUser);
@@ -272,51 +262,26 @@ const SignInScreen = ({navigation}) => {
           
             <Text style={[styles.text_footer, {
                 color: colors.text,
-                marginTop: 25
+                marginTop: 25,
+                marginBottom: 15
             }]}>User Type</Text>
-           {products.map(val => (
-                              <TouchableOpacity key={val.id} onPress={value => 
-
-                                setData({
-                                    ...data,
-                                    type: val.name,
-                            })}>
-                             
-
-                             <View style={styles.action2}>
-                               
-                                <View style={{
-                                    height: 24,
-                                    width: 24,
-                                    borderRadius: 12,
-                                    borderWidth: 2,
-                                    borderColor: '#000',
-                                    alignItems: 'center',
-                                    
-                                    justifyContent: 'center',
-                                }}>
-                                    
-                                    {
-                                    val.name == data.type?
-                                        <View style={{
-                                        height: 12,
-                                        width: 12,
-                                        borderRadius: 6,
-                                        backgroundColor: '#000',
-                                        }} />
-                                        : null
-                                    }
-                                
-                              </View>
-                             <View style={[styles.textInput2, {
-                        color: colors.text
-                    }]}>
-                             <Text >{val.name}</Text>
-                             </View>
-                             </View>
-                            </TouchableOpacity>
-                   
-    ))}  
+            <DropDownPicker
+                    items={
+                        [
+                            {label: 'Customer', value: 'Customer'},
+                            {label: 'Admin', value: 'Admin'},
+                            {label: 'Dealer', value: 'Dealer'},
+                        ]
+                    }
+                    defaultNull
+                    placeholder="Select your user type"
+                    containerStyle={{height: 40}}
+                    activeLabelStyle={{color: '#009387'}}
+                    onChangeItem={item => setData({
+                        ...data,
+                        type: item.value,
+                }) }
+                />
 
 
             <View style={styles.button}>
