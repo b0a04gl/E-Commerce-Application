@@ -889,7 +889,7 @@ export default function DrawerOrg(props)
 if(type[0]=='Dealer')
 {
   return(
-    <DrawerNav.Navigator initialRouteName="Dealer" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
+    <DrawerNav.Navigator initialRouteName="DealerProducts" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
       {items}
     </DrawerNav.Navigator>
   );
