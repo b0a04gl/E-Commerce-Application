@@ -414,18 +414,42 @@ const AddItemsStackScreen =({navigation}) =>(
 );
 
 
+const adminItems = [
+  <DrawerNav.Screen name="Admin" component={AdminStackScreen} 
+        
+  options={{
+    title: 'Admin',
+    drawerIcon: ({color, size}) => (
+      <Icon
+        name="md-checkmark-circle-outline"
+        size={size}
+        color={color}
+      />
+    ),
+    // gestureEnabled: false,
+  }}
+  
+  />,
 
-
-
-const items = [
-    
-
-
-
-    <DrawerNav.Screen name="Home" component={HomeStackScreen} 
+  <DrawerNav.Screen name="AddItems" component={AddItemsStackScreen}
+  
+  options={{
+    title: 'AddItems',
+    drawerIcon: ({color, size}) => (
+      <Icon
+        name="md-checkmark-circle-outline"
+        size={size}
+        color={color}
+      />
+    ),
+    // gestureEnabled: false,
+  }}
+  />
+  ,
+  <DrawerNav.Screen name="PendingList" component={PendingListStackScreen}
         
         options={{
-          title: 'Home',
+          title: 'PendingList',
           drawerIcon: ({color, size}) => (
             <Icon
               name="md-checkmark-circle-outline"
@@ -435,139 +459,11 @@ const items = [
           ),
           // gestureEnabled: false,
         }}
-        />,
-
-<DrawerNav.Screen name="Profile" component={ProfileScreenStackScreen}
-        
-        options={{
-          title: 'Profile',
-          drawerIcon: ({color, size}) => (
-            <Icon
-              name="md-checkmark-circle-outline"
-              size={size}
-              color={color}
-            />
-          ),
-          // gestureEnabled: false,
-        }}
-        />,
-      
-        <DrawerNav.Screen name="Admin" component={AdminStackScreen} 
-        
-        options={{
-          title: 'Admin',
-          drawerIcon: ({color, size}) => (
-            <Icon
-              name="md-checkmark-circle-outline"
-              size={size}
-              color={color}
-            />
-          ),
-          // gestureEnabled: false,
-        }}
-        
-        />,
-
-
-        <DrawerNav.Screen name="OTPAuth" component={OTPAuthStackScreen}
-        
-        options={{
-          title: 'OTPAuth',
-          drawerIcon: ({color, size}) => (
-            <Icon
-              name="md-checkmark-circle-outline"
-              size={size}
-              color={color}
-            />
-          ),
-          gestureEnabled: false,
-        }}
-        
-        />,
-        
-        <DrawerNav.Screen name="EditProfile" component={EditProfileScreenStackScreen} 
-        
-        options={{
-          title: 'EditProfile',
-          drawerIcon: ({color, size}) => (
-            <Icon
-              name="md-checkmark-circle-outline"
-              size={size}
-              color={color}
-            />
-          ),
-          // gestureEnabled: false,
-        }}
-        />,
-
-        <DrawerNav.Screen name="SearchBar" component={SearchBarStackScreen} 
-        
-        options={{
-          title: 'SearchBar',
-          drawerIcon: ({color, size}) => (
-            <Icon
-              name="md-checkmark-circle-outline"
-              size={size}
-              color={color}
-            />
-          ),
-          // gestureEnabled: false,
-        }}
-        />,
-
-        <DrawerNav.Screen name="ProductList" component={ProductListStackScreen} 
-        
-        options={{
-          title: 'ProductList',
-          drawerIcon: ({color, size}) => (
-            <Icon
-              name="md-checkmark-circle-outline"
-              size={size}
-              color={color}
-            />
-          ),
-          // gestureEnabled: false,
-        }}
-        />,
-        <DrawerNav.Screen name="Users" component={InitStackScreen} 
-        
-        options={{
-
-         
-          title: 'Users',
-          drawerIcon: ({color, size}) => (
-            <Icon
-              name="md-checkmark-circle-outline"
-              size={size}
-              color={color}
-            />
-            
-
-
-          ),
-          // gestureEnabled: false,
-
-          
-
-        }}
-        />,
-
-        <DrawerNav.Screen name="AddItems" component={AddItemsStackScreen}
-        
-        options={{
-          title: 'AddItems',
-          drawerIcon: ({color, size}) => (
-            <Icon
-              name="md-checkmark-circle-outline"
-              size={size}
-              color={color}
-            />
-          ),
-          // gestureEnabled: false,
-        }}
-        />,
-        
-        <DrawerNav.Screen name="Dealer" component={DealerStackScreen}
+        />
+        ,
+];
+const dealerItems = [
+  <DrawerNav.Screen name="Dealer" component={DealerStackScreen}
         
         options={{
           title: 'Dealer',
@@ -594,11 +490,14 @@ const items = [
           ),
           // gestureEnabled: false,
         }}
-        />,
-<DrawerNav.Screen name="PendingList" component={PendingListStackScreen}
+        />
+
+];
+const customerItems = [
+  <DrawerNav.Screen name="Home" component={HomeStackScreen} 
         
         options={{
-          title: 'PendingList',
+          title: 'Home',
           drawerIcon: ({color, size}) => (
             <Icon
               name="md-checkmark-circle-outline"
@@ -608,23 +507,30 @@ const items = [
           ),
           // gestureEnabled: false,
         }}
-        />
-
-
+        />,
+        <DrawerNav.Screen name="Profile" component={ProfileScreenStackScreen}
+        
+        options={{
+          title: 'Profile',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="md-checkmark-circle-outline"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+        
 ];
+
+
+
 
 
    const d = [];
 
-const fetchscreens = async ()=>{  
-  try{  
-    let mazzz = await AsyncStorage.getItem('hscreens');  
-DATA = JSON.parse(mazzz);
-  }  
-  catch(error){  
-    alert(error)  
-  }  
-}  
 
 const type = [];
 
@@ -668,7 +574,26 @@ function Popup()
                 
                 if(text!=='')
                 {
-                  items.push(
+                  adminItems.push(
+                    <DrawerNav.Screen name={text} component={ProductListStackScreen}
+
+                          options={{
+                  
+                           drawerLabel:text,
+                            title:text,
+                            drawerIcon: ({color, size}) => (
+                              <Icon
+                                name="md-checkmark-circle-outline"
+                                size={size}
+                                color={color}
+                              />
+                          ),
+                            // gestureEnabled: false,
+                      }}
+                          />
+                  );
+
+                  customerItems.push(
                     <DrawerNav.Screen name={text} component={ProductListStackScreen}
 
                           options={{
@@ -754,38 +679,7 @@ function DrawerContent(props) {
 
   const { signOut,updateScreens, toggleTheme } = React.useContext(AuthContext);
 
-   hidden = [];
-    
-  if(type[0]=='Customer')
-  {
-      hidden = ['AddItems','Users','OTPAuth','SearchBar','EditProfile','ProductList','Admin','Dealer','DealerProducts','PendingList'];
-  }
-
-  if(type[0]=='Admin')
-{
-    hidden = ['Users','OTPAuth','SearchBar','EditProfile','ProductList','Home','Profile','Dealer','DealerProducts'];
-}
-
-if(type[0]=='Dealer')
-{
-    hidden = ['Admin','AddItems','Users','OTPAuth','SearchBar','EditProfile','ProductList','Home','Profile','PendingList'];
-}
-   
-
-
-    const filteredProps = {
-        ...props,
-        state: {
-          ...props.state,
-          routeNames: props.state.routeNames.filter(
-            routeName => !hidden.includes(routeName)
-          ),
-          routes: props.state.routes.filter(
-            route => !hidden.includes(route.name)
-          ),
-        }
-    };
-
+ 
 
     // GLOBAL.hidden = mocks.hidden;
 
@@ -796,7 +690,7 @@ if(type[0]=='Dealer')
     
         <View style={{flex:1}}>
 
-          <DrawerContentScrollView {...filteredProps}>
+          <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfoSection}>
                         <View style={{flexDirection:'row',marginTop: 15}}>
@@ -827,7 +721,7 @@ if(type[0]=='Dealer')
 
                     <Drawer.Section style={styles.drawerSection}>
 
-                    <DrawerItemList {...filteredProps}/>
+                    <DrawerItemList {...props}/>
 
                     </Drawer.Section>
                     
@@ -861,10 +755,85 @@ if(type[0]=='Dealer')
 }
 
 
+
 export default function DrawerOrg(props)
 {
   const { signOut,updateScreens, toggleTheme } = React.useContext(AuthContext);
 
+ const hidden = [
+   <DrawerNav.Screen name="OTPAuth" component={OTPAuthStackScreen}
+        
+        options={{
+          // title: 'OTPAuth',
+          // drawerIcon: ({color, size}) => (
+          //   <Icon
+          //     name="md-checkmark-circle-outline"
+          //     size={size}
+          //     color={color}
+          //   />
+          // ),
+          gestureEnabled: false,
+          drawerLabel: () => null,
+                title: null,
+                drawerIcon: () => null
+        }}
+        
+        />,
+        
+        <DrawerNav.Screen name="EditProfile" component={EditProfileScreenStackScreen} 
+        
+        options={{
+          title: 'EditProfile',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="md-checkmark-circle-outline"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+          drawerLabel: () => null,
+          title: null,
+          drawerIcon: () => null
+        }}
+        />,
+
+        <DrawerNav.Screen name="SearchBar" component={SearchBarStackScreen} 
+        
+        options={{
+          // title: 'SearchBar',
+          // drawerIcon: ({color, size}) => (
+          //   <Icon
+          //     name="md-checkmark-circle-outline"
+          //     size={size}
+          //     color={color}
+          //   />
+          // ),
+          drawerLabel: () => null,
+          title: null,
+          drawerIcon: () => null
+          // gestureEnabled: false,
+        }}
+        />,
+
+        <DrawerNav.Screen name="ProductList" component={ProductListStackScreen} 
+        
+        options={{
+          // title: 'ProductList',
+          // drawerIcon: ({color, size}) => (
+          //   <Icon
+          //     name="md-checkmark-circle-outline"
+          //     size={size}
+          //     color={color}
+          //   />
+          // ),
+           drawerLabel: () => null,
+          title: null,
+          drawerIcon: () => null
+          // gestureEnabled: false,
+        }}
+        />,
+ ];
 
   type.splice(0,0,props.userType);
 
@@ -872,7 +841,8 @@ export default function DrawerOrg(props)
   {
     return(
       <DrawerNav.Navigator initialRouteName="OTPAuth" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
-          {items}
+          {customerItems}
+          
       </DrawerNav.Navigator>
     );
   }
@@ -881,7 +851,7 @@ export default function DrawerOrg(props)
 {
   return(
     <DrawerNav.Navigator initialRouteName="Admin" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
-      {items}
+      {adminItems}
     </DrawerNav.Navigator>
   );
 }
@@ -890,7 +860,7 @@ if(type[0]=='Dealer')
 {
   return(
     <DrawerNav.Navigator initialRouteName="DealerProducts" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
-      {items}
+      {dealerItems}
     </DrawerNav.Navigator>
   );
 }
