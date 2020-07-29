@@ -52,6 +52,7 @@ export default class DealerProducts extends React.Component {
       productName: this.state.productName,
       productPrice: this.state.productPrice,
       stocks: this.state.stocks,
+      status: 'Pending'
     };
     let products;
     if (this.state.buttonTitle === 'Add Product') {
@@ -130,6 +131,7 @@ export default class DealerProducts extends React.Component {
               <View style={styles.list}>
                 <Text style={styles.name}>{data.item.productName}</Text>
                 <Text style={styles.price}>{data.item.productPrice}</Text>
+                <Text style={styles.price}>{data.item.status}</Text>
               </View>
               <TouchableOpacity onPress={this.updateProduct.bind(this, data.index)}>
                 <Image source={require('../assets/edit.png')} style={styles.Optionsimage} />

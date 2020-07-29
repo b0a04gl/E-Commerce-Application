@@ -9,7 +9,6 @@ export default class PendingList extends React.Component {
       super(props);
       this.state = {
          dealers: [],
-         dealerProducts: [],
       };
       if (!firebase.apps.length) {
          firebase.initializeApp(ApiKeys.firebaseConfig);
@@ -29,56 +28,34 @@ export default class PendingList extends React.Component {
       });
    }
 
-   componentDidUpdate(prevProps, prevState) {
-      if (prevState.dealers != this.state.dealers) {
-         const dealers = Object.values(this.state.dealers);
-         var dealerProducts = [];
-         for (var i = 0; i < dealers.length; i++) {
-            dealerProducts = dealerProducts.concat(dealers[i]);
-         }
-         this.setState({
-            dealerProducts: dealerProducts,
-         });
-      }
-   }
-
    componentWillUnmount() {
       this._isMounted = false;
    }
 
-   addToProduct = (index) => {
+   addToProduct = (key, productIndex) => {
       Alert.alert('Accept Product', 'Are you sure you want to add this product to the inventory list?', [{
          text: 'Cancel',
          style: 'cancel',
       }, {
          text: 'OK',
          onPress: () => {
-            firebase.database().ref('/inventory').push(this.state.dealerProducts[index]).then(() => {
-               console.log('Pushed');
+            firebase.database().ref('/inventory').push(this.state.dealers[key][productIndex]).then(() => {
+               firebase.database().ref('dealers/' + key + '/' + productIndex.toString()).update({ status: 'Accepted' });
             }).catch((error) => {
                console.log(error);
-            });
-            const products = this.state.dealerProducts;
-            products.splice(index, 1);
-            this.setState({
-               dealerProducts: products,
             });
          }
       }]);
    };
 
-   deleteProduct = (index) => {
+   deleteProduct = (key, productIndex) => {
       Alert.alert('Delete Product', 'Are you sure you want to reject this product?', [{
          text: 'Cancel',
          style: 'cancel',
       }, {
          text: 'OK',
          onPress: () => {
-            const products = this.state.dealerProducts;
-            products.splice(index, 1);
-            this.setState({
-               dealerProducts: products,
-            });
+            firebase.database().ref('dealers/' + key + '/' + productIndex.toString()).update({ status: 'Rejected' });
          }
       }]);
    };
@@ -86,22 +63,33 @@ export default class PendingList extends React.Component {
    render() {
       return (
          <View style={styles.screen}>
-            <FlatList data={this.state.dealerProducts}
-               renderItem={data => (
-                  <View style={styles.listContainer}>
-                     <Image source={require('../assets/images/add.png')} style={styles.listimage} />
-                     <View style={styles.list}>
-                        <Text style={styles.name}>{data.item.productName}</Text>
-                        <Text style={styles.price}>{data.item.productPrice}</Text>
-                     </View>
-                     <TouchableOpacity onPress={this.addToProduct.bind(this, data.index)}>
-                        <Image source={require('../assets/tick.png')} style={styles.Optionsimage} />
-                     </TouchableOpacity>
-                     <TouchableOpacity onPress={this.deleteProduct.bind(this, data.index)}>
-                        <Image source={require('../assets/delete.png')} style={styles.Optionsimage} />
-                     </TouchableOpacity>
-                  </View>
-               )} />
+            {Object.keys(this.state.dealers).map((key, index) => (
+               <View style={styles.display}>
+                  <Text style={styles.text}>Dealer ID:{key}</Text>
+                  <FlatList data={this.state.dealers[key]}
+                     renderItem={data => (
+                        <View style={styles.listContainer}>
+                           <Image source={require('../assets/images/add.png')} style={styles.listimage} />
+                           <View style={styles.list}>
+                              <Text style={styles.name}>{data.item.productName}</Text>
+                              <Text style={styles.price}>{data.item.productPrice}</Text>
+                           </View>
+                           {data.item.status === 'Pending' ?
+                              <View style={styles.img}>
+                                 <TouchableOpacity onPress={this.addToProduct.bind(this, key, data.index)}>
+                                    <Image source={require('../assets/tick.png')} style={styles.Optionsimage} />
+                                 </TouchableOpacity>
+                                 <TouchableOpacity onPress={this.deleteProduct.bind(this, key, data.index)}>
+                                    <Image source={require('../assets/delete.png')} style={styles.Optionsimage} />
+                                 </TouchableOpacity>
+                              </View> :
+                              <Text style={styles.status}>{data.item.status}</Text>
+                           }
+                        </View>
+                     )} />
+               </View>
+            ))
+            }
          </View>
       );
    }
@@ -113,13 +101,23 @@ const styles = StyleSheet.create({
       flex: 1,
    },
 
+   display: {
+      marginVertical: 10,
+   },
+
+   text: {
+      color: 'blue',
+      fontSize: 16,
+   },
+
    listContainer: {
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
       borderBottomWidth: 0.5,
       borderColor: 'black',
-      paddingHorizontal: 20,
+      paddingLeft: 20,
+      paddingRight: 30,
    },
 
    list: {
@@ -135,6 +133,10 @@ const styles = StyleSheet.create({
       marginHorizontal: 20,
    },
 
+   img: {
+      flexDirection: 'row',
+   },
+
    name: {
       fontSize: 16,
    },
@@ -147,7 +149,13 @@ const styles = StyleSheet.create({
       height: 10,
       width: 10,
       padding: 15,
-      marginRight: 15,
+      marginRight: 10,
    },
+
+   status: {
+      fontSize: 15,
+      marginRight: 20,
+      fontWeight: 'bold',
+   }
 
 });
