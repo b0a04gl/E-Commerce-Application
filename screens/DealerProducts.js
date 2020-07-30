@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Button, Modal, TextInp
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 import { FlatList } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 export default class DealerProducts extends React.Component {
   _isMounted = false;
@@ -17,10 +19,41 @@ export default class DealerProducts extends React.Component {
       showModal: false,
       buttonTitle: 'Add Product',
       index: -1,
+      userToken : null,
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.firebaseConfig);
     }
+
+    
+    setTimeout(async() => {
+     
+      let token;
+      token = null;
+      
+      try {
+        token = await AsyncStorage.getItem('userToken');
+        
+      } catch(e) {
+        console.log(e);
+      }
+
+      this.setState(
+        {
+          userToken : token,
+        }
+      );
+
+      Alert.alert("current user : "+this.state.userToken);
+      
+    }, 100);
+ 
+
+
+
+
+    
+
   }
 
   componentDidMount() {
@@ -117,6 +150,9 @@ export default class DealerProducts extends React.Component {
 
   render() {
     return (
+
+
+      
       <View style={styles.screen}>
         <View style={styles.row}>
           <Text style={styles.text}>Products List</Text>

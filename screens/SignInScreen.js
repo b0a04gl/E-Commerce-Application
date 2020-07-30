@@ -51,7 +51,7 @@ const SignInScreen = ({navigation}) => {
         querySnapshot.forEach((res) => {
           const { email,password,userType } = res.data();
           userArr.push({
-            key: res.id,
+            token: res.id,
             res,
             email,
             password,
@@ -123,6 +123,7 @@ const SignInScreen = ({navigation}) => {
         dbRef.onSnapshot(getCollection);
         const foundUser = [
             {
+                token : null,
                 email : null,
                 password : null,
                 type : null
@@ -133,17 +134,18 @@ const SignInScreen = ({navigation}) => {
         {
             // Alert.alert(userArr[index].email+":"+userArr[index].password+":"+userArr[index].userType);
 
-            if(userArr[index].email==email && userArr[index].password==password && userArr[index].userType==type)
+            if( userArr[index].email==email && userArr[index].password==password && userArr[index].userType==type)
             {
                 foundUser[0].email = email;
                 foundUser[0].password = password;
                 foundUser[0].type = type;
+                foundUser[0].token = userArr[index].token;
             }
         }
  
         if(foundUser[0].email!=null && foundUser[0].password!=null && foundUser[0].type!=null)
         {
-            Alert.alert("current user : "+foundUser[0].email+"\n"+foundUser[0].password+"\n"+foundUser[0].type);
+            
             signIn(foundUser);
         }
         else

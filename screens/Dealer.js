@@ -30,11 +30,14 @@ class Dealer extends React.Component {
             productName: '',
             productPrice: '',
             stocks: '',
-            isLoading: false
+            isLoading: false,
+            
           };
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.firebaseConfig);
         }
+
+       
     }
 
 

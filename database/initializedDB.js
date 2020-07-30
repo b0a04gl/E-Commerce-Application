@@ -1,0 +1,22 @@
+import  firebase from 'firebase';
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDXts_z81jdPnBThNwrC-rEdwESyg89K_E",
+    authDomain: "e-commerce-b1423.firebaseapp.com",
+    databaseURL: "https://e-commerce-b1423.firebaseio.com",
+    projectId: "e-commerce-b1423",
+    storageBucket: "e-commerce-b1423.appspot.com",
+    messagingSenderId: "828771404482",
+    appId: "1:828771404482:web:4d8d2bd1ef23c009c1095b"
+};
+
+
+
+// var Firebase =  firebase.initializeApp(firebaseConfig);
+
+// // if (!Firebase.apps.length) {
+//     Firebase =  firebase.initializeApp(firebaseConfig);
+// }
+
+export default !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase;

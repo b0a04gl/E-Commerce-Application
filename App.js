@@ -126,13 +126,17 @@ const storeUser =(emailID,pwd,uType) =>{
     signIn: async(foundUser) => {
       // setUserToken('fgkj');
       // setIsLoading(false);
-      const userToken = 'hihi';
+
+
+      Alert.alert("current user : "+foundUser[0].token);
+
+      const userToken = foundUser[0].token;
       const email = foundUser[0].email;
       const password = foundUser[0].password;
       const userType = foundUser[0].type;
       
 
-   
+     
       try {
         await AsyncStorage.setItem('userToken', userToken);
         await AsyncStorage.setItem('userType',userType);
@@ -153,7 +157,7 @@ const storeUser =(emailID,pwd,uType) =>{
       dispatch({ type: 'LOGOUT' });
     },
     signUp: async (foundUser) => {
-      const userToken = 'hihi';
+      
       const email = foundUser[0].email;
       const password = foundUser[0].password;
       const userType = foundUser[0].type;

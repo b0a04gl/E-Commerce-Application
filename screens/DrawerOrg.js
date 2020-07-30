@@ -30,15 +30,20 @@ import {
 
 import {AsyncStorage, FlatList,View,  TouchableHighlight,Image, StyleSheet, TouchableOpacity, ScrollView, Alert, Modal, TextInput, Button } from 'react-native';
 
-
+// import * as firebase from 'firebase';
+// import ApiKeys from '../database/RealtimeDb';
 import {
     DrawerContentScrollView,
     DrawerItem,
     DrawerItemList
 } from '@react-navigation/drawer';
 
+// import firebase from '../database/initializedDB';
 
 
+// if (!firebase.apps.length) {
+//   firebase.initializeApp(ApiKeys.firebaseConfig);
+// }
 
 
 const DrawerNav = createDrawerNavigator();
@@ -534,14 +539,72 @@ const customerItems = [
 
 const type = [];
 
-const DATA =  [];
+const addedItems =  [];
+
+
+// firebase.database().ref('/drawerMenu').once('value', (data) => {
+ 
+//       if (data.val()) {
+//          var temp = data.val();
+//          var keys = Object.keys(temp);
+
+//          for(var index=0;index<keys.length;index++)
+//          {
+//            var key = keys[index];
+//            if(addedItems.includes(temp[key])==false)
+//                addedItems.push(temp[key]);
+//          }
+
+//       }
+  
+// });
+
+addedItems.map((text) => {
+  adminItems.push (
+     <DrawerNav.Screen name={text} component={ProductListStackScreen}
+ 
+                   options={{
+           
+                    drawerLabel:text,
+                     title:text,
+                     drawerIcon: ({color, size}) => (
+                       <Icon
+                         name="md-checkmark-circle-outline"
+                         size={size}
+                         color={color}
+                       />
+                   ),
+                     // gestureEnabled: false,
+               }}
+                   />
+   )
+   customerItems.push (
+    <DrawerNav.Screen name={text} component={ProductListStackScreen}
+
+                  options={{
+          
+                   drawerLabel:text,
+                    title:text,
+                    drawerIcon: ({color, size}) => (
+                      <Icon
+                        name="md-checkmark-circle-outline"
+                        size={size}
+                        color={color}
+                      />
+                  ),
+                    // gestureEnabled: false,
+              }}
+                  />
+  )
+ });
 
 function Popup()
 {
   
     const [text,setText] = React.useState('a');
     const [modalVisible, setModalVisible] = React.useState(false);
- 
+
+    
  
     return (
     <View style={styles.centeredView}>
@@ -572,8 +635,37 @@ function Popup()
               onPress={() => {
                 setModalVisible(!modalVisible);
                 
-                if(text!=='')
+                if(text!==''  && addedItems.includes(text)==false)
                 {
+
+                  addedItems.push(text);
+
+                  // firebase.database().ref('/drawerMenu').set(addedItems).then(() => {
+                  // }).catch((error) => {
+                  //     console.log(error);
+                  // });
+
+                  customerItems.push (
+                    <DrawerNav.Screen name={text} component={ProductListStackScreen}
+                
+                                  options={{
+                          
+                                   drawerLabel:text,
+                                    title:text,
+                                    drawerIcon: ({color, size}) => (
+                                      <Icon
+                                        name="md-checkmark-circle-outline"
+                                        size={size}
+                                        color={color}
+                                      />
+                                  ),
+                                    // gestureEnabled: false,
+                              }}
+                                  />
+                  );
+                 
+                
+
                   adminItems.push(
                     <DrawerNav.Screen name={text} component={ProductListStackScreen}
 
@@ -593,24 +685,24 @@ function Popup()
                           />
                   );
 
-                  customerItems.push(
-                    <DrawerNav.Screen name={text} component={ProductListStackScreen}
+                  // customerItems.push(
+                  //   <DrawerNav.Screen name={text} component={ProductListStackScreen}
 
-                          options={{
+                  //         options={{
                   
-                           drawerLabel:text,
-                            title:text,
-                            drawerIcon: ({color, size}) => (
-                              <Icon
-                                name="md-checkmark-circle-outline"
-                                size={size}
-                                color={color}
-                              />
-                          ),
-                            // gestureEnabled: false,
-                      }}
-                          />
-                  );
+                  //          drawerLabel:text,
+                  //           title:text,
+                  //           drawerIcon: ({color, size}) => (
+                  //             <Icon
+                  //               name="md-checkmark-circle-outline"
+                  //               size={size}
+                  //               color={color}
+                  //             />
+                  //         ),
+                  //           // gestureEnabled: false,
+                  //     }}
+                  //         />
+                  // );
               
   
                 }
@@ -660,7 +752,15 @@ function Popup()
                 borderWidth: 1,
                 borderColor: '#fff'}}
               onPress={() => {
-                items.splice(items.length-1,1);  
+                addedItems.splice(addedItems.length-1,1);
+                
+                // firebase.database().ref('/drawerMenu').set(addedItems).then(() => {
+                // }).catch((error) => {
+                //     console.log(error);
+                // });
+
+                adminItems.splice(adminItems.length-1,1);
+                customerItems.splice(adminItems.length-1,1);
               }}
             >
               <Text style={styles.textStyle}>DELETE ITEM</Text>
@@ -754,118 +854,263 @@ function DrawerContent(props) {
     );
 }
 
+// if (!firebase.apps.length) {
+  
+// }
 
-
-export default function DrawerOrg(props)
+export default class DrawerOrg extends React.Component
 {
-  const { signOut,updateScreens, toggleTheme } = React.useContext(AuthContext);
-
- const hidden = [
-   <DrawerNav.Screen name="OTPAuth" component={OTPAuthStackScreen}
-        
-        options={{
-          // title: 'OTPAuth',
-          // drawerIcon: ({color, size}) => (
-          //   <Icon
-          //     name="md-checkmark-circle-outline"
-          //     size={size}
-          //     color={color}
-          //   />
-          // ),
-          gestureEnabled: false,
-          drawerLabel: () => null,
-                title: null,
-                drawerIcon: () => null
-        }}
-        
-        />,
-        
-        <DrawerNav.Screen name="EditProfile" component={EditProfileScreenStackScreen} 
-        
-        options={{
-          title: 'EditProfile',
-          drawerIcon: ({color, size}) => (
-            <Icon
-              name="md-checkmark-circle-outline"
-              size={size}
-              color={color}
-            />
-          ),
-          // gestureEnabled: false,
-          drawerLabel: () => null,
-          title: null,
-          drawerIcon: () => null
-        }}
-        />,
-
-        <DrawerNav.Screen name="SearchBar" component={SearchBarStackScreen} 
-        
-        options={{
-          // title: 'SearchBar',
-          // drawerIcon: ({color, size}) => (
-          //   <Icon
-          //     name="md-checkmark-circle-outline"
-          //     size={size}
-          //     color={color}
-          //   />
-          // ),
-          drawerLabel: () => null,
-          title: null,
-          drawerIcon: () => null
-          // gestureEnabled: false,
-        }}
-        />,
-
-        <DrawerNav.Screen name="ProductList" component={ProductListStackScreen} 
-        
-        options={{
-          // title: 'ProductList',
-          // drawerIcon: ({color, size}) => (
-          //   <Icon
-          //     name="md-checkmark-circle-outline"
-          //     size={size}
-          //     color={color}
-          //   />
-          // ),
-           drawerLabel: () => null,
-          title: null,
-          drawerIcon: () => null
-          // gestureEnabled: false,
-        }}
-        />,
- ];
-
-  type.splice(0,0,props.userType);
-
-  if(type[0]=='Customer')
+  construct(props)
   {
-    return(
-      <DrawerNav.Navigator initialRouteName="OTPAuth" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
-          {customerItems}
-          
-      </DrawerNav.Navigator>
-    );
+    // super(props);
+    // if (!firebase.apps.length) {
+    //   firebase.initializeApp(ApiKeys.firebaseConfig);
+  // }
+   
+   
   }
 
-  if(type[0]=='Admin')
-{
-  return(
-    <DrawerNav.Navigator initialRouteName="Admin" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
-      {adminItems}
-    </DrawerNav.Navigator>
-  );
+  componetWillMount() {
+
+   
+  }
+
+
+  render()
+  {
+    const hidden = [
+      <DrawerNav.Screen name="OTPAuth" component={OTPAuthStackScreen}
+           
+           options={{
+             // title: 'OTPAuth',
+             // drawerIcon: ({color, size}) => (
+             //   <Icon
+             //     name="md-checkmark-circle-outline"
+             //     size={size}
+             //     color={color}
+             //   />
+             // ),
+             gestureEnabled: false,
+             drawerLabel: () => null,
+                   title: null,
+                   drawerIcon: () => null
+           }}
+           
+           />,
+           
+           <DrawerNav.Screen name="EditProfile" component={EditProfileScreenStackScreen} 
+           
+           options={{
+             title: 'EditProfile',
+             drawerIcon: ({color, size}) => (
+               <Icon
+                 name="md-checkmark-circle-outline"
+                 size={size}
+                 color={color}
+               />
+             ),
+             // gestureEnabled: false,
+             drawerLabel: () => null,
+             title: null,
+             drawerIcon: () => null
+           }}
+           />,
+   
+           <DrawerNav.Screen name="SearchBar" component={SearchBarStackScreen} 
+           
+           options={{
+             // title: 'SearchBar',
+             // drawerIcon: ({color, size}) => (
+             //   <Icon
+             //     name="md-checkmark-circle-outline"
+             //     size={size}
+             //     color={color}
+             //   />
+             // ),
+             drawerLabel: () => null,
+             title: null,
+             drawerIcon: () => null
+             // gestureEnabled: false,
+           }}
+           />,
+   
+           <DrawerNav.Screen name="ProductList" component={ProductListStackScreen} 
+           
+           options={{
+             // title: 'ProductList',
+             // drawerIcon: ({color, size}) => (
+             //   <Icon
+             //     name="md-checkmark-circle-outline"
+             //     size={size}
+             //     color={color}
+             //   />
+             // ),
+              drawerLabel: () => null,
+             title: null,
+             drawerIcon: () => null
+             // gestureEnabled: false,
+           }}
+           />,
+    ];
+   
+   
+   
+   
+     type.splice(0,0,this.props.userType);
+   
+     if(type[0]=='Customer')
+     {
+       return(
+         <DrawerNav.Navigator initialRouteName="OTPAuth" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
+             {customerItems}
+             
+         </DrawerNav.Navigator>
+       );
+     }
+   
+     if(type[0]=='Admin')
+   {
+   
+    
+   
+     return(
+       <DrawerNav.Navigator initialRouteName="Admin" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
+         {adminItems}
+         
+       </DrawerNav.Navigator>
+     );
+   }
+   
+   if(type[0]=='Dealer')
+   {
+     return(
+       <DrawerNav.Navigator initialRouteName="DealerProducts" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
+         {dealerItems}
+       </DrawerNav.Navigator>
+     );
+   }
+
+  }
 }
 
-if(type[0]=='Dealer')
-{
-  return(
-    <DrawerNav.Navigator initialRouteName="DealerProducts" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
-      {dealerItems}
-    </DrawerNav.Navigator>
-  );
-}
+
+// export default function DrawerOrg(props)
+// {
+//   const { signOut,updateScreens, toggleTheme } = React.useContext(AuthContext);
+
+//  const hidden = [
+//    <DrawerNav.Screen name="OTPAuth" component={OTPAuthStackScreen}
+        
+//         options={{
+//           // title: 'OTPAuth',
+//           // drawerIcon: ({color, size}) => (
+//           //   <Icon
+//           //     name="md-checkmark-circle-outline"
+//           //     size={size}
+//           //     color={color}
+//           //   />
+//           // ),
+//           gestureEnabled: false,
+//           drawerLabel: () => null,
+//                 title: null,
+//                 drawerIcon: () => null
+//         }}
+        
+//         />,
+        
+//         <DrawerNav.Screen name="EditProfile" component={EditProfileScreenStackScreen} 
+        
+//         options={{
+//           title: 'EditProfile',
+//           drawerIcon: ({color, size}) => (
+//             <Icon
+//               name="md-checkmark-circle-outline"
+//               size={size}
+//               color={color}
+//             />
+//           ),
+//           // gestureEnabled: false,
+//           drawerLabel: () => null,
+//           title: null,
+//           drawerIcon: () => null
+//         }}
+//         />,
+
+//         <DrawerNav.Screen name="SearchBar" component={SearchBarStackScreen} 
+        
+//         options={{
+//           // title: 'SearchBar',
+//           // drawerIcon: ({color, size}) => (
+//           //   <Icon
+//           //     name="md-checkmark-circle-outline"
+//           //     size={size}
+//           //     color={color}
+//           //   />
+//           // ),
+//           drawerLabel: () => null,
+//           title: null,
+//           drawerIcon: () => null
+//           // gestureEnabled: false,
+//         }}
+//         />,
+
+//         <DrawerNav.Screen name="ProductList" component={ProductListStackScreen} 
+        
+//         options={{
+//           // title: 'ProductList',
+//           // drawerIcon: ({color, size}) => (
+//           //   <Icon
+//           //     name="md-checkmark-circle-outline"
+//           //     size={size}
+//           //     color={color}
+//           //   />
+//           // ),
+//            drawerLabel: () => null,
+//           title: null,
+//           drawerIcon: () => null
+//           // gestureEnabled: false,
+//         }}
+//         />,
+//  ];
+
+
+
+
+//   type.splice(0,0,props.userType);
+
+//   if(type[0]=='Customer')
+//   {
+//     return(
+//       <DrawerNav.Navigator initialRouteName="OTPAuth" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
+//           {customerItems}
+          
+//       </DrawerNav.Navigator>
+//     );
+//   }
+
+//   if(type[0]=='Admin')
+// {
+
+ 
+
+//   return(
+//     <DrawerNav.Navigator initialRouteName="Admin" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
+//       {adminItems}
+      
+//     </DrawerNav.Navigator>
+//   );
+// }
+
+// if(type[0]=='Dealer')
+// {
+//   return(
+//     <DrawerNav.Navigator initialRouteName="DealerProducts" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
+//       {dealerItems}
+//     </DrawerNav.Navigator>
+//   );
+// }
    
-}
+// }
 
 
 
