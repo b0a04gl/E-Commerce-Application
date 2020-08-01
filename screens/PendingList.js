@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Button, StyleSheet, FlatList, Image, TouchableOpacity, Text, Alert } from 'react-native';
+import { View, ScrollView, StyleSheet, FlatList, Image, TouchableOpacity, Text, Alert } from 'react-native';
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 
@@ -39,11 +39,13 @@ export default class PendingList extends React.Component {
       }, {
          text: 'OK',
          onPress: () => {
-            firebase.database().ref('/inventory').push(this.state.dealers[key][productIndex]).then(() => {
+            firebase.database().ref('/inventory/'+this.state.dealers[key][productIndex].category).push(this.state.dealers[key][productIndex]).then(() => {
                firebase.database().ref('dealers/' + key + '/' + productIndex.toString()).update({ status: 'Accepted' });
             }).catch((error) => {
                console.log(error);
             });
+            firebase.database().ref('/recentProducts').push(this.state.dealers[key][productIndex]).then(() => {
+            }).catch((error) => console.log(error));
          }
       }]);
    };
@@ -62,14 +64,14 @@ export default class PendingList extends React.Component {
 
    render() {
       return (
-         <View style={styles.screen}>
+         <ScrollView keyboardShouldPersistTaps='always' style={styles.screen}>
             {Object.keys(this.state.dealers).map((key, index) => (
                <View style={styles.display}>
                   <Text style={styles.text}>Dealer ID:{key}</Text>
                   <FlatList data={this.state.dealers[key]}
                      renderItem={data => (
                         <View style={styles.listContainer}>
-                           <Image source={require('../assets/images/add.png')} style={styles.listimage} />
+                           <Image source={data.item.image} style={styles.listimage} />
                            <View style={styles.list}>
                               <Text style={styles.name}>{data.item.productName}</Text>
                               <Text style={styles.price}>{data.item.productPrice}</Text>
@@ -90,7 +92,7 @@ export default class PendingList extends React.Component {
                </View>
             ))
             }
-         </View>
+         </ScrollView>
       );
    }
 };

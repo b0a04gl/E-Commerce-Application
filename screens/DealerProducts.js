@@ -5,6 +5,7 @@ import ApiKeys from '../database/RealtimeDb';
 import { FlatList } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as ImagePicker from 'expo-image-picker';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export default class DealerProducts extends React.Component {
   _isMounted = false;
@@ -12,9 +13,13 @@ export default class DealerProducts extends React.Component {
     super(props);
     this.state = {
       dealerProducts: [],
+      categories: [],
+      dropDown: [],
       productName: '',
       productPrice: '',
       stocks: '',
+      category: '',
+      description: '',
       showModal: false,
       buttonTitle: 'Add Product',
       index: -1,
@@ -39,6 +44,17 @@ export default class DealerProducts extends React.Component {
               this.setState({
                 dealerProducts: data.val(),
               });
+            }
+          }
+        });
+        firebase.database().ref('/drawerMenu').on('value', data => {
+          if (this._isMounted) {
+            if (data.val()) {
+              data.val().map(category => {
+              this.setState({
+                categories: [...this.state.categories, {label:category, value:category}],
+              });
+            });
             }
           }
         });
@@ -94,6 +110,8 @@ export default class DealerProducts extends React.Component {
         productName: this.state.productName,
         productPrice: this.state.productPrice,
         stocks: this.state.stocks,
+        category: this.state.category,
+        description: this.state.description,
         status: 'Pending',
         image: this.state.image,
       };
@@ -111,6 +129,8 @@ export default class DealerProducts extends React.Component {
         productName: '',
         productPrice: '',
         stocks: '',
+        description: '',
+        category: '',
         showModal: false,
         image: require('../assets/images/add.png'),
       });
@@ -129,6 +149,8 @@ export default class DealerProducts extends React.Component {
       productName: product.productName,
       productPrice: product.productPrice,
       stocks: product.stocks,
+      description: product.description,
+      category: product.category,
       showModal: true,
     })
   };
@@ -221,9 +243,29 @@ export default class DealerProducts extends React.Component {
                 style={styles.textInput}
                 value={this.state.stocks}
                 onChangeText={(val) => this.inputValueUpdate(val, 'stocks')} />
-              <View style={styles.button}>
+                <TextInput
+                placeholder='Enter your product description'
+                multiline={true}
+                placeholderTextColor='black'
+                style={styles.textInput}
+                value={this.state.description}
+                onChangeText={(val) => this.inputValueUpdate(val, 'description')} />
+                <DropDownPicker
+                    items={this.state.categories}
+                    defaultNull
+                    placeholder="Select the product category"
+                    containerStyle={{height: 40, marginVertical: 10,}}
+                    dropDownStyle={{backgroundColor: 'white'}}
+                    style={{backgroundColor: 'white'}}
+                    activeLabelStyle={{color: '#009387'}}
+                    onChangeItem={item => 
+                      this.setState({
+                        category: item.value,
+                }) }
+                />
+              <TouchableOpacity style={styles.button}>
                 <Button title={this.state.buttonTitle} color='green' onPress={this.addProduct} />
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -302,7 +344,6 @@ const styles = StyleSheet.create({
   },
 
   modalScreen: {
-    height: 400,
     width: '90%',
   },
 
