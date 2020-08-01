@@ -6,24 +6,36 @@ const BASE_URL = 'https://raw.githubusercontent.com/sdras/sample-vue-shop/master
 
 const products = [
   {
-    name: 'Khaki Suede Polish Work Boots',
-    price: 149.99,
-    img: `${BASE_URL}/shoe1.png`
+    name: 'Khaki Work Boots',
+    price: 149,
+    img: `${BASE_URL}/shoe1.png`,
+    qty:0,
+    category: 'Utilities',
+    description:'Ever lasting!!!!'
   },
   {
-    name: 'Camo Fang Backpack Jungle',
-    price: 39.99,
-    img: `${BASE_URL}/jacket1.png`
+    name: 'Camo Fang Backpack',
+    price: 399,
+    img: `${BASE_URL}/jacket1.png`,
+    qty:0,
+    category: 'Mens Fashion',
+    description:'Super Coool!!!!'
   },
   {
-    name: 'Parka and Quilted Liner Jacket',
-    price: 49.99,
-    img: `${BASE_URL}/jacket2.png`
+    name: 'Quilted Liner Jacket',
+    price: 499,
+    img: `${BASE_URL}/jacket2.png`,
+    qty:0,
+    category: 'Travel',
+    description:'Awaited one!!!!'
   },
   {
     name: 'Cotton Black Cap',
-    price: 12.99,
-    img: `${BASE_URL}/hat1.png`
+    price: 199,
+    img: `${BASE_URL}/hat1.png`,
+    qty:0,
+    category:'Mens Fashion',
+    description:'Best deal!!!!'
   },
 ];
 
@@ -41,7 +53,7 @@ export default class ProdutcList extends React.Component {
               return(
                 <View style={styles.row} key={index}>
                     <View style={styles.col}>
-                      <Product product={product}/>
+                      <Product product={product} />
                     </View>
                 </View>
               )

@@ -14,6 +14,8 @@ import{ AuthContext } from '../components/context';
 import ProductList from './ProductList';
 import SearchBar from './Components/SearchBar';
 import PendingList from './PendingList';
+import CartScreen from './CartScreen';
+import OrderScreen from './OrderScreen';
 
 import {
     useTheme,
@@ -30,8 +32,8 @@ import {
 
 import {AsyncStorage, FlatList,View,  TouchableHighlight,Image, StyleSheet, TouchableOpacity, ScrollView, Alert, Modal, TextInput, Button } from 'react-native';
 
-// import * as firebase from 'firebase';
-// import ApiKeys from '../database/RealtimeDb';
+import * as firebase from 'firebase';
+import ApiKeys from '../database/RealtimeDb';
 import {
     DrawerContentScrollView,
     DrawerItem,
@@ -78,7 +80,7 @@ const HomeStackScreen =({navigation}) =>(
             //   <Icon.Button  name = 'md-search' size={30}
             //     backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
          <Icon.Button  name = 'ios-cart' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+                backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('CartScreen')}></Icon.Button>
     //   </View>
             ),
 
@@ -88,7 +90,7 @@ const HomeStackScreen =({navigation}) =>(
 );
 
 
-const InitStackScreen =({navigation}) =>(
+const CartScreenStackScreen =({navigation}) =>(
     <Stack.Navigator
     
     screenOptions={{
@@ -105,14 +107,47 @@ const InitStackScreen =({navigation}) =>(
 
 
       
-        <Stack.Screen name="Init" component={Init} options={{
-            title:'E-Commerce App',
+        <Stack.Screen name="CartScreen" component={CartScreen} options={{
+            title:'CartScreen',
             gestureEnabled: false,
+            headerStyle: {
+              backgroundColor: '#ec2F4B',
+            },
+          headerTitleAlign: 'center',
+          // headerLeft : () => (
+          //     <Icon.Button  name = 'ios-menu' size={30}
+          //     backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+          // ),
         }}/>
 
     </Stack.Navigator>
 );
 
+
+const OrderScreenStackScreen =({navigation}) =>(
+  <Stack.Navigator
+  
+  screenOptions={{
+      headerStyle: {
+          backgroundColor: '#ec2F4B',
+        },
+        gestureEnabled: false ,
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          alignSelf: 'center'
+        },
+  }}>
+
+
+    
+      <Stack.Screen name="OrderScreen" component={OrderScreen} options={{
+          title:'OrderScreen',
+          gestureEnabled: false,
+      }}/>
+
+  </Stack.Navigator>
+);
 
 
 const SearchBarStackScreen =({navigation}) =>(
@@ -316,7 +351,7 @@ const ProductListStackScreen =({navigation}) =>(
               <Icon.Button  name = 'md-search' size={30}
                 backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('SearchBar')}></Icon.Button>
          <Icon.Button  name = 'ios-cart' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+                backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('CartScreen')}></Icon.Button>
       </View>
             ),
 
@@ -527,6 +562,22 @@ const customerItems = [
           // gestureEnabled: false,
         }}
         />,
+        <DrawerNav.Screen name='Recent' component={ProductListStackScreen}
+
+        options={{
+
+         drawerLabel:'Recent',
+          title:'Recent',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="md-checkmark-circle-outline"
+              size={size}
+              color={color}
+            />
+        ),
+          // gestureEnabled: false,
+    }}
+        />
         
 ];
 
@@ -559,49 +610,49 @@ const addedItems =  [];
   
 // });
 
-addedItems.map((text) => {
-  adminItems.push (
-     <DrawerNav.Screen name={text} component={ProductListStackScreen}
+// addedItems.map((text) => {
+//   adminItems.push (
+//      <DrawerNav.Screen name={text} component={ProductListStackScreen}
  
-                   options={{
+//                    options={{
            
-                    drawerLabel:text,
-                     title:text,
-                     drawerIcon: ({color, size}) => (
-                       <Icon
-                         name="md-checkmark-circle-outline"
-                         size={size}
-                         color={color}
-                       />
-                   ),
-                     // gestureEnabled: false,
-               }}
-                   />
-   )
-   customerItems.push (
-    <DrawerNav.Screen name={text} component={ProductListStackScreen}
+//                     drawerLabel:text,
+//                      title:text,
+//                      drawerIcon: ({color, size}) => (
+//                        <Icon
+//                          name="md-checkmark-circle-outline"
+//                          size={size}
+//                          color={color}
+//                        />
+//                    ),
+//                      // gestureEnabled: false,
+//                }}
+//                    />
+//    )
+//    customerItems.push (
+//     <DrawerNav.Screen name={text} component={ProductListStackScreen}
 
-                  options={{
+//                   options={{
           
-                   drawerLabel:text,
-                    title:text,
-                    drawerIcon: ({color, size}) => (
-                      <Icon
-                        name="md-checkmark-circle-outline"
-                        size={size}
-                        color={color}
-                      />
-                  ),
-                    // gestureEnabled: false,
-              }}
-                  />
-  )
- });
+//                    drawerLabel:text,
+//                     title:text,
+//                     drawerIcon: ({color, size}) => (
+//                       <Icon
+//                         name="md-checkmark-circle-outline"
+//                         size={size}
+//                         color={color}
+//                       />
+//                   ),
+//                     // gestureEnabled: false,
+//               }}
+//                   />
+//   )
+//  });
 
 function Popup()
 {
   
-    const [text,setText] = React.useState('a');
+    const [text,setText] = React.useState('');
     const [modalVisible, setModalVisible] = React.useState(false);
 
     
@@ -640,10 +691,10 @@ function Popup()
 
                   addedItems.push(text);
 
-                  // firebase.database().ref('/drawerMenu').set(addedItems).then(() => {
-                  // }).catch((error) => {
-                  //     console.log(error);
-                  // });
+                  firebase.database().ref('/drawerMenu').set(addedItems).then(() => {
+                  }).catch((error) => {
+                      console.log(error);
+                  });
 
                   customerItems.push (
                     <DrawerNav.Screen name={text} component={ProductListStackScreen}
@@ -754,10 +805,10 @@ function Popup()
               onPress={() => {
                 addedItems.splice(addedItems.length-1,1);
                 
-                // firebase.database().ref('/drawerMenu').set(addedItems).then(() => {
-                // }).catch((error) => {
-                //     console.log(error);
-                // });
+                firebase.database().ref('/drawerMenu').set(addedItems).then(() => {
+                }).catch((error) => {
+                    console.log(error);
+                });
 
                 adminItems.splice(adminItems.length-1,1);
                 customerItems.splice(adminItems.length-1,1);
@@ -860,20 +911,94 @@ function DrawerContent(props) {
 
 export default class DrawerOrg extends React.Component
 {
-  construct(props)
+  _isMounted = false;
+  constructor(props)
   {
-    // super(props);
-    // if (!firebase.apps.length) {
-    //   firebase.initializeApp(ApiKeys.firebaseConfig);
-  // }
+    super(props);
+
+    this.state = {
+      arr:[],
+  };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(ApiKeys.firebaseConfig);
+  }
    
    
   }
 
-  componetWillMount() {
+  componentDidMount() {
+    this._isMounted = true;
+    firebase.database().ref('/drawerMenu').once('value', (data) => {
+        if (this._isMounted) {
+            if (data.val()) {
+                this.setState({
+                    arr: data.val(),
+                });
 
-   
-  }
+                while(addedItems.length>0)
+                {
+                  addedItems.splice(0,0,1);
+                }
+                for(var index=0;index<this.state.arr.length;index++)
+                {
+                  if(addedItems.includes(this.state.arr[index])==false)
+                      addedItems.push(this.state.arr[index]);
+                }
+
+                this.setState({
+                  arr: null,
+              });
+
+                     addedItems.map((text) => {
+                  adminItems.push (
+                     <DrawerNav.Screen name={text} component={ProductListStackScreen}
+                 
+                                   options={{
+                           
+                                    drawerLabel:text,
+                                     title:text,
+                                     drawerIcon: ({color, size}) => (
+                                       <Icon
+                                         name="md-checkmark-circle-outline"
+                                         size={size}
+                                         color={color}
+                                       />
+                                   ),
+                                     // gestureEnabled: false,
+                               }}
+                                   />
+                   )
+                   customerItems.push (
+                    <DrawerNav.Screen name={text} component={ProductListStackScreen}
+                
+                                  options={{
+                          
+                                   drawerLabel:text,
+                                    title:text,
+                                    drawerIcon: ({color, size}) => (
+                                      <Icon
+                                        name="md-checkmark-circle-outline"
+                                        size={size}
+                                        color={color}
+                                      />
+                                  ),
+                                    // gestureEnabled: false,
+                              }}
+                                  />
+                  )
+                 });
+
+            }
+        }
+    }
+    );
+    
+}
+
+componentWillUnmount() {
+    this._isMounted = false;
+}
 
 
   render()
@@ -951,6 +1076,40 @@ export default class DrawerOrg extends React.Component
              // gestureEnabled: false,
            }}
            />,
+           <DrawerNav.Screen name="CartScreen" component={CartScreenStackScreen} 
+           
+           options={{
+             // title: 'ProductList',
+             // drawerIcon: ({color, size}) => (
+             //   <Icon
+             //     name="md-checkmark-circle-outline"
+             //     size={size}
+             //     color={color}
+             //   />
+             // ),
+              drawerLabel: () => null,
+             title: null,
+             drawerIcon: () => null
+             // gestureEnabled: false,
+           }}
+           />,
+           <DrawerNav.Screen name="OrderScreen" component={OrderScreenStackScreen} 
+           
+           options={{
+             // title: 'ProductList',
+             // drawerIcon: ({color, size}) => (
+             //   <Icon
+             //     name="md-checkmark-circle-outline"
+             //     size={size}
+             //     color={color}
+             //   />
+             // ),
+              drawerLabel: () => null,
+             title: null,
+             drawerIcon: () => null
+             // gestureEnabled: false,
+           }}
+           />
     ];
    
    
@@ -961,9 +1120,9 @@ export default class DrawerOrg extends React.Component
      if(type[0]=='Customer')
      {
        return(
-         <DrawerNav.Navigator initialRouteName="OTPAuth" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
+         <DrawerNav.Navigator initialRouteName="Home" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
              {customerItems}
-             
+             {hidden}
          </DrawerNav.Navigator>
        );
      }
@@ -994,123 +1153,6 @@ export default class DrawerOrg extends React.Component
 }
 
 
-// export default function DrawerOrg(props)
-// {
-//   const { signOut,updateScreens, toggleTheme } = React.useContext(AuthContext);
-
-//  const hidden = [
-//    <DrawerNav.Screen name="OTPAuth" component={OTPAuthStackScreen}
-        
-//         options={{
-//           // title: 'OTPAuth',
-//           // drawerIcon: ({color, size}) => (
-//           //   <Icon
-//           //     name="md-checkmark-circle-outline"
-//           //     size={size}
-//           //     color={color}
-//           //   />
-//           // ),
-//           gestureEnabled: false,
-//           drawerLabel: () => null,
-//                 title: null,
-//                 drawerIcon: () => null
-//         }}
-        
-//         />,
-        
-//         <DrawerNav.Screen name="EditProfile" component={EditProfileScreenStackScreen} 
-        
-//         options={{
-//           title: 'EditProfile',
-//           drawerIcon: ({color, size}) => (
-//             <Icon
-//               name="md-checkmark-circle-outline"
-//               size={size}
-//               color={color}
-//             />
-//           ),
-//           // gestureEnabled: false,
-//           drawerLabel: () => null,
-//           title: null,
-//           drawerIcon: () => null
-//         }}
-//         />,
-
-//         <DrawerNav.Screen name="SearchBar" component={SearchBarStackScreen} 
-        
-//         options={{
-//           // title: 'SearchBar',
-//           // drawerIcon: ({color, size}) => (
-//           //   <Icon
-//           //     name="md-checkmark-circle-outline"
-//           //     size={size}
-//           //     color={color}
-//           //   />
-//           // ),
-//           drawerLabel: () => null,
-//           title: null,
-//           drawerIcon: () => null
-//           // gestureEnabled: false,
-//         }}
-//         />,
-
-//         <DrawerNav.Screen name="ProductList" component={ProductListStackScreen} 
-        
-//         options={{
-//           // title: 'ProductList',
-//           // drawerIcon: ({color, size}) => (
-//           //   <Icon
-//           //     name="md-checkmark-circle-outline"
-//           //     size={size}
-//           //     color={color}
-//           //   />
-//           // ),
-//            drawerLabel: () => null,
-//           title: null,
-//           drawerIcon: () => null
-//           // gestureEnabled: false,
-//         }}
-//         />,
-//  ];
-
-
-
-
-//   type.splice(0,0,props.userType);
-
-//   if(type[0]=='Customer')
-//   {
-//     return(
-//       <DrawerNav.Navigator initialRouteName="OTPAuth" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
-//           {customerItems}
-          
-//       </DrawerNav.Navigator>
-//     );
-//   }
-
-//   if(type[0]=='Admin')
-// {
-
- 
-
-//   return(
-//     <DrawerNav.Navigator initialRouteName="Admin" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
-//       {adminItems}
-      
-//     </DrawerNav.Navigator>
-//   );
-// }
-
-// if(type[0]=='Dealer')
-// {
-//   return(
-//     <DrawerNav.Navigator initialRouteName="DealerProducts" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
-//       {dealerItems}
-//     </DrawerNav.Navigator>
-//   );
-// }
-   
-// }
 
 
 
