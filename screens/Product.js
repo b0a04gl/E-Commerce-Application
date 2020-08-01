@@ -14,6 +14,7 @@ class Product extends React.Component {
     {
         super(props);
 
+        
         this.state = {
             item : this.props.product
         }
@@ -73,13 +74,13 @@ class Product extends React.Component {
     render() {
       return (
         <Card
-            image={{uri: this.state.item.img}}>
+            image={this.state.item.image}>
                 
             <Text style={{marginBottom: 10, marginTop: 20 }} h2>
-                {this.state.item.name}
+                {this.state.item.productName}
             </Text>
             <Text style={styles.price} h4>
-            ₹{this.state.item.price}
+            ₹{this.state.item.productPrice}
             </Text>
             
           

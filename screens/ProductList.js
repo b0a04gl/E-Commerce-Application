@@ -1,45 +1,94 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import Product from './Product';
+import * as firebase from 'firebase';
+import ApiKeys from '../database/RealtimeDb';
+// const BASE_URL = 'https://raw.githubusercontent.com/sdras/sample-vue-shop/master/dist';
 
-const BASE_URL = 'https://raw.githubusercontent.com/sdras/sample-vue-shop/master/dist';
-
-const products = [
-  {
-    name: 'Khaki Work Boots',
-    price: 149,
-    img: `${BASE_URL}/shoe1.png`,
-    qty:0,
-    category: 'Utilities',
-    description:'Ever lasting!!!!'
-  },
-  {
-    name: 'Camo Fang Backpack',
-    price: 399,
-    img: `${BASE_URL}/jacket1.png`,
-    qty:0,
-    category: 'Mens Fashion',
-    description:'Super Coool!!!!'
-  },
-  {
-    name: 'Quilted Liner Jacket',
-    price: 499,
-    img: `${BASE_URL}/jacket2.png`,
-    qty:0,
-    category: 'Travel',
-    description:'Awaited one!!!!'
-  },
-  {
-    name: 'Cotton Black Cap',
-    price: 199,
-    img: `${BASE_URL}/hat1.png`,
-    qty:0,
-    category:'Mens Fashion',
-    description:'Best deal!!!!'
-  },
-];
+// const products = [
+//   {
+//     productName: 'Khaki Work Boots',
+//     productPrice: 149,
+//     category: 'Utilities',
+//     description:'Ever lasting!!!!',
+//     image: `${BASE_URL}/shoe1.png`,
+//     qty:0,
+    
+//   },
+//   {
+//     productName: 'Camo Fang Backpack',
+//     productPrice: 399,
+//     image: `${BASE_URL}/jacket1.png`,
+//     qty:0,
+//     category: 'Mens Fashion',
+//     description:'Super Coool!!!!'
+//   },
+//   {
+//     productName: 'Quilted Liner Jacket',
+//     productPrice: 499,
+//     image: `${BASE_URL}/jacket2.png`,
+//     qty:0,
+//     category: 'Travel',
+//     description:'Awaited one!!!!'
+//   },
+//   {
+//     productName: 'Cotton Black Cap',
+//     productPrice: 199,
+//     image: `${BASE_URL}/hat1.png`,
+//     qty:0,
+//     category:'Mens Fashion',
+//     description:'Best deal!!!!'
+//   },
+// ];
 
 export default class ProdutcList extends React.Component {
+
+
+  constructor(props)
+  {
+    super(props);
+    
+    const {index, routes} = this.props.navigation.dangerouslyGetState();
+    const currentRoute = routes[index].name;
+    console.log('current screen', routes[index].params);
+    this.state = {
+      products:[]
+    };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(ApiKeys.firebaseConfig);
+    }
+
+  }
+
+  componentDidMount()
+  {
+    firebase.database().ref('/recentProducts').on('value', (data) => {
+     
+
+      if (data.val()) {
+                 var temp = data.val();
+                 var keys = Object.keys(temp);
+              var x = [];
+                 for(var index=0;index<keys.length;index++)
+                 {
+                   var key = keys[index];
+          
+                  x.push(temp[key]);
+                  x[index]['id']=key;
+                  x[index]['qty']=0;
+                  // console.log(x[index].image);
+                 }
+                
+                 this.setState(
+                   {
+                     products:x,
+                   }
+                 );
+        
+              }
+    });
+  }
+
     render() {
       return (
         <ScrollView
@@ -49,7 +98,7 @@ export default class ProdutcList extends React.Component {
             height: "100%",
           }}>
           {
-            products.map((product, index) => {
+            this.state.products.map((product, index) => {
               return(
                 <View style={styles.row} key={index}>
                     <View style={styles.col}>

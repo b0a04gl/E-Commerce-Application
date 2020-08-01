@@ -15,7 +15,7 @@ import ButtonAddRemove from "./Buttons/AddRemoveButton";
 import AppButton from './Buttons/AppButton';
 
 const CartItem = ({ data, onAddItem, onRemoveItem }) => {
-  const {id, name,price,qty ,category,description} = data.item;
+  const {id, productName,productPrice,qty ,category,description} = data.item;
 
 const [currentQty,setCurrentQty] = React.useState(qty);
 const [currentItem,setCurrentItem] = React.useState(data.item);
@@ -93,14 +93,14 @@ const remove = () => {
   return (
     <View style={styles.smallCard}>
       <View style={styles.productInfo}>
-        <Text style={styles.title}>{name}</Text>
+        <Text style={styles.title}>{productName}</Text>
         <Text style={styles.resturentTitle}>
           {category.toString().toUpperCase()}
         </Text>
         <Text style={styles.foodDescription}>{description}</Text>
       </View>
       <View style={styles.priceView}>
-        <Text style={styles.price}>₹{price}</Text>
+        <Text style={styles.price}>₹{productPrice}</Text>
         {/* <Text style={styles.price}>₹{_id}</Text> */}
         <View style={styles.countView}>
         <TouchableOpacity style={styles.options} >

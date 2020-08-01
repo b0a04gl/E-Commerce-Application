@@ -115,7 +115,7 @@ const popupRef = useRef();
     if (cartItems !== undefined && cartItems.length > 0) {
       cartItems.map((item) => {
         let qty = item.qty;
-        let price = item.price;
+        let price = item.productPrice;
         // Alert.alert(qty+"..."+price);
         total += qty * price;
       });
