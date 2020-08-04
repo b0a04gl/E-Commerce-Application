@@ -13,6 +13,8 @@ import ArrowIcon from "../assets/images/arrow_icon.png";
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 
+
+
 const CartScreen = ({ navigation }) => {
 
 const [cartItems,setCartItems] = React.useState([]);

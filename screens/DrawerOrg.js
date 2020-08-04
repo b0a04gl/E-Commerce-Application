@@ -12,7 +12,7 @@ import Admin from './Admin';
 import DealerProducts from './DealerProducts';
 import{ AuthContext } from '../components/context';
 import ProductList from './ProductList';
-import SearchBar from './Components/SearchBar';
+import SearchBar1 from './Components/SearchBar1';
 import PendingList from './PendingList';
 import CartScreen from './CartScreen';
 import OrderScreen from './OrderScreen';
@@ -47,7 +47,7 @@ import {
 //   firebase.initializeApp(ApiKeys.firebaseConfig);
 // }
 
-
+const addedItems =  [];
 const DrawerNav = createDrawerNavigator();
 const Stack = createStackNavigator();
 const HomeStackScreen =({navigation}) =>(
@@ -152,23 +152,26 @@ const OrderScreenStackScreen =({navigation}) =>(
 
 const SearchBarStackScreen =({navigation}) =>(
     <Stack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: '#ec2F4B',
-          },
+      headerShown:false,
 
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            alignSelf: 'center'
-          },
-          headerLeft : () => (
-            <Icon.Button  name = 'ios-arrow-round-back' size={30}
-            backgroundColor = '#ec2F4B' onPress={() => navigation.goBack()}></Icon.Button>
-        ),
+        // headerStyle: {
+        //     backgroundColor: '#ec2F4B',
+        //   },
+
+        //   headerTintColor: '#fff',
+        //   headerTitleStyle: {
+        //     fontWeight: 'bold',
+        //     alignSelf: 'center'
+        //   },
+        //   headerLeft : () => (
+        //     <Icon.Button  name = 'ios-arrow-round-back' size={30}
+        //     backgroundColor = '#ec2F4B' onPress={() => navigation.goBack()}></Icon.Button>
+        // ),
     }}>
-        <Stack.Screen name="SearchBar" component={SearchBar} options={{
+        <Stack.Screen name="SearchBar" component={SearchBar1} options={{
             title:'SearchBar',
             headerTitleAlign: 'center',
+            header : null,
         }}/>
 
     </Stack.Navigator>
@@ -322,6 +325,9 @@ const PendingListStackScreen =({navigation}) =>(
 );
 
 const ProductListStackScreen =({navigation}) =>(
+
+
+  
     <Stack.Navigator screenOptions={{
         headerStyle: {
             backgroundColor: '#ec2F4B',
@@ -334,7 +340,8 @@ const ProductListStackScreen =({navigation}) =>(
            
           },
     }}>
-        <Stack.Screen name="ProductList" component={ProductList} options={{
+      
+        <Stack.Screen name={addedItems.length!=0 ? addedItems[addedItems.length-1]: 'Dummy'} component={ProductList} options={{
             title:'ProductList',
             headerStyle: {
                 backgroundColor: '#ec2F4B',
@@ -590,7 +597,7 @@ const customerItems = [
 
 const type = [];
 
-const addedItems =  [];
+
 
 
 // firebase.database().ref('/drawerMenu').once('value', (data) => {
@@ -718,7 +725,12 @@ function Popup()
                 
 
                   adminItems.push(
-                    <DrawerNav.Screen name={text} component={ProductListStackScreen}
+                    <DrawerNav.Screen name={text} component={
+
+                      
+                       ProductListStackScreen                    
+
+                    }
 
                           options={{
                   
@@ -942,13 +954,19 @@ export default class DrawerOrg extends React.Component
                 }
                 for(var index=0;index<this.state.arr.length;index++)
                 {
-                  if(addedItems.includes(this.state.arr[index])==false)
+                  if(this.state.arr[index]!=null && addedItems.includes(this.state.arr[index])==false)
+                    {
                       addedItems.push(this.state.arr[index]);
+                      // console.log("screen : "+this.state.arr[index]);
+                    }
                 }
 
                 this.setState({
                   arr: null,
               });
+
+              if(addedItems.length!=0)
+              {
 
                      addedItems.map((text) => {
                   adminItems.push (
@@ -990,6 +1008,8 @@ export default class DrawerOrg extends React.Component
                  });
 
             }
+
+          }
         }
     }
     );
@@ -1119,6 +1139,9 @@ componentWillUnmount() {
    
      if(type[0]=='Customer')
      {
+
+
+      
        return(
          <DrawerNav.Navigator initialRouteName="Home" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
              {customerItems}

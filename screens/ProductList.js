@@ -48,11 +48,13 @@ export default class ProdutcList extends React.Component {
   {
     super(props);
     
+
     const {index, routes} = this.props.navigation.dangerouslyGetState();
     const currentRoute = routes[index].name;
-    console.log('current screen', routes[index].params);
+    console.log('current screen : ', routes[index].name);
     this.state = {
-      products:[]
+      products:[],
+      category : routes[index].name,
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.firebaseConfig);
@@ -62,7 +64,8 @@ export default class ProdutcList extends React.Component {
 
   componentDidMount()
   {
-    firebase.database().ref('/recentProducts').on('value', (data) => {
+  //'/inventory/'+this.state.category  
+    firebase.database().ref('/inventory/'+this.state.category).on('value', (data) => {
      
 
       if (data.val()) {
