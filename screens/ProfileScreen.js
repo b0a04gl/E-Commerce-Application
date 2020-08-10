@@ -16,6 +16,11 @@ class ProfileScreen extends React.Component
     render()
     {
         const {navigation} = this.props;
+
+        const {index, routes} = this.props.navigation.dangerouslyGetState();
+        const currentRoute = routes[index].name;
+        console.log('current screen : ', routes[index].name);
+
         return (
 
 
@@ -77,13 +82,13 @@ class ProfileScreen extends React.Component
                     <Text style={styles.menuItemText}>My Wishlist</Text>
                   </View>
                 </TouchableRipple>
-                <TouchableRipple onPress={() => {}}>
+                <TouchableRipple onPress={() => {navigation.navigate('OrderScreen')}}>
                   <View style={styles.menuItem}>
                     <Icon name="briefcase-upload-outline" color="#ec2F4B" size={25}/>
                     <Text style={styles.menuItemText}>My Orders</Text>
                   </View>
                 </TouchableRipple>
-                <TouchableRipple onPress={() => {}}>
+                <TouchableRipple onPress={() => {navigation.navigate('CartScreen')}}>
                   <View style={styles.menuItem}>
                     <Icon name="cart-outline" color="#ec2F4B" size={25}/>
                     <Text style={styles.menuItemText}>My Cart</Text>

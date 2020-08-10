@@ -63,6 +63,9 @@ export default class PendingList extends React.Component {
    };
 
    render() {
+
+      console.log("active : "+this.props.activeItemKey);
+
       return (
          <ScrollView keyboardShouldPersistTaps='always' style={styles.screen}>
             {Object.keys(this.state.dealers).map((key, index) => (

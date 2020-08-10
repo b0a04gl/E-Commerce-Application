@@ -14,6 +14,7 @@ class Product extends React.Component {
     {
         super(props);
 
+        console.log("reached.............");
         
         this.state = {
             item : this.props.product
@@ -23,7 +24,8 @@ class Product extends React.Component {
         }
 
         var temp = this.state.item;
-        temp.qty= 0;
+        if(temp!=null)
+          temp.qty= 0;
     
         this.setState({
             item:temp,
@@ -71,9 +73,21 @@ class Product extends React.Component {
 
       }
 
+      store = () =>{
+        firebase.database().ref('/current').set(this.state.item).then(() => {
+        }).catch((error) => {
+            console.log(error);
+        });
+      }
+
     render() {
+
+
+      const {navigation,p} = this.props;
+
       return (
         <Card
+          onPress = {this.store()}
             image={this.state.item.image}>
                 
             <Text style={{marginBottom: 10, marginTop: 20 }} h2>
@@ -112,6 +126,10 @@ class Product extends React.Component {
             type="clear"
             title='Add to Cart'
             onPress={() =>this.addToDB()} />
+
+
+
+            
         </Card>
       );
     }
@@ -139,6 +157,7 @@ const styles = StyleSheet.create({
         width: "100%",
         flex: 8,
       },
+     
 });
 
 export default Product;

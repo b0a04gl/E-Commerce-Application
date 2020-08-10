@@ -11,11 +11,14 @@ import OTPAuth from './OTPAuth';
 import Admin from './Admin';
 import DealerProducts from './DealerProducts';
 import{ AuthContext } from '../components/context';
+import Product from './Product';
 import ProductList from './ProductList';
 import SearchBar1 from './Components/SearchBar1';
 import PendingList from './PendingList';
 import CartScreen from './CartScreen';
 import OrderScreen from './OrderScreen';
+import ProductDetailScreen from './ProductDetailScreen';
+import AdminOrders from './AdminOrders';
 
 import {
     useTheme,
@@ -295,6 +298,36 @@ const DealerProductsStackScreen =({navigation}) =>(
   </Stack.Navigator>
 );
 
+
+const AdminOrdersStackScreen =({navigation}) =>(
+  <Stack.Navigator screenOptions={{
+      headerStyle: {
+          backgroundColor: '#ec2F4B',
+        },
+
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          alignSelf: 'center'
+        },
+  }}>
+      <Stack.Screen name="AdminOrders" component={AdminOrders} options={{
+          title:'Admin Orders',
+          // headerShown: false,
+          headerStyle: {
+              backgroundColor: '#ec2F4B',
+            },
+          headerTitleAlign: 'center',
+          headerLeft : () => (
+              <Icon.Button  name = 'ios-menu' size={30}
+              backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+          ),
+        
+      }}/>
+
+  </Stack.Navigator>
+);
+
 const PendingListStackScreen =({navigation}) =>(
   <Stack.Navigator screenOptions={{
       headerStyle: {
@@ -324,47 +357,86 @@ const PendingListStackScreen =({navigation}) =>(
   </Stack.Navigator>
 );
 
-const ProductListStackScreen =({navigation}) =>(
+// const ProductListStackScreen =({navigation}) =>(
 
 
   
-    <Stack.Navigator screenOptions={{
-        headerStyle: {
-            backgroundColor: '#ec2F4B',
-          },
+//     <Stack.Navigator screenOptions={{
+//         headerStyle: {
+//             backgroundColor: '#ec2F4B',
+//           },
 
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            // alignSelf: 'center'
+//           headerTintColor: '#fff',
+//           headerTitleStyle: {
+//             fontWeight: 'bold',
+//             // alignSelf: 'center'
            
-          },
-    }}>
+//           },
+//     }}>
       
-        <Stack.Screen name={addedItems.length!=0 ? addedItems[addedItems.length-1]: 'Dummy'} component={ProductList} options={{
-            title:'ProductList',
-            headerStyle: {
-                backgroundColor: '#ec2F4B',
-              },
-            headerTitleAlign: 'center',
-            headerLeft : () => (
-                <Icon.Button  name = 'ios-menu' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
-            ),
+//         <Stack.Screen name={ 'ProductList'} component={ProductList} options={{
+//             title:'ProductList',
+//             headerStyle: {
+//                 backgroundColor: '#ec2F4B',
+//               },
+//             headerTitleAlign: 'center',
+//             headerLeft : () => (
+//                 <Icon.Button  name = 'ios-menu' size={30}
+//                 backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+//             ),
             
-            headerRight : () => (
+//             headerRight : () => (
                 
-                <View style={styles.iconContainer}>
-              <Icon.Button  name = 'md-search' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('SearchBar')}></Icon.Button>
-         <Icon.Button  name = 'ios-cart' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('CartScreen')}></Icon.Button>
-      </View>
-            ),
+//                 <View style={styles.iconContainer}>
+//               <Icon.Button  name = 'md-search' size={30}
+//                 backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('SearchBar')}></Icon.Button>
+//          <Icon.Button  name = 'ios-cart' size={30}
+//                 backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('CartScreen')}></Icon.Button>
+//       </View>
+//             ),
 
-        }}/>
+//         }}/>
 
-    </Stack.Navigator>
+
+
+//     </Stack.Navigator>
+// );
+
+
+
+
+
+const ProductListStackScreen =({navigation}) =>(
+  <Stack.Navigator screenOptions={{
+      headerStyle: {
+          backgroundColor: '#ec2F4B',
+        },
+      //   headerShown: false,
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          // alignSelf: 'center'
+         
+        },
+  }}>
+      <Stack.Screen name="ProductList" component={ProductList} options={{
+          title:'ProductList',
+          headerStyle: {
+              backgroundColor: '#ec2F4B',
+            },
+          headerTitleAlign: 'center',
+          headerLeft : () => (
+              <Icon.Button  name = 'ios-menu' size={30}
+              backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+          ),
+
+            
+
+      }}/>
+
+
+
+  </Stack.Navigator>
 );
 
 const ProfileScreenStackScreen =({navigation}) =>(
@@ -507,7 +579,39 @@ const adminItems = [
           // gestureEnabled: false,
         }}
         />
-        ,
+
+  ,
+  <DrawerNav.Screen name="AdminOrders" component={AdminOrdersStackScreen}
+        
+        options={{
+          title: 'AdminOrders',
+          drawerIcon: ({color, size}) => (
+            <Icon
+              name="md-checkmark-circle-outline"
+              size={size}
+              color={color}
+            />
+          ),
+          // gestureEnabled: false,
+        }}
+        />,
+        <DrawerNav.Screen name='Details' component={ProductDetailScreen}
+
+options={{
+
+ drawerLabel:'Recent',
+  title:'Recent',
+  drawerIcon: ({color, size}) => (
+    <Icon
+      name="md-checkmark-circle-outline"
+      size={size}
+      color={color}
+    />
+),
+  // gestureEnabled: false,
+}}
+/>,
+
 ];
 const dealerItems = [
   <DrawerNav.Screen name="Dealer" component={DealerStackScreen}
@@ -584,7 +688,24 @@ const customerItems = [
         ),
           // gestureEnabled: false,
     }}
-        />
+        />,
+<DrawerNav.Screen name='Details' component={ProductDetailScreen}
+
+options={{
+
+ drawerLabel:'Recent',
+  title:'Recent',
+  drawerIcon: ({color, size}) => (
+    <Icon
+      name="md-checkmark-circle-outline"
+      size={size}
+      color={color}
+    />
+),
+  // gestureEnabled: false,
+}}
+/>,
+        
         
 ];
 
@@ -704,7 +825,52 @@ function Popup()
                   });
 
                   customerItems.push (
-                    <DrawerNav.Screen name={text} component={ProductListStackScreen}
+                    <DrawerNav.Screen name={text} component={
+
+                      ({navigation}) =>(
+
+
+  
+                        <Stack.Navigator screenOptions={{
+                            headerStyle: {
+                                backgroundColor: '#ec2F4B',
+                              },
+                    
+                              headerTintColor: '#fff',
+                              headerTitleStyle: {
+                                fontWeight: 'bold',
+                                // alignSelf: 'center'
+                               
+                              },
+                        }}>
+                          
+                            <Stack.Screen name={text} component={ProductList} options={{
+                                title:'ProductList',
+                                headerStyle: {
+                                    backgroundColor: '#ec2F4B',
+                                  },
+                                headerTitleAlign: 'center',
+                                headerLeft : () => (
+                                    <Icon.Button  name = 'ios-menu' size={30}
+                                    backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+                                ),
+                                
+                                headerRight : () => (
+                                    
+                                    <View style={styles.iconContainer}>
+                                  <Icon.Button  name = 'md-search' size={30}
+                                    backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('SearchBar')}></Icon.Button>
+                             <Icon.Button  name = 'ios-cart' size={30}
+                                    backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('CartScreen')}></Icon.Button>
+                          </View>
+                                ),
+                    
+                            }}/>
+                    
+                        </Stack.Navigator>
+                    )
+
+                    }
                 
                                   options={{
                           
@@ -728,7 +894,49 @@ function Popup()
                     <DrawerNav.Screen name={text} component={
 
                       
-                       ProductListStackScreen                    
+                      ({navigation}) =>(
+
+
+  
+                        <Stack.Navigator screenOptions={{
+                            headerStyle: {
+                                backgroundColor: '#ec2F4B',
+                              },
+                    
+                              headerTintColor: '#fff',
+                              headerTitleStyle: {
+                                fontWeight: 'bold',
+                                // alignSelf: 'center'
+                               
+                              },
+                        }}>
+                          
+                            <Stack.Screen name={text} component={ProductList} options={{
+                                title:text,
+                                headerStyle: {
+                                    backgroundColor: '#ec2F4B',
+                                  },
+                                headerTitleAlign: 'center',
+                                headerLeft : () => (
+                                    <Icon.Button  name = 'ios-menu' size={30}
+                                    backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+                                ),
+                                
+                                headerRight : () => (
+                                    
+                                    <View style={styles.iconContainer}>
+                                  <Icon.Button  name = 'md-search' size={30}
+                                    backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('SearchBar')}></Icon.Button>
+                             <Icon.Button  name = 'ios-cart' size={30}
+                                    backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('CartScreen')}></Icon.Button>
+                          </View>
+                                ),
+                    
+                            }}/>
+                    
+                        </Stack.Navigator>
+                    )
+                                      
 
                     }
 
@@ -970,7 +1178,53 @@ export default class DrawerOrg extends React.Component
 
                      addedItems.map((text) => {
                   adminItems.push (
-                     <DrawerNav.Screen name={text} component={ProductListStackScreen}
+                     <DrawerNav.Screen name={text} component={
+
+                      ({navigation}) =>(
+
+
+  
+                        <Stack.Navigator screenOptions={{
+                            headerStyle: {
+                                backgroundColor: '#ec2F4B',
+                              },
+                    
+                              headerTintColor: '#fff',
+                              headerTitleStyle: {
+                                fontWeight: 'bold',
+                                // alignSelf: 'center'
+                               
+                              },
+                        }}>
+                          
+                            <Stack.Screen name={text} component={ProductList} options={{
+                                title:text,
+                                headerStyle: {
+                                    backgroundColor: '#ec2F4B',
+                                  },
+                                headerTitleAlign: 'center',
+                                headerLeft : () => (
+                                    <Icon.Button  name = 'ios-menu' size={30}
+                                    backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+                                ),
+                                
+                                headerRight : () => (
+                                    
+                                    <View style={styles.iconContainer}>
+                                  <Icon.Button  name = 'md-search' size={30}
+                                    backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('SearchBar')}></Icon.Button>
+                             <Icon.Button  name = 'ios-cart' size={30}
+                                    backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('CartScreen')}></Icon.Button>
+                          </View>
+                                ),
+                    
+                            }}/>
+                    
+                        </Stack.Navigator>
+                    )
+
+
+                     }
                  
                                    options={{
                            
@@ -988,7 +1242,53 @@ export default class DrawerOrg extends React.Component
                                    />
                    )
                    customerItems.push (
-                    <DrawerNav.Screen name={text} component={ProductListStackScreen}
+                    <DrawerNav.Screen name={text} component={
+
+
+                      ({navigation}) =>(
+
+
+  
+                        <Stack.Navigator screenOptions={{
+                            headerStyle: {
+                                backgroundColor: '#ec2F4B',
+                              },
+                    
+                              headerTintColor: '#fff',
+                              headerTitleStyle: {
+                                fontWeight: 'bold',
+                                // alignSelf: 'center'
+                               
+                              },
+                        }}>
+                          
+                            <Stack.Screen name={text} component={ProductList} options={{
+                                title:text,
+                                headerStyle: {
+                                    backgroundColor: '#ec2F4B',
+                                  },
+                                headerTitleAlign: 'center',
+                                headerLeft : () => (
+                                    <Icon.Button  name = 'ios-menu' size={30}
+                                    backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+                                ),
+                                
+                                headerRight : () => (
+                                    
+                                    <View style={styles.iconContainer}>
+                                  <Icon.Button  name = 'md-search' size={30}
+                                    backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('SearchBar')}></Icon.Button>
+                             <Icon.Button  name = 'ios-cart' size={30}
+                                    backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('CartScreen')}></Icon.Button>
+                          </View>
+                                ),
+                    
+                            }}/>
+                    
+                        </Stack.Navigator>
+                    )
+
+                    }
                 
                                   options={{
                           
@@ -1023,7 +1323,11 @@ componentWillUnmount() {
 
   render()
   {
+
+    
+
     const hidden = [
+      
       <DrawerNav.Screen name="OTPAuth" component={OTPAuthStackScreen}
            
            options={{
@@ -1096,6 +1400,25 @@ componentWillUnmount() {
              // gestureEnabled: false,
            }}
            />,
+           
+<DrawerNav.Screen name="Product" component={Product} 
+           
+           options={{
+             // title: 'ProductList',
+             // drawerIcon: ({color, size}) => (
+             //   <Icon
+             //     name="md-checkmark-circle-outline"
+             //     size={size}
+             //     color={color}
+             //   />
+             // ),
+              drawerLabel: () => null,
+             title: null,
+             drawerIcon: () => null
+             // gestureEnabled: false,
+           }}
+           />,
+
            <DrawerNav.Screen name="CartScreen" component={CartScreenStackScreen} 
            
            options={{
@@ -1158,7 +1481,7 @@ componentWillUnmount() {
      return(
        <DrawerNav.Navigator initialRouteName="Admin" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
          {adminItems}
-         
+         {hidden}
        </DrawerNav.Navigator>
      );
    }

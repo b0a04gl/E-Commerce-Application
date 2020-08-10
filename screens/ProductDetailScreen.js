@@ -18,10 +18,14 @@ export default class ProductDetailScreen extends React.Component {
             showRateModal: false,
             comment: '',
             comments: [],
+            
         }
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.firebaseConfig);
         }
+
+
+        
     }
 
     componentDidMount() {
@@ -36,6 +40,21 @@ export default class ProductDetailScreen extends React.Component {
             }
         }
         );
+        
+        firebase.database().ref('/current').once('value', (data) => {
+            if (this._isMounted) {
+            if (data.val()) {
+                console.log("current : "+data.val());
+                this.setState({
+                    product: data.val(),
+                });
+            }
+            }
+    }
+    );
+
+        
+
     }
 
     componentWillUnmount() {
@@ -84,18 +103,21 @@ export default class ProductDetailScreen extends React.Component {
     };
 
     render() {
+
+        
+
         return (
             <View style={styles.screen}>
                 <ScrollView>
                     <View style={styles.display}>
                         <View style={styles.imageContainer}>
-                            <Image source={this.props.product.image} style={styles.mainImage} />
+                            <Image source={this.state.product.image} style={styles.mainImage} />
                             <TouchableOpacity style={styles.iconContainer} onPress={this.toggleFavorite}>
                                 <Image source={this.state.clicked ? clicked : unclicked} style={styles.icon} />
                             </TouchableOpacity>
                         </View>
-                        <Text style={styles.text}>{this.props.product.productName}</Text>
-                        <Text style={styles.price}>{this.props.product.productPrice}</Text>
+                        <Text style={styles.text}>{this.state.product.productName}</Text>
+                        <Text style={styles.price}>{this.state.product.productPrice}</Text>
                     </View>
                     <View style={styles.body}>
                         <View style={styles.reviewContainer}>
@@ -135,7 +157,7 @@ export default class ProductDetailScreen extends React.Component {
                                 this.state.comments.slice(this.state.comments.length - 2, this.state.comments.length).reverse().map(comment =>
                                     <View style={styles.commentBox}>
                                         <View style={styles.userContainer}>
-                                            <Image source={require('./assets/images/avatar.png')} style={styles.image} />
+                                            <Image source={require('../assets/images/avatar.png')} style={styles.image} />
                                             <Text style={styles.user}>{comment.user}</Text>
                                         </View>
                                         <View style={styles.row}>
