@@ -5,6 +5,8 @@ import clicked from '../assets/images/clicked_heart.png';
 import StarRating from 'react-native-star-rating';
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
+import AsyncStorage from '@react-native-community/async-storage';
+import Toast from 'react-native-simple-toast';
 
 export default class ProductDetailScreen extends React.Component {
     _isMounted = false;
@@ -18,43 +20,78 @@ export default class ProductDetailScreen extends React.Component {
             showRateModal: false,
             comment: '',
             comments: [],
-            
+            product: {},
+            userToken: '',
+            key: '',
+            category: '',
+
         }
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.firebaseConfig);
         }
 
-
-        
     }
 
     componentDidMount() {
         this._isMounted = true;
-        firebase.database().ref('/comments').once('value', (data) => {
+
+        firebase.database().ref('/current').on('value', (data) => {
             if (this._isMounted) {
                 if (data.val()) {
                     this.setState({
-                        comments: Object.values(data.val()),
+                        product: data.val(),
+                        comments: [],
                     });
                 }
             }
         }
         );
-        
-        firebase.database().ref('/current').once('value', (data) => {
+
+        var key = '';
+        firebase.database().ref('/key').on('value', (data) => {
             if (this._isMounted) {
-            if (data.val()) {
-                console.log("current : "+data.val());
+                if (data.val()) {
+                    key = data.val().key;
+                    this.setState({
+                        key: key,
+                        category: data.val().category,
+                    });
+
+                }
+            }
+        }
+        );
+        console.log(key);
+        
+
+        AsyncStorage.getItem('userToken').then((userToken) => {
+            if (userToken) {
                 this.setState({
-                    product: data.val(),
+                    userToken: userToken,
                 });
             }
-            }
+        });
+
     }
-    );
 
-        
-
+    componentDidUpdate(prevProps, prevState) {
+        console.log(prevState.key);
+        console.log(this.state.key);
+        if (this.state.key !== prevState.key) {
+            firebase.database().ref('/comments/' + this.state.key).on('value', data => {
+                if (this._isMounted) {
+                    if (data.val()) {
+                        this.setState({
+                           comments: data.val(),
+                        });
+    
+                    }
+                }
+            });
+            this.setState({
+                clicked: this.state.product.wishlist,
+            })
+        }
     }
 
     componentWillUnmount() {
@@ -62,8 +99,14 @@ export default class ProductDetailScreen extends React.Component {
     }
 
     toggleFavorite = () => {
+        firebase.database().ref('/wishlist/' + this.state.userToken).push(this.state.product).then(() => {
+            firebase.database().ref('/current').update({ wishlist: true });
+            firebase.database().ref('inventory/' + this.state.category + '/' + this.state.key).update({ wishlist: true });
+        }).catch((error) => {
+            console.log(error);
+        });
         this.setState({
-            clicked: !this.state.clicked,
+            clicked: true,
         });
     }
 
@@ -76,20 +119,28 @@ export default class ProductDetailScreen extends React.Component {
     commentsHandler = () => {
         const date = new Date();
         const dateFormat = date.getDate() + '/' + (parseInt(date.getMonth()) + 1).toString() + '/' + date.getFullYear();
-        const comment = {
+        const comments = [...this.state.comments, {
             user: 'Anonymous',
             comment: this.state.comment,
             date: dateFormat,
             rating: this.state.rating,
-        };
+        }];
         this.setState({
-            comments: [...this.state.comments, comment],
+            comments: comments,
             comment: '',
             showRateModal: false,
             rating: 0,
         });
-        firebase.database().ref('/comments').push(comment).then(() => {
+        firebase.database().ref('/comments/' + this.state.key).set(comments).then(() => {
             console.log('Pushed');
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    saveToCart = () => {
+        firebase.database().ref('/cart/' + this.state.userToken).set(this.state.product).then(() => {
+            Toast.show('Added to Cart', Toast.LONG);
         }).catch((error) => {
             console.log(error);
         });
@@ -103,8 +154,6 @@ export default class ProductDetailScreen extends React.Component {
     };
 
     render() {
-
-        
 
         return (
             <View style={styles.screen}>
@@ -154,7 +203,7 @@ export default class ProductDetailScreen extends React.Component {
                         </View>
                         <View style={styles.comments}>
                             {
-                                this.state.comments.slice(this.state.comments.length - 2, this.state.comments.length).reverse().map(comment =>
+                                this.state.comments.slice(0, 2).reverse().map(comment =>
                                     <View style={styles.commentBox}>
                                         <View style={styles.userContainer}>
                                             <Image source={require('../assets/images/avatar.png')} style={styles.image} />
@@ -186,12 +235,9 @@ export default class ProductDetailScreen extends React.Component {
                         </View>
                     </View>
                 </ScrollView>
-                <View style={styles.footer}>
-                    <TouchableOpacity style={styles.button1}>
+                <View>
+                    <TouchableOpacity style={styles.footer} onPress={this.saveToCart}>
                         <Text style={styles.footerText}>ADD TO CART</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button2}>
-                        <Text style={styles.footerText}>BUY NOW</Text>
                     </TouchableOpacity>
                 </View>
                 <Modal
@@ -258,7 +304,7 @@ const styles = StyleSheet.create({
     iconContainer: {
         position: 'absolute',
         top: 10,
-        right: 10,
+        right: 0,
         height: 40,
         width: 40,
         alignItems: 'center',
@@ -349,30 +395,16 @@ const styles = StyleSheet.create({
     },
 
     footer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-
-    button1: {
-        flex: 1,
-        backgroundColor: '#898989',
-        alignItems: 'center',
+        backgroundColor: '#ec2F4B',
         padding: 15,
         elevation: 10,
-    },
-
-    button2: {
-        flex: 1,
-        backgroundColor: '#389BD9',
+        borderRadius: 10,
+        margin: 5,
         alignItems: 'center',
-        padding: 15,
-        elevation: 10,
     },
 
     footerText: {
-        fontWeight: 'bold',
         color: 'white',
-        fontSize: 14,
     },
 
     comments: {

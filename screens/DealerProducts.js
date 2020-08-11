@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Button, Modal, TextInput, Alert } from 'react-native';
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -191,6 +191,7 @@ export default class DealerProducts extends React.Component {
   render() {
     return (
       <View style={styles.screen}>
+        <ScrollView>
         <View style={styles.row}>
           <Text style={styles.text}>Products List</Text>
           <TouchableOpacity onPress={this.showInput}>
@@ -214,9 +215,10 @@ export default class DealerProducts extends React.Component {
               </TouchableOpacity>
             </View>
           )} />
+          </ScrollView>
         <View>
-          <TouchableOpacity>
-            <Button title='Save Changes' onPress={this.saveToDB} />
+          <TouchableOpacity style={styles.footer} onPress={this.saveToDB}>
+            <Text style={styles.footerText}>SAVE CHANGES</Text>
           </TouchableOpacity>
         </View>
         <Modal
@@ -370,5 +372,19 @@ const styles = StyleSheet.create({
 
   button: {
     marginVertical: 20,
+  },
+
+  footer: {
+    backgroundColor: '#ec2F4B',
+    padding: 15,
+    elevation: 10,
+    borderRadius: 10,
+    margin: 5,
+    alignItems: 'center',
+  },
+
+  footerText: {
+    color: 'white',
   }
+
 });

@@ -58,6 +58,7 @@ export default class ProdutcList extends React.Component {
     console.log('current screen : ', routes[index].name);
     this.state = {
       products:[],
+      keys: [],
       category : routes[index].name,
     };
     if (!firebase.apps.length) {
@@ -75,11 +76,11 @@ export default class ProdutcList extends React.Component {
       if (data.val()) {
                  var temp = data.val();
                  var keys = Object.keys(temp);
-              var x = [];
+                 var x = [];
                  for(var index=0;index<keys.length;index++)
                  {
                    var key = keys[index];
-          
+                  
                   x.push(temp[key]);
                   x[index]['id']=key;
                   x[index]['qty']=0;
@@ -89,20 +90,27 @@ export default class ProdutcList extends React.Component {
                  this.setState(
                    {
                      products:x,
+                     keys: keys,
                    }
-                 );
-        
+                 );   
               }
     });
   }
 
-  store = (product,navigation) =>{
+  store = (product,navigation, index) =>{
     console.log("Current Product : "+product);
     firebase.database().ref('/current').set(product).then(() => {
     }).catch((error) => {
         console.log(error);
     });
-
+    var key = {
+      key: this.state.keys[index],
+      category: this.state.category,
+    };
+    firebase.database().ref('/key').set(key).then(() => {
+    }).catch((error) => {
+        console.log(error);
+    });
     navigation.navigate('Details');
 
   }
@@ -142,7 +150,7 @@ export default class ProdutcList extends React.Component {
             height={30}
             width = {100}
             title="Details >>>"
-            onTap={() =>this.store(product,navigation)   }
+            onTap={() =>this.store(product,navigation,index)   }
           />
 </TouchableOpacity>
                      

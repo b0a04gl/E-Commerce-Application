@@ -291,7 +291,8 @@ export default class Admin extends React.Component {
 
     render() {
         return (
-            <ScrollView keyboardShouldPersistTaps='always' style={styles.screen}>
+            <View style={styles.screen}> 
+            <ScrollView keyboardShouldPersistTaps='always'>
                 <View style={styles.iconContainer}>
                     <TouchableOpacity onPress={this.AddImageHandler.bind(this, 'deck')}>
                         <Image source={require('../assets/images/add.png')} style={styles.image} />
@@ -319,9 +320,6 @@ export default class Admin extends React.Component {
                     <TouchableOpacity style={styles.bottomContainer} onPress={this.AddCardHandler}>
                         <Image source={require('../assets/images/add.png')} style={styles.addImage} />
                     </TouchableOpacity>
-                    <View style={styles.bottomContainer}>
-                        <Button title='Save Changes' color='red' onPress={this.SaveToDatabase} />
-                    </View>
                 </View>
                 <Modal
                     visible={this.state.showCardModal}
@@ -375,6 +373,12 @@ export default class Admin extends React.Component {
                     </View>
                 </Modal>
             </ScrollView>
+            <View>
+            <TouchableOpacity style={styles.footer} onPress={this.SaveToDatabase}>
+            <Text style={styles.footerText}>SAVE CHANGES</Text>
+          </TouchableOpacity>
+            </View>
+            </View>
         );
     }
 }
@@ -494,5 +498,18 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '30%',
     },
+
+    footer: {
+        backgroundColor: '#ec2F4B',
+        padding: 15,
+        elevation: 10,
+        borderRadius: 10,
+        margin: 5,
+        alignItems: 'center',
+      },
+    
+      footerText: {
+        color: 'white',
+      }
 
 });

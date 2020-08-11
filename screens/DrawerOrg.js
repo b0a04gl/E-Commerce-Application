@@ -78,13 +78,13 @@ const HomeStackScreen =({navigation}) =>(
             ),
             
             headerRight : () => (
-                
-            //     <View style={styles.iconContainer}>
-            //   <Icon.Button  name = 'md-search' size={30}
-            //     backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
-         <Icon.Button  name = 'ios-cart' size={30}
-                backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('CartScreen')}></Icon.Button>
-    //   </View>
+                                    
+              <View style={styles.iconContainer}>
+            <Icon.Button  name = 'md-search' size={30}
+              backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('SearchBar')}></Icon.Button>
+       <Icon.Button  name = 'ios-cart' size={30}
+              backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('CartScreen')}></Icon.Button>
+       </View>
             ),
 
         }}/>

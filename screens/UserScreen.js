@@ -50,7 +50,6 @@ export default class UserScreen extends React.Component {
   render() {
     return (
       <View style={styles.screen}>
-        <SearchBar />
         <ScrollView>
           <View>
             <View style={styles.imageDeck}>

@@ -3,7 +3,7 @@ import React from 'react';
 import { Text, StyleSheet,View,Alert } from 'react-native';
 import { Card, Button } from 'react-native-elements';
 import ButtonAddRemove from '../components/Buttons/AddRemoveButton';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 
@@ -17,7 +17,8 @@ class Product extends React.Component {
         console.log("reached.............");
         
         this.state = {
-            item : this.props.product
+            item : this.props.product,
+            userToken: '',
         }
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.firebaseConfig);
@@ -32,6 +33,18 @@ class Product extends React.Component {
         });
 
     }
+
+    componentDidMount() {
+      AsyncStorage.getItem('userToken').then((userToken) => {
+        if (userToken) {
+          this.setState({
+            userToken: userToken,
+          });
+        }
+      });
+    }
+
+
 
      onAddItem = () => {
         // onAddToCart(item, qty);
@@ -64,7 +77,7 @@ class Product extends React.Component {
 
         
 
-        firebase.database().ref('/cart').push(this.state.item).then(() => {
+        firebase.database().ref('/cart/'+this.state.userToken).push(this.state.item).then(() => {
         }).catch((error) => {
             console.log(error);
         });

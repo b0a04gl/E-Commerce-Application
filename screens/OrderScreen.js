@@ -3,18 +3,19 @@ import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-navigation";
 import { Text, Button } from "react-native-elements";
 import OrderListView from "../components/OrderListView";
-import BackIcon from"../assets/images/back_arrow.png";
+import BackIcon from "../assets/images/back_arrow.png";
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // import { Context as UserContext } from "../../dataStore/userAccessContext";
 
 const OrderScreen = ({ navigation }) => {
-//   const { state, onViewOrders, onViewOrderDetails } = useContext(UserContext);
+  //   const { state, onViewOrders, onViewOrderDetails } = useContext(UserContext);
 
-//   const { orders } = state;
+  //   const { orders } = state;
 
-const [orders,setOrders] = React.useState([]);
+  const [orders, setOrders] = React.useState([]);
 
   useEffect(() => {
     // onViewOrders();
@@ -24,29 +25,28 @@ const [orders,setOrders] = React.useState([]);
     }
 
 
-   
-    firebase.database().ref('/orders').on('value', (data) => {
-     
+    AsyncStorage.getItem('userToken').then((userToken) => {
+      if (userToken) {
+        firebase.database().ref('/orders/'+userToken.toString()).on('value', (data) => {
+          if (data.val()) {
+            var temp = data.val();
+            var keys = Object.keys(temp);
+            var x = [];
+            for (var index = 0; index < keys.length; index++) {
+              var key = keys[index];
+              x.push(temp[key]);
+            }
+            setOrders(x);
 
-            if (data.val()) {
-                       var temp = data.val();
-                       var keys = Object.keys(temp);
-                    var x = [];
-                       for(var index=0;index<keys.length;index++)
-                       {
-                         var key = keys[index];
-                        
-                        x.push(temp[key]);
-                       }
-                       setOrders(x);
 
-              
-                    }
-          });
+          }
+        });
+      }
+    });
 
-         
-          
-    
+
+
+
 
   }, []);
 
@@ -83,24 +83,24 @@ const [orders,setOrders] = React.useState([]);
           />
         </View>
       ) : (
-        <View style={styles.listView}>
-          <View
-            style={{
-              display: "flex",
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ fontSize: 30, fontWeight: "500", color: "#9C9696" }}>
-              Your Order is Empty
+          <View style={styles.listView}>
+            <View
+              style={{
+                display: "flex",
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontSize: 30, fontWeight: "500", color: "#9C9696" }}>
+                Your Order is Empty
             </Text>
+            </View>
           </View>
-        </View>
-      )
-       
-          }
-      </SafeAreaView>
+        )
+
+      }
+    </SafeAreaView>
   );
 };
 

@@ -17,6 +17,8 @@ export default class PendingList extends React.Component {
 
    componentDidMount() {
       this._isMounted = true;
+      var dealer = null;
+      var dealers = {};
       firebase.database().ref('/dealers').on('value', data => {
          if (this._isMounted) {
             if (data.val()) {
@@ -26,6 +28,7 @@ export default class PendingList extends React.Component {
             }
          }
       });
+
    }
 
    componentWillUnmount() {
@@ -39,7 +42,7 @@ export default class PendingList extends React.Component {
       }, {
          text: 'OK',
          onPress: () => {
-            firebase.database().ref('/inventory/'+this.state.dealers[key][productIndex].category).push(this.state.dealers[key][productIndex]).then(() => {
+            firebase.database().ref('/inventory/' + this.state.dealers[key][productIndex].category).push(this.state.dealers[key][productIndex]).then(() => {
                firebase.database().ref('dealers/' + key + '/' + productIndex.toString()).update({ status: 'Accepted' });
             }).catch((error) => {
                console.log(error);
@@ -60,38 +63,38 @@ export default class PendingList extends React.Component {
             firebase.database().ref('dealers/' + key + '/' + productIndex.toString()).update({ status: 'Rejected' });
          }
       }]);
+      console.log(this.state.dealers);
    };
 
    render() {
-
-      console.log("active : "+this.props.activeItemKey);
 
       return (
          <ScrollView keyboardShouldPersistTaps='always' style={styles.screen}>
             {Object.keys(this.state.dealers).map((key, index) => (
                <View style={styles.display}>
-                  <Text style={styles.text}>Dealer ID:{key}</Text>
+                  <Text style={styles.text}>Dealer ID: {key}</Text>
                   <FlatList data={this.state.dealers[key]}
-                     renderItem={data => (
-                        <View style={styles.listContainer}>
-                           <Image source={data.item.image} style={styles.listimage} />
-                           <View style={styles.list}>
-                              <Text style={styles.name}>{data.item.productName}</Text>
-                              <Text style={styles.price}>{data.item.productPrice}</Text>
-                           </View>
-                           {data.item.status === 'Pending' ?
-                              <View style={styles.img}>
-                                 <TouchableOpacity onPress={this.addToProduct.bind(this, key, data.index)}>
-                                    <Image source={require('../assets/tick.png')} style={styles.Optionsimage} />
-                                 </TouchableOpacity>
-                                 <TouchableOpacity onPress={this.deleteProduct.bind(this, key, data.index)}>
-                                    <Image source={require('../assets/delete.png')} style={styles.Optionsimage} />
-                                 </TouchableOpacity>
-                              </View> :
-                              <Text style={styles.status}>{data.item.status}</Text>
-                           }
-                        </View>
-                     )} />
+                     renderItem={data => {
+                        if (data.item.status === 'Pending') {
+                           return (
+                              <View style={styles.listContainer}>
+                                 <Image source={data.item.image} style={styles.listimage} />
+                                 <View style={styles.list}>
+                                    <Text style={styles.name}>{data.item.productName}</Text>
+                                    <Text style={styles.price}>{data.item.productPrice}</Text>
+                                 </View>
+                                    <View style={styles.img}>
+                                       <TouchableOpacity onPress={this.addToProduct.bind(this, key, data.index)}>
+                                          <Image source={require('../assets/tick.png')} style={styles.Optionsimage} />
+                                       </TouchableOpacity>
+                                       <TouchableOpacity onPress={this.deleteProduct.bind(this, key, data.index)}>
+                                          <Image source={require('../assets/delete.png')} style={styles.Optionsimage} />
+                                       </TouchableOpacity>
+                                    </View> 
+                              </View>
+                           )
+                        }
+                     }} />
                </View>
             ))
             }
@@ -113,6 +116,7 @@ const styles = StyleSheet.create({
    text: {
       color: 'blue',
       fontSize: 16,
+      paddingLeft: 10,
    },
 
    listContainer: {

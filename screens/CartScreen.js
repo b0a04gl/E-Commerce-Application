@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { View, StyleSheet, Image,Alert } from "react-native";
+import { View, StyleSheet, Image, Alert } from "react-native";
 import { SafeAreaView } from "react-navigation";
 import { Text, Button } from "react-native-elements";
-
+import AsyncStorage from '@react-native-community/async-storage';
 import CartListView from "../components/CartListView";
 import AppButton from "../components/Buttons/AppButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -17,62 +17,72 @@ import ApiKeys from '../database/RealtimeDb';
 
 const CartScreen = ({ navigation }) => {
 
-const [cartItems,setCartItems] = React.useState([]);
-const [isMounted,setIsMounted] = React.useState(false);
+  const [cartItems, setCartItems] = React.useState([]);
+  const [isMounted, setIsMounted] = React.useState(false);
+  const [userToken, setUserToken] = React.useState('');
 
-const popupRef = useRef();
+  const popupRef = useRef();
 
   useEffect(() => {
-   
-    console.log("Goto Order Screen");
+
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.firebaseConfig);
     }
 
 
     setIsMounted(true);
-    firebase.database().ref('/cart').on('value', (data) => {
-     
+    var user = '';
 
-            if (data.val()) {
-                       var temp = data.val();
-                       var keys = Object.keys(temp);
-                    var x = [];
-                       for(var index=0;index<keys.length;index++)
-                       {
-                         var key = keys[index];
-                
-                        x.push(temp[key]);
-                        x[index]['id']=key;
-                        console.log(x[index]);
-                       }
-                       setCartItems(x);
+    AsyncStorage.getItem('userToken').then((userToken) => {
+      if (userToken) {
+        user = userToken;
+        firebase.database().ref('/cart/'+user).on('value', (data) => {
 
-              
-                    }
-          });
 
-          setIsMounted(false);
-          
+          if (data.val()) {
+            var temp = data.val();
+            var keys = Object.keys(temp);
+            var x = [];
+            for (var index = 0; index < keys.length; index++) {
+              var key = keys[index];
     
+              x.push(temp[key]);
+              x[index]['id'] = key;
+              //console.log(x[index]);
+            }
+            setCartItems(x);
+            
+    
+    
+          }
+        });
+        setUserToken(userToken);
+      }
+    });
+    
+    
+
+    setIsMounted(false);
+
+
   }, []);
 
   useEffect(() => {
-   
-    
+
+
   }, []);
 
   let isLoading = false;
 
   const didTapOrderNow = () => {
-      
-   
 
 
-    const empty=[]
+
+
+    const empty = []
     firebase.database().ref('/cart').set(empty).then(() => {
     }).catch((error) => {
-        console.log(error);
+      console.log(error);
     });
 
     setCartItems(empty);
@@ -83,33 +93,39 @@ const popupRef = useRef();
     var date = new Date().getDate(); //Current Date
     var month = new Date().getMonth() + 1; //Current Month
     var year = new Date().getFullYear(); //Current Year
- 
+
     var currentOrder = {
-      orderID: Math.floor((Math.random() * 1000) + 1),
-    totalAmount:totalAmount(),
-    orderDate : date+'/'+month+'/'+year,
+      orderID: Math.floor((Math.random() * 1000) + 1).toString(),
+      totalAmount: totalAmount(),
+      orderDate: date + '/' + month + '/' + year,
+      user: userToken,
     }
 
-    firebase.database().ref('/orders').push(currentOrder).then(() => {
+    firebase.database().ref('/orders/'+userToken).push(currentOrder).then(() => {
     }).catch((error) => {
-        console.log(error);
+      console.log(error);
     });
 
-    navigation.navigate('OrderScreen' );
+    firebase.database().ref('/recentOrders').push(currentOrder).then(() => {
+    }).catch((error) => {
+      console.log(error);
+    });
+
+    navigation.navigate('OrderScreen');
   };
 
-  const onAddItem = (item, qty,index) => {
+  const onAddItem = (item, qty, index) => {
     // onAddToCart(item, qty);
-    Alert.alert("Clicked Add Item..."+index);
+    Alert.alert("Clicked Add Item..." + index);
 
-    
-    
+
+
 
   };
 
-  const onRemoveItem = (item, qty,index) => {
+  const onRemoveItem = (item, qty, index) => {
     // onAddToCart(item, qty);
-    Alert.alert("Clicked Remove Item..."+index);
+    Alert.alert("Clicked Remove Item..." + index);
   };
 
   const totalAmount = () => {
@@ -149,19 +165,19 @@ const popupRef = useRef();
             onRemoveItem={onRemoveItem}
           />
         ) : (
-          <View
-            style={{
-              display: "flex",
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ fontSize: 30, fontWeight: "500", color: "#9C9696" }}>
-              Your Cart is Empty
+            <View
+              style={{
+                display: "flex",
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontSize: 30, fontWeight: "500", color: "#9C9696" }}>
+                Your Cart is Empty
             </Text>
-          </View>
-        )}
+            </View>
+          )}
       </View>
       {cartItems !== undefined && cartItems.length > 0 && (
         <View style={styles.bottomView}>
@@ -210,38 +226,38 @@ const popupRef = useRef();
               ₹ {totalAmount() + 50}
             </Text>
           </View>
-        
-<TouchableOpacity style={styles.options} >
-<AppButton
-            height={50}
-            // width = {800}
-            title="Cash On Delivery"
-            onTap={() =>
-              didTapOrderNow()
 
-            }
-          />
-</TouchableOpacity>
+          <TouchableOpacity style={styles.options} >
+            <AppButton
+              height={50}
+              // width = {800}
+              title="Cash On Delivery"
+              onTap={() =>
+                didTapOrderNow()
+
+              }
+            />
+          </TouchableOpacity>
 
 
-<TouchableOpacity  style={styles.options} >
-<AppButton
-            height={50}
-            // width = {300}
-            title="Pay Through Card"
-            onTap={() =>{navigation.navigate('OrderScreen');}}
-          />
-</TouchableOpacity>
+          <TouchableOpacity style={styles.options} >
+            <AppButton
+              height={50}
+              // width = {300}
+              title="Pay Through Card"
+              onTap={() => { navigation.navigate('OrderScreen'); }}
+            />
+          </TouchableOpacity>
 
-      
-<TouchableOpacity style={styles.options} >
-<AppButton
-            height={50}
-            // width = {800}
-            title="Change Delivery Address"
-            onTap={() =>{navigation.navigate('OrderScreen');}}
-          />
-</TouchableOpacity>
+
+          <TouchableOpacity style={styles.options} >
+            <AppButton
+              height={50}
+              // width = {800}
+              title="Change Delivery Address"
+              onTap={() => { navigation.navigate('OrderScreen'); }}
+            />
+          </TouchableOpacity>
 
         </View>
       </PaymentTypePopup>
