@@ -19,7 +19,7 @@ import CartScreen from './CartScreen';
 import OrderScreen from './OrderScreen';
 import ProductDetailScreen from './ProductDetailScreen';
 import AdminOrders from './AdminOrders';
-
+import WishList from './WishList';
 import {
     useTheme,
     Avatar,
@@ -403,7 +403,38 @@ const PendingListStackScreen =({navigation}) =>(
 // );
 
 
+const WishListStackScreen =({navigation}) =>(
+  <Stack.Navigator screenOptions={{
+      headerStyle: {
+          backgroundColor: '#ec2F4B',
+        },
+      //   headerShown: false,
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          // alignSelf: 'center'
+         
+        },
+  }}>
+      <Stack.Screen name="WishList" component={WishList} options={{
+          title:'WishList',
+          headerStyle: {
+              backgroundColor: '#ec2F4B',
+            },
+          headerTitleAlign: 'center',
+          headerLeft : () => (
+              <Icon.Button  name = 'ios-menu' size={30}
+              backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+          ),
 
+            
+
+      }}/>
+
+
+
+  </Stack.Navigator>
+);
 
 
 const ProductListStackScreen =({navigation}) =>(
@@ -673,12 +704,12 @@ const customerItems = [
           // gestureEnabled: false,
         }}
         />,
-        <DrawerNav.Screen name='Recent' component={ProductListStackScreen}
+        <DrawerNav.Screen name='WishList' component={WishListStackScreen}
 
         options={{
 
-         drawerLabel:'Recent',
-          title:'Recent',
+         drawerLabel:'WishList',
+          title:'WishList',
           drawerIcon: ({color, size}) => (
             <Icon
               name="md-checkmark-circle-outline"
@@ -693,8 +724,8 @@ const customerItems = [
 
 options={{
 
- drawerLabel:'Recent',
-  title:'Recent',
+ drawerLabel:'Details',
+  title:'Details',
   drawerIcon: ({color, size}) => (
     <Icon
       name="md-checkmark-circle-outline"
