@@ -116,6 +116,7 @@ export default class DealerProducts extends React.Component {
         category: this.state.category,
         description: this.state.description,
         status: 'Pending',
+        wishlist: false,
         image: this.state.image,
       };
       let products;

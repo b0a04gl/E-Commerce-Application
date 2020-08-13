@@ -99,7 +99,7 @@ export default class ProdutcList extends React.Component {
 
   store = (product,navigation, index) =>{
     console.log("Current Product : "+product);
-    firebase.database().ref('/current').set(product).then(() => {
+    firebase.database().ref('/currents').set(product).then(() => {
     }).catch((error) => {
         console.log(error);
     });

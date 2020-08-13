@@ -35,11 +35,12 @@ export default class ProductDetailScreen extends React.Component {
     componentDidMount() {
         this._isMounted = true;
 
-        firebase.database().ref('/current').on('value', (data) => {
+        firebase.database().ref('/currents').on('value', (data) => {
             if (this._isMounted) {
                 if (data.val()) {
+                    const product = data.val();
                     this.setState({
-                        product: data.val(),
+                        product: product,
                         comments: [],
                     });
                 }
@@ -61,9 +62,7 @@ export default class ProductDetailScreen extends React.Component {
             }
         }
         );
-        console.log(key);
-        
-
+        console.log(this.state.product);
         AsyncStorage.getItem('userToken').then((userToken) => {
             if (userToken) {
                 this.setState({
@@ -75,8 +74,6 @@ export default class ProductDetailScreen extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log(prevState.key);
-        console.log(this.state.key);
         if (this.state.key !== prevState.key) {
             firebase.database().ref('/comments/' + this.state.key).on('value', data => {
                 if (this._isMounted) {
@@ -88,9 +85,10 @@ export default class ProductDetailScreen extends React.Component {
                     }
                 }
             });
+            console.log(this.state.product);
             this.setState({
                 clicked: this.state.product.wishlist,
-            })
+            });
         }
     }
 
@@ -99,15 +97,36 @@ export default class ProductDetailScreen extends React.Component {
     }
 
     toggleFavorite = () => {
-        firebase.database().ref('/wishlist/' + this.state.userToken).push(this.state.product).then(() => {
-            firebase.database().ref('/current').update({ wishlist: true });
-            firebase.database().ref('inventory/' + this.state.category + '/' + this.state.key).update({ wishlist: true });
+        this.setState({
+            clicked: !this.state.clicked,
+        });
+        console.log(this.state.clicked);
+        if(this.state.clicked === false) {
+            console.log('Entered true');
+        firebase.database().ref('/wishlist/' + this.state.userToken+'/'+this.state.key).set(this.state.product).then(() => {
+            
         }).catch((error) => {
             console.log(error);
         });
-        this.setState({
-            clicked: true,
+        const product = this.state.product;
+            product['wishlist'] = true;
+            console.log(product);
+            firebase.database().ref('/currents').set(product).then(() => {
+                console.log('Inserted');
+        }).catch((error) => {
+            console.log(error);
+            });
+            firebase.database().ref('inventory/' + this.state.category + '/' + this.state.key).update({ wishlist: true });
+    }
+    else {
+        console.log('Entered false');
+        firebase.database().ref('/wishlist/'+this.state.userToken+'/'+this.state.key).remove().then(() => {
+            const product = this.state.product;
+            product['wishlist'] = false;
+            firebase.database().ref('/currents').set(product);
+            firebase.database().ref('inventory/' + this.state.category + '/' + this.state.key).update({ wishlist: false });
         });
+    }
     }
 
     commentHandler = (comment) => {
