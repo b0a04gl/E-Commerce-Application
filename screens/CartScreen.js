@@ -90,14 +90,10 @@ const CartScreen = ({ navigation }) => {
     Alert.alert("Placing order...");
 
 
-    var date = new Date().getDate(); //Current Date
-    var month = new Date().getMonth() + 1; //Current Month
-    var year = new Date().getFullYear(); //Current Year
-
     var currentOrder = {
       orderID: Math.floor((Math.random() * 1000) + 1).toString(),
       totalAmount: totalAmount(),
-      orderDate: date.toString() + '/' + month.toString() + '/' + year.toString(),
+      orderDate: new Date(),
       user: userToken,
     }
 

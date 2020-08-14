@@ -69,7 +69,7 @@ const OrderCard = ({ data, onSelect, onCancel }) => {
         >
           <Text style={smallStyles.title}>Order ID: {orderID}</Text>
           <Text style={smallStyles.orderDateTitle}>
-            {orderDate}
+            {moment(orderDate).format('MMM Do, HH:mm A')}
           </Text>
           <Text style={smallStyles.price}>₹{totalAmount}</Text>
         </View>
