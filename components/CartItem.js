@@ -13,20 +13,20 @@ import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 import ButtonAddRemove from "./Buttons/AddRemoveButton";
 import AppButton from './Buttons/AppButton';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const CartItem = ({ data, onAddItem, onRemoveItem }) => {
   const {id, productName,productPrice,qty ,category,description} = data.item;
-
 const [currentQty,setCurrentQty] = React.useState(qty);
 const [currentItem,setCurrentItem] = React.useState(data.item);
+const [userToken, setUserToken] = React.useState('');
 
 React.useEffect(() => {
   if (!firebase.apps.length) {
     firebase.initializeApp(ApiKeys.firebaseConfig);
   }
-console.log(currentItem);
 
-  firebase.database().ref('/cart/'+id).once('value', (data) => {
+  firebase.database().ref('/cart/'+userToken+'/'+id).once('value', (data) => {
      
 
     if (data.val()) {
@@ -40,13 +40,18 @@ console.log(currentItem);
 
             }
   });
+  AsyncStorage.getItem('userToken').then((userToken) => {
+    if (userToken) {
+      setUserToken(userToken);
+    }
+  });
     
 }, []);
 
 const add = () => {
 
   
-
+  console.log(currentItem);
   // firebase.database().ref('/cart/'+id).once('value', (data) => {
      
 
@@ -59,7 +64,7 @@ const add = () => {
       
             setCurrentItem(temp);
 
-            firebase.database().ref('/cart/'+id).set(currentItem).then(( 
+            firebase.database().ref('/cart/'+userToken+'/'+id).update({qty: currentQty+1}).then(( 
             ) => {
             }).catch((error) => {
                 console.log(error);
@@ -80,7 +85,7 @@ const remove = () => {
 
   setCurrentItem(temp);
 
-  firebase.database().ref('/cart/'+id).set(currentItem).then(( 
+  firebase.database().ref('/cart/'+userToken+'/'+id).update({qty: currentQty-1}).then(( 
   ) => {
   }).catch((error) => {
       console.log(error);

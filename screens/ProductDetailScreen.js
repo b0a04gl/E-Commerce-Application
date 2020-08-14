@@ -77,7 +77,7 @@ export default class ProductDetailScreen extends React.Component {
 
                     }
                 }
-            }); 
+            });
             AsyncStorage.getItem('userToken').then((userToken) => {
                 if (userToken) {
                     var keys = [];
@@ -160,7 +160,10 @@ export default class ProductDetailScreen extends React.Component {
     }
 
     saveToCart = () => {
-        firebase.database().ref('/cart/' + this.state.userToken).set(this.state.product).then(() => {
+        const product = this.state.product;
+        product.qty = 1;
+        product.id = this.state.key;
+        firebase.database().ref('/cart/' + this.state.userToken+'/'+this.state.key).set(product).then(() => {
             Toast.show('Added to Cart', Toast.LONG);
         }).catch((error) => {
             console.log(error);

@@ -29,24 +29,21 @@ const OrderScreen = ({ navigation }) => {
       if (userToken) {
         let dbRef = firebase.database().ref('/orders/' + userToken);
         if (dbRef) {
-        dbRef.on('value', (data) => {
-          if (data.val()) {
-            var temp = data.val();
-            var keys = Object.keys(temp);
-            var x = [];
-            for (var index = 0; index < keys.length; index++) {
-              var key = keys[index];
-              x.push(temp[key]);
+          dbRef.on('value', (data) => {
+            if (data.val()) {
+              var temp = data.val();
+              var keys = Object.keys(temp);
+              var x = [];
+              for (var index = 0; index < keys.length; index++) {
+                var key = keys[index];
+                x.push(temp[key]);
+              }
+              setOrders(x);
+
+
             }
-            setOrders(x);
-
-
-          }
-        });
-      }
-      else {
-        dbRef.set({test:'fine'});
-      }
+          });
+        }
       }
     });
 

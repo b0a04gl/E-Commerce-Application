@@ -31,16 +31,14 @@ const CartScreen = ({ navigation }) => {
 
 
     setIsMounted(true);
-    var user = '';
 
     AsyncStorage.getItem('userToken').then((userToken) => {
       if (userToken) {
-        user = userToken;
-        let dbRef = firebase.database().ref('/cart/' + user);
+        let dbRef = firebase.database().ref('/cart/' + userToken);
         if (dbRef) {
           dbRef.on('value', (data) => {
 
-
+            console.log(data.val());
             if (data.val()) {
               var temp = data.val();
               var keys = Object.keys(temp);
@@ -55,12 +53,8 @@ const CartScreen = ({ navigation }) => {
               setCartItems(x);
 
 
-
             }
           });
-        }
-        else {
-          dbRef.set({test:'fine'});
         }
         setUserToken(userToken);
       }
@@ -86,7 +80,7 @@ const CartScreen = ({ navigation }) => {
 
 
     const empty = []
-    firebase.database().ref('/cart').set(empty).then(() => {
+    firebase.database().ref('/cart/' + userToken).remove().then(() => {
     }).catch((error) => {
       console.log(error);
     });
@@ -103,7 +97,7 @@ const CartScreen = ({ navigation }) => {
     var currentOrder = {
       orderID: Math.floor((Math.random() * 1000) + 1).toString(),
       totalAmount: totalAmount(),
-      orderDate: date + '/' + month + '/' + year,
+      orderDate: date.toString() + '/' + month.toString() + '/' + year.toString(),
       user: userToken,
     }
 
@@ -141,7 +135,7 @@ const CartScreen = ({ navigation }) => {
         let qty = item.qty;
         let price = item.productPrice;
         // Alert.alert(qty+"..."+price);
-        total += qty * price;
+        total += qty * parseInt(price);
       });
     }
 
