@@ -36,31 +36,37 @@ const CartScreen = ({ navigation }) => {
     AsyncStorage.getItem('userToken').then((userToken) => {
       if (userToken) {
         user = userToken;
-        firebase.database().ref('/cart/'+user).on('value', (data) => {
+        let dbRef = firebase.database().ref('/cart/' + user);
+        if (dbRef) {
+          dbRef.on('value', (data) => {
 
 
-          if (data.val()) {
-            var temp = data.val();
-            var keys = Object.keys(temp);
-            var x = [];
-            for (var index = 0; index < keys.length; index++) {
-              var key = keys[index];
-    
-              x.push(temp[key]);
-              x[index]['id'] = key;
-              //console.log(x[index]);
+            if (data.val()) {
+              var temp = data.val();
+              var keys = Object.keys(temp);
+              var x = [];
+              for (var index = 0; index < keys.length; index++) {
+                var key = keys[index];
+
+                x.push(temp[key]);
+                x[index]['id'] = key;
+                //console.log(x[index]);
+              }
+              setCartItems(x);
+
+
+
             }
-            setCartItems(x);
-            
-    
-    
-          }
-        });
+          });
+        }
+        else {
+          dbRef.set({test:'fine'});
+        }
         setUserToken(userToken);
       }
     });
-    
-    
+
+
 
     setIsMounted(false);
 
@@ -101,7 +107,7 @@ const CartScreen = ({ navigation }) => {
       user: userToken,
     }
 
-    firebase.database().ref('/orders/'+userToken).push(currentOrder).then(() => {
+    firebase.database().ref('/orders/' + userToken).push(currentOrder).then(() => {
     }).catch((error) => {
       console.log(error);
     });

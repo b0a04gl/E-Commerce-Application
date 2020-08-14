@@ -24,7 +24,7 @@ export default class ProductDetailScreen extends React.Component {
             userToken: '',
             key: '',
             category: '',
-
+            wishlist: [],
         }
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.firebaseConfig);
@@ -62,14 +62,7 @@ export default class ProductDetailScreen extends React.Component {
             }
         }
         );
-        console.log(this.state.product);
-        AsyncStorage.getItem('userToken').then((userToken) => {
-            if (userToken) {
-                this.setState({
-                    userToken: userToken,
-                });
-            }
-        });
+
 
     }
 
@@ -79,15 +72,37 @@ export default class ProductDetailScreen extends React.Component {
                 if (this._isMounted) {
                     if (data.val()) {
                         this.setState({
-                           comments: data.val(),
+                            comments: data.val(),
                         });
-    
+
                     }
                 }
-            });
-            console.log(this.state.product);
-            this.setState({
-                clicked: this.state.product.wishlist,
+            }); 
+            AsyncStorage.getItem('userToken').then((userToken) => {
+                if (userToken) {
+                    var keys = [];
+                    var clicked = this.state.clicked;
+                    console.log(clicked);
+                    firebase.database().ref('/wishlist/' + userToken).on('value', (data) => {
+                        if (this._isMounted) {
+                            if (data.val()) {
+                                keys = Object.keys(data.val());
+                                if (keys.includes(this.state.key)) {
+                                    clicked = true;
+                                }
+                                else {
+                                    clicked = false;
+                                }
+                            }
+                        }
+                    }
+                    );
+                    this.setState({
+                        userToken: userToken,
+                        wishlist: keys,
+                        clicked: clicked,
+                    });
+                }
             });
         }
     }
@@ -101,32 +116,19 @@ export default class ProductDetailScreen extends React.Component {
             clicked: !this.state.clicked,
         });
         console.log(this.state.clicked);
-        if(this.state.clicked === false) {
+        if (this.state.clicked === false) {
             console.log('Entered true');
-        firebase.database().ref('/wishlist/' + this.state.userToken+'/'+this.state.key).set(this.state.product).then(() => {
-            
-        }).catch((error) => {
-            console.log(error);
-        });
-        const product = this.state.product;
-            product['wishlist'] = true;
-            console.log(product);
-            firebase.database().ref('/currents').set(product).then(() => {
-                console.log('Inserted');
-        }).catch((error) => {
-            console.log(error);
+            firebase.database().ref('/wishlist/' + this.state.userToken + '/' + this.state.key).set(this.state.product).then(() => {
+
+            }).catch((error) => {
+                console.log(error);
             });
-            firebase.database().ref('inventory/' + this.state.category + '/' + this.state.key).update({ wishlist: true });
-    }
-    else {
-        console.log('Entered false');
-        firebase.database().ref('/wishlist/'+this.state.userToken+'/'+this.state.key).remove().then(() => {
-            const product = this.state.product;
-            product['wishlist'] = false;
-            firebase.database().ref('/currents').set(product);
-            firebase.database().ref('inventory/' + this.state.category + '/' + this.state.key).update({ wishlist: false });
-        });
-    }
+        }
+        else {
+            console.log('Entered false');
+            firebase.database().ref('/wishlist/' + this.state.userToken + '/' + this.state.key).remove().then(() => {
+            });
+        }
     }
 
     commentHandler = (comment) => {
@@ -463,7 +465,7 @@ const styles = StyleSheet.create({
     },
 
     dateText: {
-        marginLeft: 10,
+        marginLeft: 20,
         marginVertical: 10,
     },
 
