@@ -27,7 +27,9 @@ const OrderScreen = ({ navigation }) => {
 
     AsyncStorage.getItem('userToken').then((userToken) => {
       if (userToken) {
-        firebase.database().ref('/orders/'+userToken.toString()).on('value', (data) => {
+        let dbRef = firebase.database().ref('/orders/' + userToken);
+        if (dbRef) {
+        dbRef.on('value', (data) => {
           if (data.val()) {
             var temp = data.val();
             var keys = Object.keys(temp);
@@ -41,6 +43,10 @@ const OrderScreen = ({ navigation }) => {
 
           }
         });
+      }
+      else {
+        dbRef.set({test:'fine'});
+      }
       }
     });
 
