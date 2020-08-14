@@ -162,8 +162,7 @@ export default class ProductDetailScreen extends React.Component {
     saveToCart = () => {
         const product = this.state.product;
         product.qty = 1;
-        product.id = this.state.key;
-        firebase.database().ref('/cart/' + this.state.userToken+'/'+this.state.key).set(product).then(() => {
+        firebase.database().ref('/cart/' + this.state.userToken).push(product).then(() => {
             Toast.show('Added to Cart', Toast.LONG);
         }).catch((error) => {
             console.log(error);
