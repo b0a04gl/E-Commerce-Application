@@ -50,6 +50,13 @@ export default class PendingList extends React.Component {
       }).catch((error) => {
          console.log(error);
       });
+
+      firebase.database().ref( product.category).push(product).then(() => {
+         firebase.database().ref('dealers/' + key + '/' + productIndex.toString()).update({ status: 'Accepted' });
+      }).catch((error) => {
+         console.log(error);
+      });
+
       firebase.database().ref('/recentProducts').push(product).then(() => {
       }).catch((error) => console.log(error));
       this.setState({

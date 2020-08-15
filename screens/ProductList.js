@@ -75,6 +75,12 @@ export default class ProdutcList extends React.Component {
 
       if (data.val()) {
                  var temp = data.val();
+                //  firebase.database().ref(this.state.category).set(temp).then(() => {
+                // }).catch((error) => {
+                //   console.log(error);
+                // });
+
+
                  var keys = Object.keys(temp);
                  var x = [];
                  for(var index=0;index<keys.length;index++)

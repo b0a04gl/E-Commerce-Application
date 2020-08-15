@@ -145,7 +145,11 @@ const SignInScreen = ({navigation}) => {
  
         if(foundUser[0].email!=null && foundUser[0].password!=null && foundUser[0].type!=null)
         {
-            
+             firebase.database().ref('currentUser').set(foundUser[0]).then(() => {
+                }).catch((error) => {
+                  console.log(error);
+                });
+
             signIn(foundUser);
         }
         else

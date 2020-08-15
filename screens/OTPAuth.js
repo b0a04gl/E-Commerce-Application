@@ -182,7 +182,7 @@ export default function App({navigation}) {
                 showMessage({ text: "Phone authentication successful 👍" });
                 Alert.alert( "Phone authentication successful 👍" );
                 setEnterCode(false);
-                navigation.navigate("Home");
+                navigation.navigate("OrderScreen");
                 } catch (err) {
                 showMessage({ text: `Error: ${err.message}`, color: "red" });
                 }

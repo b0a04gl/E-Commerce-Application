@@ -59,10 +59,13 @@ const OrderScreen = ({ navigation }) => {
 
   const onCancel = ({ item }) => {
     console.log(item);
+
+    
+
   };
 
   const didTapBack = () => {
-    navigation.goBack();
+    navigation.navigate("CartScreen");
   };
 
 

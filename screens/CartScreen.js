@@ -110,7 +110,7 @@ const CartScreen = ({ navigation }) => {
       console.log(error);
     });
 
-    navigation.navigate('OrderScreen');
+    navigation.navigate('OTPAuth');
   };
 
   const onAddItem = (item, qty, index) => {

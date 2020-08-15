@@ -76,7 +76,7 @@ class ProfileScreen extends React.Component
               </View>
         
               <View style={styles.menuWrapper}>
-                <TouchableRipple onPress={() => {}}>
+                <TouchableRipple onPress={() => {navigation.navigate('WishList')}}>
                   <View style={styles.menuItem}>
                     <Icon name="heart-outline" color="#ec2F4B" size={25}/>
                     <Text style={styles.menuItemText}>My Wishlist</Text>
@@ -100,7 +100,7 @@ class ProfileScreen extends React.Component
                     <Text style={styles.menuItemText}>My Account</Text>
                   </View>
                 </TouchableRipple>
-                <TouchableRipple onPress={() => {}}>
+                <TouchableRipple onPress={() => {navigation.navigate('Settings')}}>
                   <View style={styles.menuItem}>
                     <Icon name="settings-outline" color="#ec2F4B" size={25}/>
                     <Text style={styles.menuItemText}>Settings</Text>

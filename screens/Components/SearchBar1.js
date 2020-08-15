@@ -18,11 +18,14 @@ import {
 import { Rating} from 'react-native-elements';
 //import all the components we are going to use.
 import { Searchbar } from 'react-native-paper';
+import AppButton from "../../components/Buttons/AppButton";
+import DropDownPicker from 'react-native-dropdown-picker';
+
 export default class App extends Component {
   constructor(props) {
     super(props);
     //setting default state
-    this.state = { isLoading: false, text: '' };
+    this.state = { isLoading: false, text: '' ,category:'recentProducts',field:"productName"};
     this.arrayholder = [];
 
     if (!firebase.apps.length) {
@@ -53,12 +56,51 @@ export default class App extends Component {
     
 
 
+
+
   }
+
+
+  filter= () => {
+    Alert.alert(  
+        'Filter Search',  
+        'Search by',  
+        [  
+
+
+            {text: 'ProductPrice', onPress: () => {
+                    console.log('ProductPrice');
+                    this.setState(
+                        {
+                            field:"productPrice",
+                            // table:'dealers'
+                        }
+                    );
+                },  },  
+            {  
+                text: 'Product Name',  
+                onPress: () => {
+                    console.log('Product Name');
+                    this.setState(
+                        {
+                            field:"productName",
+                            // table:'recentProducts'
+                        }
+                    );
+                },  
+                style: 'cancel',  
+            },  
+           
+        ],  
+        {cancelable: false}  
+    )  
+}
+
   SearchFilterFunction(searchText) {
 
     // console.log("Item : "+itemData);
     console.log("Text : "+searchText);
-
+console.log(this.state.category);
 
     
 
@@ -69,7 +111,7 @@ export default class App extends Component {
         });
       }else{
         
-        const dbRef = firebase.database().ref("recentProducts");
+        const dbRef = firebase.database().ref(this.state.category);
       
         const item = [];
     
@@ -86,7 +128,7 @@ export default class App extends Component {
      if(item.length==0)   
      {   console.log("---------------------------------------------------------");
     
-        dbRef.orderByChild("productName").startAt(searchText).endAt(searchText+"\uf8ff").on("child_added", (snap) => {
+        dbRef.orderByChild(this.state.field).startAt(searchText).endAt(searchText+"\uf8ff").on("child_added", (snap) => {
             // console.log(snap.val());
             item.push(snap.val());
         });
@@ -140,7 +182,28 @@ this.setState({
       onChangeText={text => this.SearchFilterFunction(text)}
     value={this.state.text}
     />
-        
+    <DropDownPicker
+                    items={
+                        [
+                            {label: 'Electronics', value: 'Electronics'},
+                            {label: 'Fashion', value: 'Fashion'},
+                            {label: 'Furniture', value: 'Furniture'},
+                        ]
+                    }
+                    defaultNull
+                    placeholder="Select Category"
+                    containerStyle={{height: 40}}
+                    activeLabelStyle={{color: '#009387'}}
+                    onChangeItem={item => this.setState({
+                        category:item.value,
+                    }) }
+                />
+        <TouchableOpacity style={styles.options} >
+                    <AppButton
+            height={30}
+            width = {80}
+            title="FILTER"
+            onTap={() =>this.filter()   }></AppButton></TouchableOpacity>
         <ScrollView >
  
 
@@ -227,6 +290,22 @@ countView: {
     width: "100%",
     flex: 8,
   },
+  options: {
+    // display: "flex",
+    // height: 80,
+    // justifyContent: "space-between",
+    // alignItems: "center",
+    // flexDirection: "row",
+    // paddingLeft: 50,
+    // paddingRight: 20,
+    // borderTopColor: "#DFDFDF",
+    // borderTopWidth: 0.5,
+    // borderBottomColor: "#DFDFDF",
+    // borderBottomWidth: 0.5,
+    marginLeft:230,
+    marginTop:2
+
+  },
 });
 
 
@@ -289,4 +368,6 @@ const smallStyles = StyleSheet.create({
     fontWeight: "600",
     color: "#848484",
   },
+  
+   
 });

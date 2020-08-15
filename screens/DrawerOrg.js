@@ -20,6 +20,8 @@ import OrderScreen from './OrderScreen';
 import ProductDetailScreen from './ProductDetailScreen';
 import AdminOrders from './AdminOrders';
 import WishList from './WishList';
+import Settings from './Settings';
+
 import {
     useTheme,
     Avatar,
@@ -1490,6 +1492,22 @@ componentWillUnmount() {
            />,
 
 <DrawerNav.Screen name='Details' component={ProductDetailStackScreen}
+           options={{
+            // title: 'ProductList',
+            // drawerIcon: ({color, size}) => (
+            //   <Icon
+            //     name="md-checkmark-circle-outline"
+            //     size={size}
+            //     color={color}
+            //   />
+            // ),
+             drawerLabel: () => null,
+            title: null,
+            drawerIcon: () => null
+            // gestureEnabled: false,
+          }}
+          />,
+          <DrawerNav.Screen name='Settings' component={Settings}
            options={{
             // title: 'ProductList',
             // drawerIcon: ({color, size}) => (
