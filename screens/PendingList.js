@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, FlatList, Image, TouchableOpacity, Text, Alert } from 'react-native';
+import { View, ScrollView, Modal, StyleSheet, Button,TextInput, FlatList, Image, TouchableOpacity, Text, Alert } from 'react-native';
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 
@@ -9,6 +9,11 @@ export default class PendingList extends React.Component {
       super(props);
       this.state = {
          dealers: [],
+         showModal: false,
+         price: '',
+         discount: '',
+         key: '',
+         productIndex: 0,
       };
       if (!firebase.apps.length) {
          firebase.initializeApp(ApiKeys.firebaseConfig);
@@ -35,6 +40,23 @@ export default class PendingList extends React.Component {
       this._isMounted = false;
    }
 
+   AddProduct = () => {
+      const key = this.state.key;
+      const productIndex = this.state.productIndex;
+      const product = this.state.dealers[key][productIndex];
+      product.productPrice = (this.state.price - (this.state.price)*this.state.discount/100).toString();
+      firebase.database().ref('/inventory/' + product.category).push(product).then(() => {
+         firebase.database().ref('dealers/' + key + '/' + productIndex.toString()).update({ status: 'Accepted' });
+      }).catch((error) => {
+         console.log(error);
+      });
+      firebase.database().ref('/recentProducts').push(product).then(() => {
+      }).catch((error) => console.log(error));
+      this.setState({
+         showModal: false,
+      });
+   };
+
    addToProduct = (key, productIndex) => {
       Alert.alert('Accept Product', 'Are you sure you want to add this product to the inventory list?', [{
          text: 'Cancel',
@@ -42,13 +64,13 @@ export default class PendingList extends React.Component {
       }, {
          text: 'OK',
          onPress: () => {
-            firebase.database().ref('/inventory/' + this.state.dealers[key][productIndex].category).push(this.state.dealers[key][productIndex]).then(() => {
-               firebase.database().ref('dealers/' + key + '/' + productIndex.toString()).update({ status: 'Accepted' });
-            }).catch((error) => {
-               console.log(error);
+            this.setState({
+               key: key,
+               productIndex: productIndex,
+               price: this.state.dealers[key][productIndex].productPrice,
+               showModal: true,
             });
-            firebase.database().ref('/recentProducts').push(this.state.dealers[key][productIndex]).then(() => {
-            }).catch((error) => console.log(error));
+            
          }
       }]);
    };
@@ -63,8 +85,13 @@ export default class PendingList extends React.Component {
             firebase.database().ref('dealers/' + key + '/' + productIndex.toString()).update({ status: 'Rejected' });
          }
       }]);
-      console.log(this.state.dealers);
    };
+
+   closeModal = () => {
+      this.setState({
+          showModal: false,
+      });
+  };
 
    render() {
 
@@ -98,6 +125,32 @@ export default class PendingList extends React.Component {
                </View>
             ))
             }
+            <Modal
+                    visible={this.state.showModal}
+                    position='center'
+                    transparent={true}
+                    onRequestClose={this.closeModal}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.cardModalScreen}>
+                            <Text style={styles.modalText}>Enter Product Price:</Text>
+                            <View style={styles.modalTextInputContainer}>
+                                <TextInput style={styles.modalTextInput} onChangeText={(price) => this.setState({ price: price })} value={this.state.price} />
+                            </View>
+                            <Text style={styles.modalText}>Enter Product Discount Percentage:</Text>
+                            <View style={styles.modalTextInputContainer}>
+                                 <TextInput style={styles.modalTextInput} onChangeText={(discount) => this.setState({ discount: discount })} value={this.state.discount} />
+                            </View>
+                            <View style={styles.modalButtonContainer}>
+                                <View style={styles.modalButton}>
+                                    <Button title='OK' onPress={this.AddProduct} />
+                                </View>
+                                <View style={styles.modalButton}>
+                                    <Button title='Cancel' style={styles.modalButton} onPress={this.closeModal} />
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
          </ScrollView>
       );
    }
@@ -165,6 +218,55 @@ const styles = StyleSheet.create({
       fontSize: 15,
       marginRight: 20,
       fontWeight: 'bold',
-   }
+   },
+
+   modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
+
+  cardModalScreen: {
+      height: 300,
+      width: '85%',
+      borderRadius: 15,
+      justifyContent: 'center',
+      elevation: 20,
+      borderWidth: 1,
+      borderColor: 'black',
+      backgroundColor: 'white'
+  },
+
+  modalText: {
+      paddingLeft: 15,
+      marginTop: 10,
+  },
+
+  modalTextInput: {
+      width: '90%',
+      marginVertical: 10,
+      padding: 5,
+      paddingLeft: 15,
+      borderWidth: 1,
+      borderColor: 'black',
+      borderRadius: 10,
+      backgroundColor: 'white'
+  },
+
+  modalTextInputContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+  },
+
+  modalButtonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      marginVertical: 15,
+  },
+
+  modalButton: {
+      padding: 10,
+      width: '30%',
+  },
 
 });

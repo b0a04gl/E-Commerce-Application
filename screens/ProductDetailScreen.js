@@ -192,6 +192,8 @@ export default class ProductDetailScreen extends React.Component {
                         <Text style={styles.price}>{this.state.product.productPrice}</Text>
                     </View>
                     <View style={styles.body}>
+                        <Text style={styles.descriptionHeader}>Description:</Text>
+                        <Text style={styles.description}>{this.state.product.description}</Text>
                         <View style={styles.reviewContainer}>
                             <Modal
                                 transparent
@@ -358,6 +360,19 @@ const styles = StyleSheet.create({
     body: {
         padding: 10,
         flex: 1,
+    },
+
+    descriptionHeader: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginLeft: 20,
+    },
+
+    description: {
+        fontStyle: 'italic',
+        fontSize: 18,
+        marginVertical: 15,
+        marginLeft: 30,
     },
 
     reviewContainer: {

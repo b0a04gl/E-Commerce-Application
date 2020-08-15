@@ -16,82 +16,83 @@ import AppButton from './Buttons/AppButton';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const CartItem = ({ data, onAddItem, onRemoveItem }) => {
-  const {id, productName,productPrice,qty ,category,description} = data.item;
-const [currentQty,setCurrentQty] = React.useState(qty);
-const [currentItem,setCurrentItem] = React.useState(data.item);
-const [userToken, setUserToken] = React.useState('');
+  const { id, productName, productPrice, qty, category, description } = data.item;
+  const [currentItem, setCurrentItem] = React.useState(data.item);
+  const [userToken, setUserToken] = React.useState('');
 
-React.useEffect(() => {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(ApiKeys.firebaseConfig);
+  React.useEffect(() => {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(ApiKeys.firebaseConfig);
+    }
+
+    firebase.database().ref('/cart/' + userToken + '/' + id).on('value', (data) => {
+
+
+      if (data.val()) {
+
+
+
+        var temp = data.val();
+        setCurrentItem(temp);
+
+
+
+      }
+    });
+    AsyncStorage.getItem('userToken').then((userToken) => {
+      if (userToken) {
+        setUserToken(userToken);
+      }
+    });
+
+  }, []);
+
+  const add = () => {
+
+
+    console.log(currentItem);
+    // firebase.database().ref('/cart/'+id).once('value', (data) => {
+
+
+    //   if (data.val()) {
+
+
+    var temp = currentItem;
+    temp.qty = qty + 1;
+
+    setCurrentItem(temp);
+
+    firebase.database().ref('/cart/' + userToken + '/' + id).update({ qty: qty + 1 }).then((
+    ) => {
+    }).catch((error) => {
+      console.log(error);
+    });
+
+    //           }
+    // });
+
+
   }
 
-  firebase.database().ref('/cart/'+userToken+'/'+id).once('value', (data) => {
-     
+  const remove = () => {
+    if (qty > 1) {
 
-    if (data.val()) {
-              
-      
+      var temp = currentItem;
+      temp.qty = qty - 1;
 
-            var temp = data.val();
-           setCurrentItem(temp);
-      
-          
+      setCurrentItem(temp);
 
-            }
-  });
-  AsyncStorage.getItem('userToken').then((userToken) => {
-    if (userToken) {
-      setUserToken(userToken);
+      firebase.database().ref('/cart/' + userToken + '/' + id).update({ qty: qty - 1 }).then((
+      ) => {
+      }).catch((error) => {
+        console.log(error);
+      });
     }
-  });
-    
-}, []);
+    else {
+      firebase.database().ref('/cart/' + userToken + '/' + id).remove();
+    }
 
-const add = () => {
-
-  
-  console.log(currentItem);
-  // firebase.database().ref('/cart/'+id).once('value', (data) => {
-     
-
-  //   if (data.val()) {
-              
-      setCurrentQty(currentQty+1);
-
-            var temp = currentItem;
-            temp.qty = currentQty+1;
-      
-            setCurrentItem(temp);
-
-            firebase.database().ref('/cart/'+userToken+'/'+id).update({qty: currentQty+1}).then(( 
-            ) => {
-            }).catch((error) => {
-                console.log(error);
-            });
-
-  //           }
-  // });
-
-
-}
-
-const remove = () => {
-
-  setCurrentQty(currentQty-1);
-
-  var temp = currentItem;
-  temp.qty = currentQty-1;
-
-  setCurrentItem(temp);
-
-  firebase.database().ref('/cart/'+userToken+'/'+id).update({qty: currentQty-1}).then(( 
-  ) => {
-  }).catch((error) => {
-      console.log(error);
-  });
-
-}
+  }
 
   // let currentQty = qty;
 
@@ -108,35 +109,35 @@ const remove = () => {
         <Text style={styles.price}>₹{productPrice}</Text>
         {/* <Text style={styles.price}>₹{_id}</Text> */}
         <View style={styles.countView}>
-        <TouchableOpacity style={styles.options} >
-<AppButton
-            height={35}
-            width = {35}
-            title="-"
-            onTap={() =>
-        remove()  
+          <TouchableOpacity style={styles.options} >
+            <AppButton
+              height={35}
+              width={35}
+              title="-"
+              onTap={() =>
+                remove()
 
-            }
-          />
-</TouchableOpacity>
+              }
+            />
+          </TouchableOpacity>
 
           <Text
             h4
             style={{ alignSelf: "center", margin: 5, fontWeight: "600" }}
           >
-            {currentQty}
+            {qty}
           </Text>
           <TouchableOpacity style={styles.options} >
-<AppButton
-            height={35}
-            width = {35}
-            title="+"
-            onTap={() =>
-            //  Alert.alert("Add")
-            add()
-            }
-          />
-</TouchableOpacity>
+            <AppButton
+              height={35}
+              width={35}
+              title="+"
+              onTap={() =>
+                //  Alert.alert("Add")
+                add()
+              }
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </View>

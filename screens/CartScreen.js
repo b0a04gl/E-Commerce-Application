@@ -54,6 +54,9 @@ const CartScreen = ({ navigation }) => {
 
 
             }
+            else {
+              setCartItems([]);
+            }
           });
         }
         setUserToken(userToken);

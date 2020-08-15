@@ -39,7 +39,7 @@ export default class WishList extends React.Component {
 
     AsyncStorage.getItem('userToken').then((token) => {
         firebase.database().ref('/wishlist/' + token).on('value', (data) => {
-     
+            console.log(data.val());
 
             if (data.val()) {
                        var temp = data.val();
@@ -61,6 +61,11 @@ export default class WishList extends React.Component {
                            keys: keys,
                          }
                        );   
+                    }
+                    else {
+                      this.setState({
+                        products: []
+                      });
                     }
           });
     });
