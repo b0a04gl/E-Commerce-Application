@@ -357,50 +357,50 @@ const PendingListStackScreen =({navigation}) =>(
   </Stack.Navigator>
 );
 
-// const ProductListStackScreen =({navigation}) =>(
+const ProductDetailStackScreen =({navigation}) =>(
 
 
   
-//     <Stack.Navigator screenOptions={{
-//         headerStyle: {
-//             backgroundColor: '#ec2F4B',
-//           },
+    <Stack.Navigator screenOptions={{
+        headerStyle: {
+            backgroundColor: '#ec2F4B',
+          },
 
-//           headerTintColor: '#fff',
-//           headerTitleStyle: {
-//             fontWeight: 'bold',
-//             // alignSelf: 'center'
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            // alignSelf: 'center'
            
-//           },
-//     }}>
+          },
+    }}>
       
-//         <Stack.Screen name={ 'ProductList'} component={ProductList} options={{
-//             title:'ProductList',
-//             headerStyle: {
-//                 backgroundColor: '#ec2F4B',
-//               },
-//             headerTitleAlign: 'center',
-//             headerLeft : () => (
-//                 <Icon.Button  name = 'ios-menu' size={30}
-//                 backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
-//             ),
+        <Stack.Screen name={ 'ProductDetailst'} component={ProductDetailScreen} options={{
+            title:'ProductDetails',
+            headerStyle: {
+                backgroundColor: '#ec2F4B',
+              },
+            headerTitleAlign: 'center',
+            headerLeft : () => (
+                <Icon.Button  name = 'ios-menu' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+            ),
             
-//             headerRight : () => (
+            headerRight : () => (
                 
-//                 <View style={styles.iconContainer}>
-//               <Icon.Button  name = 'md-search' size={30}
-//                 backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('SearchBar')}></Icon.Button>
-//          <Icon.Button  name = 'ios-cart' size={30}
-//                 backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('CartScreen')}></Icon.Button>
-//       </View>
-//             ),
+                <View style={styles.iconContainer}>
+              <Icon.Button  name = 'md-search' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('SearchBar')}></Icon.Button>
+         <Icon.Button  name = 'ios-cart' size={30}
+                backgroundColor = '#ec2F4B' onPress={() => navigation.navigate('CartScreen')}></Icon.Button>
+      </View>
+            ),
 
-//         }}/>
+        }}/>
 
 
 
-//     </Stack.Navigator>
-// );
+    </Stack.Navigator>
+);
 
 
 const WishListStackScreen =({navigation}) =>(
@@ -626,7 +626,12 @@ const adminItems = [
           // gestureEnabled: false,
         }}
         />,
-        <DrawerNav.Screen name='Details' component={ProductDetailScreen}
+        
+
+];
+
+
+{/* <DrawerNav.Screen name='Details' component={ProductDetailScreen}
 
 options={{
 
@@ -641,9 +646,8 @@ options={{
 ),
   // gestureEnabled: false,
 }}
-/>,
+/>, */}
 
-];
 const dealerItems = [
   <DrawerNav.Screen name="Dealer" component={DealerStackScreen}
         
@@ -720,7 +724,12 @@ const customerItems = [
           // gestureEnabled: false,
     }}
         />,
-<DrawerNav.Screen name='Details' component={ProductDetailScreen}
+
+        
+        
+];
+
+{/* <DrawerNav.Screen name='Details' component={ProductDetailScreen}
 
 options={{
 
@@ -735,12 +744,7 @@ options={{
 ),
   // gestureEnabled: false,
 }}
-/>,
-        
-        
-];
-
-
+/>, */}
 
 
 
@@ -1483,11 +1487,28 @@ componentWillUnmount() {
              drawerIcon: () => null
              // gestureEnabled: false,
            }}
-           />
+           />,
+
+<DrawerNav.Screen name='Details' component={ProductDetailStackScreen}
+           options={{
+            // title: 'ProductList',
+            // drawerIcon: ({color, size}) => (
+            //   <Icon
+            //     name="md-checkmark-circle-outline"
+            //     size={size}
+            //     color={color}
+            //   />
+            // ),
+             drawerLabel: () => null,
+            title: null,
+            drawerIcon: () => null
+            // gestureEnabled: false,
+          }}
+          />
     ];
    
    
-   
+    
    
      type.splice(0,0,this.props.userType);
    
