@@ -16,6 +16,7 @@ const OrderScreen = ({ navigation }) => {
   //   const { orders } = state;
 
   const [orders, setOrders] = React.useState([]);
+  const [userToken, setUserToken] = React.useState('');
 
   useEffect(() => {
     // onViewOrders();
@@ -36,14 +37,17 @@ const OrderScreen = ({ navigation }) => {
               var x = [];
               for (var index = 0; index < keys.length; index++) {
                 var key = keys[index];
+                temp[key].key = key;
                 x.push(temp[key]);
               }
               setOrders(x);
-
-
+            }
+            else {
+              setOrders([]);
             }
           });
         }
+        setUserToken(userToken);
       }
     });
 
@@ -54,18 +58,14 @@ const OrderScreen = ({ navigation }) => {
   }, []);
 
   const didSelect = ({ item }) => {
-    // onViewOrderDetails(item);
   };
 
   const onCancel = ({ item }) => {
-    console.log(item);
-
-    
-
+    firebase.database().ref('orders/'+userToken+'/'+item.key).remove();
   };
 
   const didTapBack = () => {
-    navigation.navigate("CartScreen");
+    navigation.goBack();
   };
 
 
