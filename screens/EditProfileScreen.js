@@ -14,87 +14,87 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 
-// import BottomSheet from 'reanimated-bottom-sheet';
-// import Animated from 'react-native-reanimated';
+import firebase from 'firebase';
+import ApiKeys from '../database/RealtimeDb';
 
-// import ImagePicker from 'react-native-image-crop-picker';
+class EditProfileScreen  extends React.Component
+{
 
-const EditProfileScreen = () => {
+constructor(props)
+{
+  super(props);
 
-  const [image, setImage] = useState('https://api.adorable.io/avatars/80/abott@adorable.png');
-  const {colors} = useTheme();
+  this.state = {
+    fname : 'First Name',
+    lname : 'Last Name',
+    phone : 'Phone',
+    city : 'City'
+  };
+  if (!firebase.apps.length) {
+    firebase.initializeApp(ApiKeys.firebaseConfig);
+}
+}
 
-//   const takePhotoFromCamera = () => {
-//     ImagePicker.openCamera({
-//       compressImageMaxWidth: 300,
-//       compressImageMaxHeight: 300,
-//       cropping: true,
-//       compressImageQuality: 0.7
-//     }).then(image => {
-//       console.log(image);
-//       setImage(image.path);
-//       this.bs.current.snapTo(1);
-//     });
-//   }
 
-//   const choosePhotoFromLibrary = () => {
-//     ImagePicker.openPicker({
-//       width: 300,
-//       height: 300,
-//       cropping: true,
-//       compressImageQuality: 0.7
-//     }).then(image => {
-//       console.log(image);
-//       setImage(image.path);
-//       this.bs.current.snapTo(1);
-//     });
-//   }
+componentDidMount() {
+  let dbRef = firebase.database().ref('currentUser');
+  if (dbRef) {
+    dbRef.on('value', (data) => {
+      
+      var temp = data.val();
 
-//   renderInner = () => (
-//     <View style={styles.panel}>
-//       <View style={{alignItems: 'center'}}>
-//         <Text style={styles.panelTitle}>Upload Photo</Text>
-//         <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
-//       </View>
-//       <TouchableOpacity style={styles.panelButton} onPress={takePhotoFromCamera}>
-//         <Text style={styles.panelButtonTitle}>Take Photo</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity style={styles.panelButton} onPress={choosePhotoFromLibrary}>
-//         <Text style={styles.panelButtonTitle}>Choose From Library</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity
-//         style={styles.panelButton}
-//         onPress={() => this.bs.current.snapTo(1)}>
-//         <Text style={styles.panelButtonTitle}>Cancel</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
+      this.setState({
+          fname : temp.fname,
+          lname : temp.lname,
+          phone : temp.phone,
+          city : temp.city,
+          token : temp.token,
+          email : temp.email,
+          password : temp.password,
+          type : temp.type,
+      });
+      
+  })
+  }
 
-//   renderHeader = () => (
-//     <View style={styles.header}>
-//       <View style={styles.panelHeader}>
-//         <View style={styles.panelHandle} />
-//       </View>
-//     </View>
-//   );
+  // console.log(this.state.email+":"+this.state.pwd);
 
-//   bs = React.createRef();
-//   fall = new Animated.Value(1);
+}
 
+saveUser = () =>
+{
+
+  var currUser = {
+
+    fname : this.state.fname,
+    lname : this.state.lname,
+    phone : this.state.phone,
+    city : this.state.city,
+    token : this.state.token,
+    email : this.state.email,
+    password : this.state.password,
+    type : this.state.type,
+  };
+
+  console.log("Current user : ::: "+ currUser);
+
+  firebase.database().ref('currentUser').set(currUser).then(() => {
+  }).catch((error) => {
+    console.log(error);
+  });
+}
+
+render(){
+
+ 
+ const colors= {
+   
+    background: '#333333',
+    text: '#333333'
+  }
   return (
     <View style={styles.container}>
-      {/* <BottomSheet
-        ref={this.bs}
-        snapPoints={[330, 0]}
-        renderContent={this.renderInner}
-        renderHeader={this.renderHeader}
-        initialSnap={1}
-        callbackNode={this.fall}
-        enabledGestureInteraction={true}
-      /> */}
-      {/* <Animated.View style={{margin: 20,
-        opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
-    }}> */}
+     
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity onPress={() => {}}>
             <View
@@ -107,7 +107,7 @@ const EditProfileScreen = () => {
               }}>
               <ImageBackground
                 source={{
-                  uri: image,
+                  uri: 'https://api.adorable.io/avatars/80/abott@adorable.png',
                 }}
                 style={{height: 100, width: 100}}
                 imageStyle={{borderRadius: 15}}>
@@ -132,6 +132,8 @@ const EditProfileScreen = () => {
                 color: colors.text,
               },
             ]}
+            value={this.state.fname}
+            onChangeText={(val) => this.setState({fname:val})}
           />
         </View>
         <View style={styles.action}>
@@ -146,6 +148,11 @@ const EditProfileScreen = () => {
                 color: colors.text,
               },
             ]}
+            
+            value={this.state.lname}
+            onChangeText={(val) => this.setState({lname:val})}
+  
+
           />
         </View>
         <View style={styles.action}>
@@ -161,37 +168,12 @@ const EditProfileScreen = () => {
                 color: colors.text,
               },
             ]}
+            value={this.state.phone}
+            onChangeText={(val) => this.setState({phone:val})}
+
           />
         </View>
-        <View style={styles.action}>
-          <FontAwesome name="envelope-o" color={colors.text} size={20} />
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor="#666666"
-            keyboardType="email-address"
-            autoCorrect={false}
-            style={[
-              styles.textInput,
-              {
-                color: colors.text,
-              },
-            ]}
-          />
-        </View>
-        <View style={styles.action}>
-          <FontAwesome name="globe" color={colors.text} size={20} />
-          <TextInput
-            placeholder="Country"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            style={[
-              styles.textInput,
-              {
-                color: colors.text,
-              },
-            ]}
-          />
-        </View>
+        
         <View style={styles.action}>
           <Icon name="map-marker-outline" color={colors.text} size={20} />
           <TextInput
@@ -204,14 +186,21 @@ const EditProfileScreen = () => {
                 color: colors.text,
               },
             ]}
+
+            value={this.state.city}
+            onChangeText={(val) => this.setState({city:val})}
+
+
           />
         </View>
-        <TouchableOpacity style={styles.commandButton} onPress={() => {}}>
+        <TouchableOpacity style={styles.commandButton} onPress={() => {this.saveUser()}}>
           <Text style={styles.panelButtonTitle}>Submit</Text>
         </TouchableOpacity>
       {/* </Animated.View> */}
     </View>
   );
+}
+
 };
 
 export default EditProfileScreen;

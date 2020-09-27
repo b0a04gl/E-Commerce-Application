@@ -126,7 +126,11 @@ const SignInScreen = ({navigation}) => {
                 token : null,
                 email : null,
                 password : null,
-                type : null
+                type : null,
+                fname : 'First Name',
+                lname : 'Last Name',
+                phone : 'Phone',
+                city : 'City'
             }
         ];
 

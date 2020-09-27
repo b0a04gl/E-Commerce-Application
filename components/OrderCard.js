@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -6,19 +6,43 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-
+import * as firebase from 'firebase';
+import ApiKeys from '../database/RealtimeDb';
 import { Text, Rating } from 'react-native-elements';
 import moment from 'moment';
 import WaitingIcon from "../assets/images/orders.png";
 import AppButton from './Buttons/AppButton';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const deviceWidth = Math.round(Dimensions.get('window').width);
 
+
 const OrderCard = ({ data, onSelect, onCancel }) => {
+
+
+  const [userToken, setUserToken] = React.useState('');
+  useEffect(() => {
+    // onViewOrders();
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(ApiKeys.firebaseConfig);
+    }
+
+    AsyncStorage.getItem('userToken').then((userToken) => {
+      if (userToken) {
+        
+      
+        setUserToken(userToken);
+      }
+    });
+
+}, []);
+
   const {
     orderID,
     totalAmount,
     orderDate,
+    key,
     paidThrough,
     orderStatus,
     items,
@@ -27,7 +51,7 @@ const OrderCard = ({ data, onSelect, onCancel }) => {
   const checkCancelOption = (orderDate) => {
     let date = moment(orderDate);
     var now = moment();
-
+    console.log(key);
     if (now < date) {
       return (
         <Text
@@ -43,6 +67,11 @@ const OrderCard = ({ data, onSelect, onCancel }) => {
         </Text>
       );
     } else {
+
+
+
+      // firebase.database().ref('orders/'+userToken+'/'+key).remove();
+
       return (
         <AppButton
           title={'Cancel Now'}

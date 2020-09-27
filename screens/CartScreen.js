@@ -92,11 +92,11 @@ const CartScreen = ({ navigation }) => {
 
     Alert.alert("Placing order...");
 
-
+    var d = new Date();
     var currentOrder = {
       orderID: Math.floor((Math.random() * 1000) + 1).toString(),
       totalAmount: totalAmount(),
-      orderDate: new Date(),
+      orderDate: d,
       user: userToken,
     }
 

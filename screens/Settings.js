@@ -88,9 +88,15 @@ class Dealer extends React.Component {
             var temp = data.val();
 
             this.setState({
-                email : temp.email,
-                password : temp.password,
-            });
+              fname : temp.fname,
+              lname : temp.lname,
+              phone : temp.phone,
+              city : temp.city,
+              token : temp.token,
+              email : temp.email,
+              password : temp.password,
+              type : temp.type,
+          });
             
         })
         }
@@ -100,11 +106,19 @@ class Dealer extends React.Component {
     }
 
     updateEmail = () =>{
-        var user = [];
-        user['email'] = this.state.email;
-        user['password'] = this.state.password;
+       
+        var currUser = {
 
-         firebase.database().ref('currentUser').set(user).then(() => {
+          fname : this.state.fname,
+          lname : this.state.lname,
+          phone : this.state.phone,
+          city : this.state.city,
+          token : this.state.token,
+          email : this.state.email,
+          password : this.state.password,
+          type : this.state.type,
+        };
+         firebase.database().ref('currentUser').set(currUser).then(() => {
                 }).catch((error) => {
                   console.log(error);
                 });
@@ -113,14 +127,21 @@ class Dealer extends React.Component {
 
     updatePwd = () =>
     {
-        var user = [];
-        user['email'] = this.state.email;
-        user['password'] = this.state.password;
+      var currUser = {
 
-         firebase.database().ref('currentUser').set(user).then(() => {
-                }).catch((error) => {
-                  console.log(error);
-                });
+        fname : this.state.fname,
+        lname : this.state.lname,
+        phone : this.state.phone,
+        city : this.state.city,
+        token : this.state.token,
+        email : this.state.email,
+        password : this.state.password,
+        type : this.state.type,
+      };
+       firebase.database().ref('currentUser').set(currUser).then(() => {
+              }).catch((error) => {    
+                console.log(error);
+              });
     }
 
    

@@ -7,12 +7,56 @@ import {
   Text,
   TouchableRipple,
 } from 'react-native-paper';
-
+import firebase from 'firebase';
+import ApiKeys from '../database/RealtimeDb';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class ProfileScreen extends React.Component
 {
     
+  constructor(props)
+  {
+    super(props);
+    this.state = {
+      email : 'abc',
+      password : 'noono',
+      fname : 'First Name',
+      lname : 'Last Name',
+      phone : 'Phone',
+      city : 'City',
+      type : '',
+    };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(ApiKeys.firebaseConfig);
+  }
+
+  }
+
+
+  componentDidMount() {
+    let dbRef = firebase.database().ref('currentUser');
+    if (dbRef) {
+      dbRef.on('value', (data) => {
+        
+        var temp = data.val();
+
+        this.setState({
+          fname : temp.fname,
+          lname : temp.lname,
+          phone : temp.phone,
+          city : temp.city,
+          email : temp.email,
+          type : temp.type,
+          password : temp.password,
+      });
+        
+    })
+    }
+
+    console.log(this.state.email+":"+this.state.pwd);
+
+}
+
     render()
     {
         const {navigation} = this.props;
@@ -40,8 +84,8 @@ class ProfileScreen extends React.Component
                     <Title style={[styles.title, {
                       marginTop:15,
                       marginBottom: 5,
-                    }]}>John Doe</Title>
-                    <Caption style={styles.caption}>@j_doe</Caption>
+                    }]}>{this.state.fname+" "+this.state.lname}</Title>
+                    <Caption style={styles.caption}>{this.state.type}</Caption>
                   </View>
                 </View>
               </View>
@@ -49,15 +93,15 @@ class ProfileScreen extends React.Component
               <View style={styles.userInfoSection}>
                 <View style={styles.row}>
                   <Icon name="map-marker-radius" color="#777777" size={20}/>
-                  <Text style={{color:"#777777", marginLeft: 20}}>Kolkata, India</Text>
+                  <Text style={{color:"#777777", marginLeft: 20}}>{this.state.city}</Text>
                 </View>
                 <View style={styles.row}>
                   <Icon name="phone" color="#777777" size={20}/>
-                  <Text style={{color:"#777777", marginLeft: 20}}>+91-900000009</Text>
+                  <Text style={{color:"#777777", marginLeft: 20}}>{'+91 '+this.state.phone}</Text>
                 </View>
                 <View style={styles.row}>
                   <Icon name="email" color="#777777" size={20}/>
-                  <Text style={{color:"#777777", marginLeft: 20}}>john_doe@email.com</Text>
+                  <Text style={{color:"#777777", marginLeft: 20}}>{this.state.email}</Text>
                 </View>
               </View>
         

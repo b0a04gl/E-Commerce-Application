@@ -61,6 +61,12 @@ const OrderScreen = ({ navigation }) => {
   };
 
   const onCancel = ({ item }) => {
+
+    var d = new Date();
+    var od = item.orderDate;
+
+    console.log(d+" "+od);
+
     firebase.database().ref('orders/'+userToken+'/'+item.key).remove();
   };
 
