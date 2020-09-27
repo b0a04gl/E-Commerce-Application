@@ -1,23 +1,27 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const Card = props =>{
-    return(
+const Card = props => {
+    return (
         <View>
             <View style={styles.headerContainer}>
                 <Text style={styles.header}>{props.header}</Text>
+                <TouchableOpacity>
+                    <Image source={require('../../assets/images/right-arrow.png')} style={styles.icon} />
+                </TouchableOpacity>
             </View>
             <View style={styles.cardContainer}>
                 <View style={styles.card}>
-                <FlatList data={props.images}
-                renderItem={ itemData => (
-                    <View style={styles.Container}>
-                        <Image style={styles.image} source={itemData.item.image} />
-                        <Text style={styles.text}>{itemData.item.textItem}</Text>
-                        <Text style={styles.offerText}>{itemData.item.textOff}</Text>
-                    </View>
-                )}
-                numColumns={2}/>
+                    <FlatList data={props.images}
+                        renderItem={itemData => (
+                            <View style={styles.Container}>
+                                <Image style={styles.image} source={itemData.item.image} />
+                                <Text style={styles.text}>{itemData.item.textItem}</Text>
+                                <Text style={styles.offerText}>{itemData.item.textOff}</Text>
+                            </View>
+                        )}
+                        numColumns={2} />
                 </View>
             </View>
         </View>
@@ -26,24 +30,33 @@ const Card = props =>{
 }
 
 const styles = StyleSheet.create({
-    
-    headerContainer:{
+
+    headerContainer: {
         paddingLeft: 30,
         marginTop: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingRight: 20,
     },
 
-    header:{
+    header: {
         fontSize: 18,
         fontWeight: 'bold',
         fontStyle: 'italic'
     },
 
-    cardContainer:{
+    icon: {
+        height: 35,
+        width: 35,
+        paddingHorizontal: 15,
+    },
+
+    cardContainer: {
         alignItems: 'center',
         marginVertical: 10,
     },
 
-    card:{
+    card: {
         flex: 1,
         width: '90%',
         elevation: 10,
@@ -52,17 +65,17 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
 
-    Container:{
+    Container: {
         flex: 1,
-        flexDirection: 'column', 
-        borderColor:'black', 
-        borderWidth:0.4,
+        flexDirection: 'column',
+        borderColor: 'black',
+        borderWidth: 0.4,
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
     },
 
-    image:{
+    image: {
         height: 80,
         width: 80,
         marginVertical: 20,
@@ -70,11 +83,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
-    text:{
+    text: {
         color: 'red',
     },
 
-    offerText:{
+    offerText: {
         color: 'darkgreen',
         fontSize: 16,
     }

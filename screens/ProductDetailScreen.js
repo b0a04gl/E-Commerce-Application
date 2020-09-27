@@ -18,6 +18,7 @@ export default class ProductDetailScreen extends React.Component {
             rating: 0,
             showModal: false,
             showRateModal: false,
+            showSpecsModal: false,
             comment: '',
             comments: [],
             product: {},
@@ -25,6 +26,7 @@ export default class ProductDetailScreen extends React.Component {
             key: '',
             category: '',
             wishlist: [],
+            specs: [{key: 'Hello', value: 'World'}, {key: 'Hello', value: 'World!'}],
         }
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.firebaseConfig);
@@ -173,6 +175,7 @@ export default class ProductDetailScreen extends React.Component {
         this.setState({
             showModal: false,
             showRateModal: false,
+            showSpecsModal: false,
         });
     };
 
@@ -192,8 +195,26 @@ export default class ProductDetailScreen extends React.Component {
                         <Text style={styles.price}>{this.state.product.productPrice}</Text>
                     </View>
                     <View style={styles.body}>
-                        <Text style={styles.descriptionHeader}>Description:</Text>
-                        <Text style={styles.description}>{this.state.product.description}</Text>
+                        <View style={styles.descriptionContainer}>
+                            <Text style={styles.descriptionHeader}>Description:</Text>
+                            <Text style={styles.description}>{this.state.product.description}</Text>
+                            <TouchableOpacity onPress={() => { this.setState({ showSpecsModal: true }) }}>
+                                <Text style={styles.productlink}>All Product Details</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Modal
+                            visible={this.state.showSpecsModal}
+                            onRequestClose={this.closeModal}>
+                            <Text style={styles.ratingText}>Product Specification</Text>
+                            <View style={styles.modalContainer}>
+                                {this.state.specs.map(specs =>(
+                                <View style={styles.container}>
+                                        <Text style={styles.item}>{specs.key}</Text>
+                                        <Text style={styles.item}>{specs.value}</Text>
+                                </View>
+                                ))}
+                            </View>
+                        </Modal>
                         <View style={styles.reviewContainer}>
                             <Modal
                                 transparent
@@ -305,11 +326,16 @@ const styles = StyleSheet.create({
     },
 
     display: {
-        borderBottomWidth: 0.3,
-        borderBottomColor: 'black',
+        borderBottomWidth: 10,
+        borderBottomColor: '#D0D0D0',
         padding: 10,
         paddingHorizontal: 20,
         marginVertical: 20,
+    },
+
+    descriptionContainer: {
+        borderBottomWidth: 10,
+        borderBottomColor: '#D0D0D0',
     },
 
     imageContainer: {
@@ -317,6 +343,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 30,
         marginVertical: 35,
+    },
+
+    productlink: {
+        color: 'blue',
+        paddingLeft: 20,
+        fontSize: 16,
+        marginVertical: 15
     },
 
     mainImage: {
@@ -358,7 +391,6 @@ const styles = StyleSheet.create({
     },
 
     body: {
-        padding: 10,
         flex: 1,
     },
 
@@ -383,8 +415,19 @@ const styles = StyleSheet.create({
 
     modalContainer: {
         flex: 1,
-        justifyContent: 'center',
+        
         alignItems: 'center',
+    },
+
+    container: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+    },
+
+    item: {
+        width: '50%',
+        borderWidth: 1,
+        padding: 10,
     },
 
     modalScreen: {
@@ -447,6 +490,7 @@ const styles = StyleSheet.create({
 
     comments: {
         paddingHorizontal: 10,
+        padding: 10,
     },
 
     commentBox: {
