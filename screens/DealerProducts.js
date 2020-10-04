@@ -6,6 +6,7 @@ import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { SliderBox } from 'react-native-image-slider-box';
 
 export default class DealerProducts extends React.Component {
   _isMounted = false;
@@ -24,7 +25,8 @@ export default class DealerProducts extends React.Component {
       buttonTitle: 'Add Product',
       index: -1,
       userToken: null,
-      image: require('../assets/images/add.png'),
+      imageIndex: -1,
+      images: [],
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.firebaseConfig);
@@ -100,15 +102,27 @@ export default class DealerProducts extends React.Component {
         console.log(`${imageName} has been successfully uploaded.`);
         snapshot.ref.getDownloadURL().then((url) => {
           this.setState({
-            image: { uri: url },
+            images: [...this.state.images, { uri: url }],
           });
         });
       })
       .catch((e) => console.log('uploading image error => ', e));
   };
 
+  DeleteImageHandler = index => {
+    if (this.state.images.length > 0) {
+        const images= this.state.images;
+        const imageRef = images.splice(index, 1);
+        if (imageRef[0]) {
+            this.setState({
+                images: images,
+            });
+        }
+    }
+};
+
   addProduct = () => {
-    if (this.state.image.uri) {
+    if (this.state.images[0].uri) {
       const product = {
         productName: this.state.productName,
         productPrice: this.state.productPrice,
@@ -116,7 +130,8 @@ export default class DealerProducts extends React.Component {
         category: this.state.category,
         description: this.state.description,
         status: 'Pending',
-        image: this.state.image,
+        images: this.state.images,
+        image: this.state.images[0],
       };
       let products;
       if (this.state.buttonTitle === 'Add Product') {
@@ -135,7 +150,7 @@ export default class DealerProducts extends React.Component {
         description: '',
         category: '',
         showModal: false,
-        image: require('../assets/images/add.png'),
+        images: [],
       });
     }
     else {
@@ -155,6 +170,7 @@ export default class DealerProducts extends React.Component {
       description: product.description,
       category: product.category,
       showModal: true,
+      images: product.images,
     })
   };
 
@@ -227,9 +243,28 @@ export default class DealerProducts extends React.Component {
           onRequestClose={this.closeModal}>
           <View style={styles.modalContainer}>
             <View style={styles.modalScreen}>
-              <TouchableOpacity onPress={this.AddImageHandler} style={styles.imageContainer}>
-                <Image source={this.state.image} style={styles.previewImage} />
-              </TouchableOpacity>
+              <View style={styles.iconContainer}>
+                    <TouchableOpacity onPress={this.AddImageHandler}>
+                        <Image source={require('../assets/images/add.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}> Product Images </Text>
+                    <TouchableOpacity onPress={this.DeleteImageHandler.bind(this, this.state.imageIndex)}>
+                        <Image source={require('../assets/images/delete.png')} style={styles.image} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.imageDeck}>
+                    <SliderBox
+                        images={this.state.images}
+                        sliderBoxHeight={175}
+                        circleLoop={true}
+                        resizeMode={'contain'}
+                        currentImageEmitter={index => {
+                            this.setState({
+                                imageIndex: index,
+                            });
+                        }
+                        } />
+                </View>
               <TextInput
                 placeholder='Enter your product name'
                 placeholderTextColor='black'
@@ -351,6 +386,30 @@ const styles = StyleSheet.create({
   modalScreen: {
     width: '90%',
   },
+
+  iconContainer: {
+    flexDirection: 'row',
+    padding: 10,
+    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderColor: 'black',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+},
+
+image: {
+    height: 30,
+    width: 30,
+    paddingHorizontal: 10
+},
+
+imageDeck: {
+    elevation: 5,
+    height: 175,
+    borderColor: 'black',
+    borderWidth: 1,
+    alignItems: 'center',
+},
 
   imageContainer: {
     justifyContent: 'center',

@@ -7,6 +7,7 @@ import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-simple-toast';
+import { SliderBox } from 'react-native-image-slider-box';
 
 export default class ProductDetailScreen extends React.Component {
     _isMounted = false;
@@ -26,7 +27,7 @@ export default class ProductDetailScreen extends React.Component {
             key: '',
             category: '',
             wishlist: [],
-            specs: [{key: 'Hello', value: 'World'}, {key: 'Hello', value: 'World!'}],
+            specs: [{ key: 'Hello', value: 'World' }, { key: 'Hello', value: 'World!' }],
         }
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.firebaseConfig);
@@ -40,6 +41,7 @@ export default class ProductDetailScreen extends React.Component {
         firebase.database().ref('/currents').on('value', (data) => {
             if (this._isMounted) {
                 if (data.val()) {
+                    console.log(data.val());
                     const product = data.val();
                     this.setState({
                         product: product,
@@ -178,6 +180,7 @@ export default class ProductDetailScreen extends React.Component {
             showSpecsModal: false,
         });
     };
+    
 
     render() {
 
@@ -186,11 +189,15 @@ export default class ProductDetailScreen extends React.Component {
                 <ScrollView>
                     <View style={styles.display}>
                         <View style={styles.imageContainer}>
-                            <Image source={this.state.product.image} style={styles.mainImage} />
+                            <SliderBox
+                                images={this.state.product.images ? this.state.product.images : [this.state.product.image]}
+                                sliderBoxHeight={375}
+                                circleLoop={true}
+                                resizeMode={'contain'} />
                             <TouchableOpacity style={styles.iconContainer} onPress={this.toggleFavorite}>
                                 <Image source={this.state.clicked ? clicked : unclicked} style={styles.icon} />
                             </TouchableOpacity>
-                        </View>
+                            </View>
                         <Text style={styles.text}>{this.state.product.productName}</Text>
                         <Text style={styles.price}>{this.state.product.productPrice}</Text>
                     </View>
@@ -207,11 +214,11 @@ export default class ProductDetailScreen extends React.Component {
                             onRequestClose={this.closeModal}>
                             <Text style={styles.ratingText}>Product Specification</Text>
                             <View style={styles.modalContainer}>
-                                {this.state.specs.map(specs =>(
-                                <View style={styles.container}>
+                                {this.state.specs.map(specs => (
+                                    <View style={styles.container}>
                                         <Text style={styles.item}>{specs.key}</Text>
                                         <Text style={styles.item}>{specs.value}</Text>
-                                </View>
+                                    </View>
                                 ))}
                             </View>
                         </Modal>
@@ -342,7 +349,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 30,
-        marginVertical: 35,
+        marginVertical: 55,
+        elevation: 5,
+        height: 375,
     },
 
     productlink: {
@@ -415,7 +424,7 @@ const styles = StyleSheet.create({
 
     modalContainer: {
         flex: 1,
-        
+
         alignItems: 'center',
     },
 
