@@ -21,6 +21,7 @@ export default class DealerProducts extends React.Component {
       stocks: '',
       category: '',
       description: '',
+      specs: '',
       showModal: false,
       buttonTitle: 'Add Product',
       index: -1,
@@ -53,17 +54,17 @@ export default class DealerProducts extends React.Component {
           if (this._isMounted) {
             if (data.val()) {
               data.val().map(category => {
-              this.setState({
-                categories: [...this.state.categories, {label:category, value:category}],
+                this.setState({
+                  categories: [...this.state.categories, { label: category, value: category }],
+                });
               });
-            });
             }
           }
         });
       }
     });
 
-   
+
 
   }
 
@@ -111,15 +112,15 @@ export default class DealerProducts extends React.Component {
 
   DeleteImageHandler = index => {
     if (this.state.images.length > 0) {
-        const images= this.state.images;
-        const imageRef = images.splice(index, 1);
-        if (imageRef[0]) {
-            this.setState({
-                images: images,
-            });
-        }
+      const images = this.state.images;
+      const imageRef = images.splice(index, 1);
+      if (imageRef[0]) {
+        this.setState({
+          images: images,
+        });
+      }
     }
-};
+  };
 
   addProduct = () => {
     if (this.state.images[0].uri) {
@@ -129,6 +130,7 @@ export default class DealerProducts extends React.Component {
         stocks: this.state.stocks,
         category: this.state.category,
         description: this.state.description,
+        specs: this.state.specs,
         status: 'Pending',
         images: this.state.images,
         image: this.state.images[0],
@@ -149,6 +151,7 @@ export default class DealerProducts extends React.Component {
         stocks: '',
         description: '',
         category: '',
+        specs: '',
         showModal: false,
         images: [],
       });
@@ -169,6 +172,7 @@ export default class DealerProducts extends React.Component {
       stocks: product.stocks,
       description: product.description,
       category: product.category,
+      specs: product.specs,
       showModal: true,
       images: product.images,
     })
@@ -208,30 +212,30 @@ export default class DealerProducts extends React.Component {
     return (
       <View style={styles.screen}>
         <ScrollView>
-        <View style={styles.row}>
-          <Text style={styles.text}>Products List</Text>
-          <TouchableOpacity onPress={this.showInput}>
-            <Image source={require('../assets/images/plus.png')} style={styles.image} />
-          </TouchableOpacity>
-        </View>
-        <FlatList data={this.state.dealerProducts}
-          renderItem={data => (
-            <View style={styles.listContainer}>
-              <Image source={data.item.image} style={styles.listimage} />
-              <View style={styles.list}>
-                <Text style={styles.name}>{data.item.productName}</Text>
-                <Text style={styles.price}>{data.item.productPrice}</Text>
-                <Text style={styles.price}>{data.item.status}</Text>
+          <View style={styles.row}>
+            <Text style={styles.text}>Products List</Text>
+            <TouchableOpacity onPress={this.showInput}>
+              <Image source={require('../assets/images/plus.png')} style={styles.image} />
+            </TouchableOpacity>
+          </View>
+          <FlatList data={this.state.dealerProducts}
+            renderItem={data => (
+              <View style={styles.listContainer}>
+                <Image source={data.item.image} style={styles.listimage} />
+                <View style={styles.list}>
+                  <Text style={styles.name}>{data.item.productName}</Text>
+                  <Text style={styles.price}>{data.item.productPrice}</Text>
+                  <Text style={styles.price}>{data.item.status}</Text>
+                </View>
+                <TouchableOpacity onPress={this.updateProduct.bind(this, data.index)}>
+                  <Image source={require('../assets/edit.png')} style={styles.Optionsimage} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.deleteProduct.bind(this, data.index)}>
+                  <Image source={require('../assets/delete.png')} style={styles.Optionsimage} />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity onPress={this.updateProduct.bind(this, data.index)}>
-                <Image source={require('../assets/edit.png')} style={styles.Optionsimage} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={this.deleteProduct.bind(this, data.index)}>
-                <Image source={require('../assets/delete.png')} style={styles.Optionsimage} />
-              </TouchableOpacity>
-            </View>
-          )} />
-          </ScrollView>
+            )} />
+        </ScrollView>
         <View>
           <TouchableOpacity style={styles.footer} onPress={this.saveToDB}>
             <Text style={styles.footerText}>SAVE CHANGES</Text>
@@ -241,73 +245,83 @@ export default class DealerProducts extends React.Component {
           visible={this.state.showModal}
           position='center'
           onRequestClose={this.closeModal}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalScreen}>
-              <View style={styles.iconContainer}>
-                    <TouchableOpacity onPress={this.AddImageHandler}>
-                        <Image source={require('../assets/images/add.png')} style={styles.image} />
-                    </TouchableOpacity>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}> Product Images </Text>
-                    <TouchableOpacity onPress={this.DeleteImageHandler.bind(this, this.state.imageIndex)}>
-                        <Image source={require('../assets/images/delete.png')} style={styles.image} />
-                    </TouchableOpacity>
+          <ScrollView style={{marginTop:10}}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalScreen}>
+                <View style={styles.iconContainer}>
+                  <TouchableOpacity onPress={this.AddImageHandler}>
+                    <Image source={require('../assets/images/add.png')} style={styles.image} />
+                  </TouchableOpacity>
+                  <Text style={{ fontSize: 18, fontWeight: 'bold' }}> Product Images </Text>
+                  <TouchableOpacity onPress={this.DeleteImageHandler.bind(this, this.state.imageIndex)}>
+                    <Image source={require('../assets/images/delete.png')} style={styles.image} />
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.imageDeck}>
-                    <SliderBox
-                        images={this.state.images}
-                        sliderBoxHeight={175}
-                        circleLoop={true}
-                        resizeMode={'contain'}
-                        currentImageEmitter={index => {
-                            this.setState({
-                                imageIndex: index,
-                            });
-                        }
-                        } />
-                </View>
-              <TextInput
-                placeholder='Enter your product name'
-                placeholderTextColor='black'
-                style={styles.textInput}
-                value={this.state.productName}
-                onChangeText={(val) => this.inputValueUpdate(val, 'productName')} />
-              <TextInput
-                placeholder='Enter your product price'
-                placeholderTextColor='black'
-                style={styles.textInput}
-                value={this.state.productPrice}
-                onChangeText={(val) => this.inputValueUpdate(val, 'productPrice')} />
-              <TextInput
-                placeholder='Enter your product stock'
-                placeholderTextColor='black'
-                style={styles.textInput}
-                value={this.state.stocks}
-                onChangeText={(val) => this.inputValueUpdate(val, 'stocks')} />
-                <TextInput
-                placeholder='Enter your product description'
-                multiline={true}
-                placeholderTextColor='black'
-                style={styles.textInput}
-                value={this.state.description}
-                onChangeText={(val) => this.inputValueUpdate(val, 'description')} />
-                <DropDownPicker
-                    items={this.state.categories}
-                    defaultNull
-                    placeholder="Select the product category"
-                    containerStyle={{height: 40, marginVertical: 10,}}
-                    dropDownStyle={{backgroundColor: 'white'}}
-                    style={{backgroundColor: 'white'}}
-                    activeLabelStyle={{color: '#009387'}}
-                    onChangeItem={item => 
+                  <SliderBox
+                    images={this.state.images}
+                    sliderBoxHeight={175}
+                    circleLoop={true}
+                    resizeMode={'contain'}
+                    currentImageEmitter={index => {
                       this.setState({
-                        category: item.value,
-                }) }
+                        imageIndex: index,
+                      });
+                    }
+                    } />
+                </View>
+                <TextInput
+                  placeholder='Enter your product name'
+                  placeholderTextColor='black'
+                  style={styles.textInput}
+                  value={this.state.productName}
+                  onChangeText={(val) => this.inputValueUpdate(val, 'productName')} />
+                <TextInput
+                  placeholder='Enter your product price'
+                  placeholderTextColor='black'
+                  style={styles.textInput}
+                  value={this.state.productPrice}
+                  onChangeText={(val) => this.inputValueUpdate(val, 'productPrice')} />
+                <TextInput
+                  placeholder='Enter your product stock'
+                  placeholderTextColor='black'
+                  style={styles.textInput}
+                  value={this.state.stocks}
+                  onChangeText={(val) => this.inputValueUpdate(val, 'stocks')} />
+                <TextInput
+                  placeholder='Enter your product description'
+                  multiline={true}
+                  placeholderTextColor='black'
+                  style={styles.textInput}
+                  value={this.state.description}
+                  onChangeText={(val) => this.inputValueUpdate(val, 'description')} />
+                <DropDownPicker
+                  items={this.state.categories}
+                  defaultNull
+                  placeholder="Select the product category"
+                  containerStyle={{ height: 40, marginVertical: 10, }}
+                  dropDownStyle={{ backgroundColor: 'white' }}
+                  style={{ backgroundColor: 'white' }}
+                  activeLabelStyle={{ color: '#009387' }}
+                  onChangeItem={item =>
+                    this.setState({
+                      category: item.value,
+                    })}
                 />
-              <TouchableOpacity style={styles.button}>
-                <Button title={this.state.buttonTitle} color='green' onPress={this.addProduct} />
-              </TouchableOpacity>
+                <Text style={{marginVertical:15, fontWeight:'bold', fontSize: 20}}>Product Specifications </Text>
+                <TextInput
+                  placeholder='(eg: Color:blue , size:XL ,each in new line)'
+                  multiline={true}
+                  placeholderTextColor='black'
+                  style={styles.textInput}
+                  value={this.state.specs}
+                  onChangeText={(val) => this.inputValueUpdate(val, 'specs')} />
+                <TouchableOpacity style={styles.button}>
+                  <Button title={this.state.buttonTitle} color='green' onPress={this.addProduct} />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          </ScrollView>
         </Modal>
       </View>
     )
@@ -395,21 +409,21 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     justifyContent: 'space-between',
     alignItems: 'center'
-},
+  },
 
-image: {
+  image: {
     height: 30,
     width: 30,
     paddingHorizontal: 10
-},
+  },
 
-imageDeck: {
+  imageDeck: {
     elevation: 5,
     height: 175,
     borderColor: 'black',
     borderWidth: 1,
     alignItems: 'center',
-},
+  },
 
   imageContainer: {
     justifyContent: 'center',

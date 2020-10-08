@@ -27,7 +27,7 @@ export default class ProductDetailScreen extends React.Component {
             key: '',
             category: '',
             wishlist: [],
-            specs: [{ key: 'Hello', value: 'World' }, { key: 'Hello', value: 'World!' }],
+            specs: [],
         }
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.firebaseConfig);
@@ -41,7 +41,6 @@ export default class ProductDetailScreen extends React.Component {
         firebase.database().ref('/currents').on('value', (data) => {
             if (this._isMounted) {
                 if (data.val()) {
-                    console.log(data.val());
                     const product = data.val();
                     this.setState({
                         product: product,
@@ -135,6 +134,24 @@ export default class ProductDetailScreen extends React.Component {
         }
     }
 
+    SpecsHandler = () => {
+        if (this.state.product.specs) {
+            const specs = this.state.product.specs.split("\n");
+            var specifications = [];
+            for (var i = 0; i < specs.length; i++) {
+                var spec = specs[i].split(":");
+                specifications.push({ key: spec[0], value: spec[1] });
+            }
+            this.setState({
+                specs: specifications,
+                showSpecsModal: true,
+            });
+        }
+        else {
+            Toast.show("No Specifcations for this product");
+        }
+    }
+
     commentHandler = (comment) => {
         this.setState({
             comment: comment,
@@ -180,7 +197,7 @@ export default class ProductDetailScreen extends React.Component {
             showSpecsModal: false,
         });
     };
-    
+
 
     render() {
 
@@ -197,7 +214,7 @@ export default class ProductDetailScreen extends React.Component {
                             <TouchableOpacity style={styles.iconContainer} onPress={this.toggleFavorite}>
                                 <Image source={this.state.clicked ? clicked : unclicked} style={styles.icon} />
                             </TouchableOpacity>
-                            </View>
+                        </View>
                         <Text style={styles.text}>{this.state.product.productName}</Text>
                         <Text style={styles.price}>{this.state.product.productPrice}</Text>
                     </View>
@@ -205,7 +222,7 @@ export default class ProductDetailScreen extends React.Component {
                         <View style={styles.descriptionContainer}>
                             <Text style={styles.descriptionHeader}>Description:</Text>
                             <Text style={styles.description}>{this.state.product.description}</Text>
-                            <TouchableOpacity onPress={() => { this.setState({ showSpecsModal: true }) }}>
+                            <TouchableOpacity onPress={this.SpecsHandler}>
                                 <Text style={styles.productlink}>All Product Details</Text>
                             </TouchableOpacity>
                         </View>
