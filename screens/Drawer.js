@@ -23,6 +23,10 @@ import { StyleSheet, Text, View } from 'react-native';
 import ProductList from './ProductList';
 import SearchBar from './Components/SearchBar';
 import {mocks} from '../constants';
+
+console.disableYellowBox = true;
+
+
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();

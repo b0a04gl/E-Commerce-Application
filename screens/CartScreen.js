@@ -13,7 +13,7 @@ import ArrowIcon from "../assets/images/arrow_icon.png";
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 
-
+console.disableYellowBox = true;
 
 const CartScreen = ({ navigation }) => {
 

@@ -9,6 +9,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppButton from "../components/Buttons/AppButton";
 import AsyncStorage from '@react-native-community/async-storage';
 
+console.disableYellowBox = true;
 
 export default class WishList extends React.Component {
 

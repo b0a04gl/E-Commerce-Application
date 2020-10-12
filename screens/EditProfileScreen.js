@@ -17,6 +17,8 @@ import Feather from 'react-native-vector-icons/Feather';
 import firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 
+console.disableYellowBox = true;
+
 class EditProfileScreen  extends React.Component
 {
 
@@ -82,6 +84,12 @@ saveUser = () =>
   }).catch((error) => {
     console.log(error);
   });
+
+  firebase.database().ref('UserProfiles'+"/"+currUser.token).set(currUser).then(() => {
+  }).catch((error) => {
+    console.log(error);
+  });
+
 }
 
 render(){

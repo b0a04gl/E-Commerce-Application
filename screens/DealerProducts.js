@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { SliderBox } from 'react-native-image-slider-box';
-
+console.disableYellowBox = true;
 export default class DealerProducts extends React.Component {
   _isMounted = false;
   constructor(props) {

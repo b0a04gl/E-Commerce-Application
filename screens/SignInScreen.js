@@ -24,6 +24,8 @@ import Users from '../model/users';
 
 import firebase from '../database/firebaseDb';
 
+console.disableYellowBox = true;
+
 const SignInScreen = ({navigation}) => {
 
     const dbRef = firebase.firestore().collection('users');
@@ -46,20 +48,32 @@ const SignInScreen = ({navigation}) => {
 
     const { signIn } = React.useContext(AuthContext);
 
-   const getCollection = (querySnapshot) => {
+const retrieve =  () => {
+    firebase.database().ref('/UserProfiles').on('value', data => {
+       
+           if (data.val()) {
+              userArr.push(data.val());
+           }
+        //    console.log(userArr.length);
+     });
+}
+
+//    const getCollection = (querySnapshot) => {
         
-        querySnapshot.forEach((res) => {
-          const { email,password,userType } = res.data();
-          userArr.push({
-            token: res.id,
-            res,
-            email,
-            password,
-            userType
-          });
-        });
+//         querySnapshot.forEach((res) => {
+//           const { email,password,userType,fname,lname,phone,city } = res.data();
+//           userArr.push({
+//             token: res.id,
+//             res,
+//             email,
+//             password,
+//             userType,
+//             fname,lname,phone,city
+
+//           });
+//         });
         
-      }
+//       }
 
 
     const textInputChange = (val) => {
@@ -120,7 +134,34 @@ const SignInScreen = ({navigation}) => {
     const loginHandle = (email, password,type) => {
 
        
-        dbRef.onSnapshot(getCollection);
+        // dbRef.onSnapshot(getCollection);
+        // retrieve();
+        var users = [];
+
+        firebase.database().ref('/UserProfiles').on('value', data => {
+       
+            if (data.val()) {
+                var temp = data.val();
+                var keys = Object.keys(temp);
+                var x = [];
+                for (var index = 0; index < keys.length; index++) {
+                  var key = keys[index];
+  
+                  x.push(temp[key]);
+                  x[index]['token'] = key;
+                  //console.log(x[index]);
+                }
+                users = x;
+            }
+            
+      });
+
+
+
+    //   console.log(users);
+
+      var temp = users[0];
+
         const foundUser = [
             {
                 token : null,
@@ -134,16 +175,21 @@ const SignInScreen = ({navigation}) => {
             }
         ];
 
-        for(let index=0;index<userArr.length;index+=1)
+        for(let index=0;index<users.length;index+=1)
         {
-            // Alert.alert(userArr[index].email+":"+userArr[index].password+":"+userArr[index].userType);
+     
+           console.log(users[index].email+"::"+users[index].password+users[index].type);
 
-            if( userArr[index].email==email && userArr[index].password==password && userArr[index].userType==type)
+            if( users[index].email==email && users[index].password==password && users[index].type==type)
             {
                 foundUser[0].email = email;
                 foundUser[0].password = password;
                 foundUser[0].type = type;
-                foundUser[0].token = userArr[index].token;
+                foundUser[0].token = users[index].token;
+                foundUser[0].fname = users[index].fname;
+                foundUser[0].lname = users[index].lname;
+                foundUser[0].phone = users[index].phone;
+                foundUser[0].city = users[index].city;
             }
         }
  
@@ -151,7 +197,7 @@ const SignInScreen = ({navigation}) => {
         {
              firebase.database().ref('currentUser').set(foundUser[0]).then(() => {
                 }).catch((error) => {
-                  console.log(error);
+                  console.log(error);  
                 });
 
             signIn(foundUser);
@@ -163,7 +209,7 @@ const SignInScreen = ({navigation}) => {
         
     }
 
-    useEffect(() => {
+    useEffect(() => {  
         setTimeout(async() => {
             dbRef.onSnapshot(getCollection); 
         }, 1000);

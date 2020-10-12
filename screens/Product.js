@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 
+console.disableYellowBox = true;
 
 class Product extends React.Component {
 

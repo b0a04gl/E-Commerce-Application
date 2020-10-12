@@ -7,6 +7,9 @@ import ApiKeys from '../database/RealtimeDb';
 import { Card, Button } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppButton from "../components/Buttons/AppButton";
+
+console.disableYellowBox = true;
+
 // const BASE_URL = 'https://raw.githubusercontent.com/sdras/sample-vue-shop/master/dist';
 
 // const products = [

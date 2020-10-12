@@ -6,6 +6,8 @@ import SearchBar from './Components/SearchBar';
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 
+console.disableYellowBox = true;
+
 export default class UserScreen extends React.Component {
   _isMounted = false;
   constructor(props) {

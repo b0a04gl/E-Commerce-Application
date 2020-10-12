@@ -3,6 +3,8 @@ import { View, ScrollView, Modal, StyleSheet, Button,TextInput, FlatList, Image,
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 
+console.disableYellowBox = true;
+
 export default class PendingList extends React.Component {
    _isMounted = false;
    constructor(props) {

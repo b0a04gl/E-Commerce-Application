@@ -19,15 +19,15 @@ import RootStackScreen from './screens/RootStackScreen';
 import AsyncStorage from '@react-native-community/async-storage';
 // import auth from '@react-native-firebase/auth';
 // import * as firebase from "firebase";
-import firebase from './database/firebaseDb';
-
+import * as firebase from 'firebase';
+import ApiKeys from './database/RealtimeDb';
 
 const App = () => {
 
 
   const [isDarkTheme, setIsDarkTheme] = React.useState(false);
 
-  const dbRef = firebase.firestore().collection('users');
+  // const dbRef = firebase.firestore().collection('users');
 
   const userArr = [];
 
@@ -62,21 +62,29 @@ const App = () => {
     }
   }
 
-const storeUser =(emailID,pwd,uType) =>{
-  if(emailID === ''){
+const storeUser =(user) =>{
+  if(user==null){
     alert('Fill at least your name!')
    } else {
         
-     dbRef.add({
-       email: emailID,
-       password: pwd,
-       userType : uType
-     }).then((res) => {
+    // console.log("USERRRRRRR.........XXXXXXXX"+user);
+    firebase.database().ref('/UserProfiles').push(user[0]).then(() => {
+    }).catch((error) => console.log(error));
+
+    //  dbRef.add({
+    //    email: emailID,
+    //    password: pwd,
+    //    userType : uType,
+    //    fname : fname,
+    //    lname : lname,
+    //    phone : phone,
+    //    city : city
+    //  }).then((res) => {
       
-     })
-     .catch((err) => {
-       console.error("Error found: ", err);
-     });
+    //  })
+    //  .catch((err) => {
+    //    console.error("Error found: ", err);
+    //  });
    }
 }
 
@@ -161,10 +169,10 @@ const storeUser =(emailID,pwd,uType) =>{
       const email = foundUser[0].email;
       const password = foundUser[0].password;
       const userType = foundUser[0].type;
-     
+   
       try {
         
-        storeUser(email,password,userType);
+        storeUser(foundUser);
         // await firebase.auth().createUserWithEmailAndPassword(email, password);
         
         // await AsyncStorage.setItem('userToken', userToken);
@@ -188,11 +196,9 @@ const storeUser =(emailID,pwd,uType) =>{
 
   useEffect(() => {
     setTimeout(async() => {
-      // setIsLoading(false);
-
-      // Alert.alert("Initializing firebase");
-      // firebase.initializeApp(firebaseConfig);
-      // getCollection;
+      if (!firebase.apps.length) {
+        firebase.initializeApp(ApiKeys.firebaseConfig);
+     }
 
       let userToken;
       userToken = null;

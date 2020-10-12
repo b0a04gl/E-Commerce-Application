@@ -7,6 +7,8 @@ import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 import Toast from 'react-native-simple-toast';
 
+console.disableYellowBox = true;
+
 export default class Admin extends React.Component {
     _isMounted = false;
     constructor(props) {

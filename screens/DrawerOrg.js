@@ -21,6 +21,7 @@ import ProductDetailScreen from './ProductDetailScreen';
 import AdminOrders from './AdminOrders';
 import WishList from './WishList';
 import Settings from './Settings';
+import ProfileScreenDealer from './ProfileScreenDealer';
 
 import {
     useTheme,
@@ -503,6 +504,38 @@ const ProfileScreenStackScreen =({navigation}) =>(
     </Stack.Navigator>
 );
 
+
+const ProfileScreenDealerStackScreen =({navigation}) =>(
+  <Stack.Navigator screenOptions={{
+      headerStyle: {
+          backgroundColor: '#ec2F4B',
+        },
+      //   headerShown: false,
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          // alignSelf: 'center'
+         
+        },
+  }}>
+      <Stack.Screen name="Profile" component={ProfileScreenDealer} options={{
+          title:'Profile',
+          headerStyle: {
+              backgroundColor: '#ec2F4B',
+            },
+          headerTitleAlign: 'center',
+          headerLeft : () => (
+              <Icon.Button  name = 'ios-menu' size={30}
+              backgroundColor = '#ec2F4B' onPress={() => navigation.openDrawer()}></Icon.Button>
+          ),
+
+            
+
+      }}/>
+
+  </Stack.Navigator>
+);
+
 const EditProfileScreenStackScreen =({navigation}) =>(
     <Stack.Navigator screenOptions={{
         headerStyle: {
@@ -651,6 +684,22 @@ options={{
 />, */}
 
 const dealerItems = [
+
+<DrawerNav.Screen name="EditProfile1" component={ProfileScreenDealerStackScreen} 
+           
+           options={{
+             title: 'Profile',
+             drawerIcon: ({color, size}) => (
+               <Icon
+                 name="md-checkmark-circle-outline"
+                 size={size}
+                 color={color}
+               />
+             ),
+             // gestureEnabled: false,
+           }}
+           />,
+
   <DrawerNav.Screen name="Dealer" component={DealerStackScreen}
         
         options={{
@@ -665,6 +714,7 @@ const dealerItems = [
           // gestureEnabled: false,
         }}
         />,
+        
         <DrawerNav.Screen name="DealerProducts" component={DealerProductsStackScreen}
         
         options={{
@@ -1361,6 +1411,9 @@ componentWillUnmount() {
   render()
   {
 
+    // const tempDealer = [
+    //   ,
+    // ];
     
 
     const hidden = [
@@ -1401,7 +1454,7 @@ componentWillUnmount() {
              drawerIcon: () => null
            }}
            />,
-   
+       
            <DrawerNav.Screen name="SearchBar" component={SearchBarStackScreen} 
            
            options={{
@@ -1561,6 +1614,7 @@ componentWillUnmount() {
      return(
        <DrawerNav.Navigator initialRouteName="DealerProducts" drawerContentOptions={{ activeBackgroundColor: '#fff', activeTintColor: '#ff788f' }} drawerContent={props => <DrawerContent {...props}/>} >
          {dealerItems}
+         {hidden}
        </DrawerNav.Navigator>
      );
    }

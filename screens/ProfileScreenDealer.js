@@ -122,24 +122,14 @@ class ProfileScreen extends React.Component
               </View>
         
               <View style={styles.menuWrapper}>
-                <TouchableRipple onPress={() => {navigation.navigate('WishList')}}>
-                  <View style={styles.menuItem}>
-                    <Icon name="heart-outline" color="#ec2F4B" size={25}/>
-                    <Text style={styles.menuItemText}>My Wishlist</Text>
-                  </View>
-                </TouchableRipple>
+                
                 <TouchableRipple onPress={() => {navigation.navigate('OrderScreen')}}>
                   <View style={styles.menuItem}>
                     <Icon name="briefcase-upload-outline" color="#ec2F4B" size={25}/>
                     <Text style={styles.menuItemText}>My Orders</Text>
                   </View>
                 </TouchableRipple>
-                <TouchableRipple onPress={() => {navigation.navigate('CartScreen')}}>
-                  <View style={styles.menuItem}>
-                    <Icon name="cart-outline" color="#ec2F4B" size={25}/>
-                    <Text style={styles.menuItemText}>My Cart</Text>
-                  </View>
-                </TouchableRipple>
+               
                 <TouchableRipple onPress={() => {navigation.navigate('EditProfile')}}>
                   <View style={styles.menuItem}>
                     <Icon name="account-check-outline" color="#ec2F4B" size={25}/>

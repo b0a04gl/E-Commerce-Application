@@ -1,6 +1,8 @@
 import React from 'react';
 import UserScreen from './UserScreen';
 
+console.disableYellowBox = true;
+
 class Home extends React.Component
 {
     constructor(props)

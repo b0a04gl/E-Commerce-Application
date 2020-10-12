@@ -9,6 +9,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-simple-toast';
 import { SliderBox } from 'react-native-image-slider-box';
 
+console.disableYellowBox = true;
+
 export default class ProductDetailScreen extends React.Component {
     _isMounted = false;
     constructor(props) {

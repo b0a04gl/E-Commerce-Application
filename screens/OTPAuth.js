@@ -4,6 +4,7 @@ import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import * as firebase from "firebase";
 import Form from 'react-native-form';
 
+console.disableYellowBox = true;
 
 export default function App({navigation}) {
 

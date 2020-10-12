@@ -20,7 +20,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import { AuthContext } from '../components/context';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-
+// console.disableYellowBox = true;
 const SignUpScreen = ({navigation}) => {
 
     const { signUp } = React.useContext(AuthContext);
@@ -99,7 +99,12 @@ const SignUpScreen = ({navigation}) => {
             {
                 email : email,
                 password : password,
-                type : type
+                type : type,
+                fname : 'First Name',
+                lname : 'Last Name',
+                phone : 'Phone',
+                city : 'City',
+                token : null,
             }
         ];
 //..Signed Up...Further Sign In to get into the App

@@ -20,7 +20,7 @@ import React from 'react';
 import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View } from 'react-native';
 import firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
-
+console.disableYellowBox = true;
 class Dealer extends React.Component {
 
     constructor(props)

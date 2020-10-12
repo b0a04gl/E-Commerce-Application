@@ -19,6 +19,8 @@ import firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 import { Text } from "react-native-elements";
 
+console.disableYellowBox = true;
+
 class Dealer extends React.Component {
 
     constructor(props)

@@ -3,6 +3,9 @@ import { View, ScrollView, StyleSheet, FlatList, Image, TouchableOpacity, Text, 
 import * as firebase from 'firebase';
 import ApiKeys from '../database/RealtimeDb';
 import AppButton from "../components/Buttons/AppButton";
+
+console.disableYellowBox = true;
+
 export default class AdminOrders extends React.Component {
     _isMounted = false;
     constructor(props) {

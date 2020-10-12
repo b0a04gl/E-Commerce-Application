@@ -10,6 +10,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 // import { Context as UserContext } from "../../dataStore/userAccessContext";
 
+console.disableYellowBox = true;
+
 const OrderScreen = ({ navigation }) => {
   //   const { state, onViewOrders, onViewOrderDetails } = useContext(UserContext);
 

@@ -6,6 +6,8 @@ import SplashScreen from './SplashScreen';
 import SignInScreen from './SignInScreen';
 import SignUpScreen from './SignUpScreen';
 
+console.disableYellowBox = true;
+
 const RootStack = createStackNavigator();
 
 const RootStackScreen = ({navigation}) => (
